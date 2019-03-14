@@ -41,11 +41,11 @@ server:
 
 logging:
   level:
-  root: ERROR
-  com.coalvalue: DEBUG
-  org.springframework.security: DEBUG
-  org.springframework.web: DEBUG
-  org.springframework.controllers: DEBUG
+    root: ERROR
+    com.coalvalue: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.controllers: DEBUG
 
 
 #logging.level.*=INFO
