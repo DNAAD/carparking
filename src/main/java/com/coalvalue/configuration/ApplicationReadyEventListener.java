@@ -112,6 +112,7 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        logger.debug("系统启动完成，准备建立通道");
 
         logger.debug("begin ------------------------------------"+mqttPublishSample.imei);
     //    logger.debug("begin ------------------------------------"+desDecode(Key));
@@ -130,13 +131,13 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 */
 
         //InitTasks.init_configuration();
-
+        logger.debug("查找配置文件");
         String property = (String)getParamChanges().get("imei");
         if(StringUtils.isBlank(property)){
 
         //if(StringUtils.isBlank(mqttPublishSample.imei)){
 
-            logger.debug("未配置设备");
+            logger.debug("未找到配置文件");
 
             alreadyConfigured="未配置设备";
 

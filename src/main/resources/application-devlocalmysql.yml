@@ -137,7 +137,7 @@ own:
       public_uuid_topic: ${MEI_PUBLIC_CHANNEL:public}
 
       local-broker:
-      host: "tcp://localhost:1883"
+        host: "tcp://localhost:1883"
 
 
 
