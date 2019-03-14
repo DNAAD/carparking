@@ -1,0 +1,24 @@
+#!/bin/sh
+
+DMG_FILE="$1"
+APP_PID="$2"
+TMP_NAME="updatefx$(date +%s)"
+
+while /bin/ps -p $APP_PID > /dev/null; do
+  /bin/sleep 1;
+done
+
+
+  /bin/rm -rf "/Applications/$app"
+  /bin/cp -pR "/Volumes/$TMP_NAME/$app" /Applications/
+cp /home/user/IdentityFinderSetup.tgz /tmp/IdentityFinderPackage
+
+#ifconfig eth0 $address netmask $netmask
+#ip route add default via $gateway
+#echo "nameserver $dns_server" > /etc/resolv.conf
+
+/usr/bin/hdiutil detach -quiet /Volumes/$TMP_NAME
+/bin/rm /tmp/$TMP_NAME.cdr
+/bin/rm "$DMG_FILE"
+
+java -a "/Applications/$app"

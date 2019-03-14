@@ -1,0 +1,47 @@
+package com.coalvalue.configuration;
+
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+//@Configuration
+/*@EnableWebMvc*/
+public class ThymeleafConfiguration implements ApplicationContextAware
+{
+
+    private ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException
+    {
+        this.applicationContext = applicationContext;
+    }
+
+/*    @Bean
+    public TemplateEngine templateEngine() {
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.addTemplateResolver(templateResolverPublic());
+        engine.addTemplateResolver(templateResolverTemplates());
+        return engine;
+    }
+
+    private ITemplateResolver templateResolverPublic() {
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+        resolver.setApplicationContext(applicationContext);
+        resolver.setPrefix("/public/");
+        resolver.setTemplateMode("HTML");
+        return resolver;
+    }
+
+    private ITemplateResolver templateResolverTemplates() {
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+        resolver.setApplicationContext(applicationContext);
+        resolver.setPrefix("/templates/");
+        resolver.setTemplateMode("HTML");
+        return resolver;
+    }*/
+
+}

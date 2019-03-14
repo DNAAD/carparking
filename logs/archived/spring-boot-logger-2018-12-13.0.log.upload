@@ -1,0 +1,69 @@
+2018-12-13 00:32:17,544 DEBUG org.springframework.boot.context.logging.ClasspathLoggingApplicationListener [main] Application started with classpath: [file:/C:/Users/silence/AppData/Local/Temp/classpath2131480448.jar, file:/C:/Program%20Files/JetBrains/IntelliJ%20IDEA%202018.1.4/lib/idea_rt.jar]
+2018-12-13 00:32:17,812 INFO org.springframework.boot.StartupInfoLogger [main] Starting Application on silence-PC with PID 8532 (E:\carparkingnew\out\production\classes started by silence in E:\carparkingnew)
+2018-12-13 00:32:17,813 DEBUG org.springframework.boot.StartupInfoLogger [main] Running with Spring Boot v2.0.4.RELEASE, Spring v5.0.8.RELEASE
+2018-12-13 00:32:17,815 INFO org.springframework.boot.SpringApplication [main] The following profiles are active: devlocal
+2018-12-13 00:32:17,815 DEBUG org.springframework.boot.SpringApplication [main] Loading source class com.Application
+2018-12-13 00:32:18,033 DEBUG org.springframework.boot.logging.DeferredLog$Line [main] Activated activeProfiles devlocal
+2018-12-13 00:32:18,034 DEBUG org.springframework.boot.logging.DeferredLog$Line [main] Loaded config file 'file:/E:/carparkingnew/out/production/classes/application.yml' (classpath:/application.yml)
+2018-12-13 00:32:18,034 DEBUG org.springframework.boot.logging.DeferredLog$Line [main] Loaded config file 'file:/E:/carparkingnew/out/production/classes/application-devlocal.yml' (classpath:/application-devlocal.yml) for profile devlocal
+2018-12-13 00:32:18,036 INFO org.springframework.context.support.AbstractApplicationContext [main] Refreshing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3a44431a: startup date [Thu Dec 13 00:32:18 CST 2018]; root of context hierarchy
+2018-12-13 00:32:18,041 DEBUG org.springframework.context.support.AbstractApplicationContext [main] Bean factory for org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3a44431a: org.springframework.beans.factory.support.DefaultListableBeanFactory@38145825: defining beans [org.springframework.context.annotation.internalConfigurationAnnotationProcessor,org.springframework.context.annotation.internalAutowiredAnnotationProcessor,org.springframework.context.annotation.internalRequiredAnnotationProcessor,org.springframework.context.annotation.internalCommonAnnotationProcessor,org.springframework.context.annotation.internalPersistenceAnnotationProcessor,org.springframework.context.event.internalEventListenerProcessor,org.springframework.context.event.internalEventListenerFactory,application]; root of factory hierarchy
+2018-12-13 00:32:44,189 DEBUG org.springframework.context.support.AbstractApplicationContext [main] Unable to locate MessageSource with name 'messageSource': using default [org.springframework.context.support.DelegatingMessageSource@6bc7eb0f]
+2018-12-13 00:32:44,190 DEBUG org.springframework.context.support.AbstractApplicationContext [main] Unable to locate ApplicationEventMulticaster with name 'applicationEventMulticaster': using default [org.springframework.context.event.SimpleApplicationEventMulticaster@e06d647]
+2018-12-13 00:32:49,195 DEBUG org.springframework.boot.web.servlet.server.DocumentRoot [main] Code archive: C:\Users\silence\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot\2.0.4.RELEASE\c8619c5b06d4dcdb4cac1e5e9c839e6e8b1c8574\spring-boot-2.0.4.RELEASE.jar
+2018-12-13 00:32:49,196 DEBUG org.springframework.boot.web.servlet.server.DocumentRoot [main] Code archive: C:\Users\silence\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot\2.0.4.RELEASE\c8619c5b06d4dcdb4cac1e5e9c839e6e8b1c8574\spring-boot-2.0.4.RELEASE.jar
+2018-12-13 00:32:49,197 DEBUG org.springframework.boot.web.servlet.server.DocumentRoot [main] Document root: E:\carparkingnew\src\main\webapp
+2018-12-13 00:32:52,263 WARN io.undertow.websockets.jsr.Bootstrap [main] UT026009: XNIO worker was not set on WebSocketDeploymentInfo, the default worker will be used
+2018-12-13 00:32:52,264 WARN io.undertow.websockets.jsr.Bootstrap [main] UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+2018-12-13 00:32:59,371 DEBUG com.zaxxer.hikari.HikariConfig [main] Driver class org.h2.Driver found in Thread context class loader sun.misc.Launcher$AppClassLoader@18b4aac2
+2018-12-13 00:33:00,245 DEBUG com.zaxxer.hikari.HikariConfig [main] HikariPool-1 - configuration:
+2018-12-13 00:33:00,249 DEBUG com.zaxxer.hikari.HikariConfig [main] allowPoolSuspension.............false
+2018-12-13 00:33:00,250 DEBUG com.zaxxer.hikari.HikariConfig [main] autoCommit......................true
+2018-12-13 00:33:00,251 DEBUG com.zaxxer.hikari.HikariConfig [main] catalog.........................none
+2018-12-13 00:33:00,252 DEBUG com.zaxxer.hikari.HikariConfig [main] connectionInitSql...............none
+2018-12-13 00:33:00,253 DEBUG com.zaxxer.hikari.HikariConfig [main] connectionTestQuery.............none
+2018-12-13 00:33:00,254 DEBUG com.zaxxer.hikari.HikariConfig [main] connectionTimeout...............30000
+2018-12-13 00:33:00,255 DEBUG com.zaxxer.hikari.HikariConfig [main] dataSource......................none
+2018-12-13 00:33:00,255 DEBUG com.zaxxer.hikari.HikariConfig [main] dataSourceClassName.............none
+2018-12-13 00:33:00,256 DEBUG com.zaxxer.hikari.HikariConfig [main] dataSourceJNDI..................none
+2018-12-13 00:33:00,258 DEBUG com.zaxxer.hikari.HikariConfig [main] dataSourceProperties............{password=<masked>}
+2018-12-13 00:33:00,258 DEBUG com.zaxxer.hikari.HikariConfig [main] driverClassName................."org.h2.Driver"
+2018-12-13 00:33:00,259 DEBUG com.zaxxer.hikari.HikariConfig [main] healthCheckProperties...........{}
+2018-12-13 00:33:00,259 DEBUG com.zaxxer.hikari.HikariConfig [main] healthCheckRegistry.............none
+2018-12-13 00:33:00,260 DEBUG com.zaxxer.hikari.HikariConfig [main] idleTimeout.....................600000
+2018-12-13 00:33:00,260 DEBUG com.zaxxer.hikari.HikariConfig [main] initializationFailFast..........true
+2018-12-13 00:33:00,260 DEBUG com.zaxxer.hikari.HikariConfig [main] initializationFailTimeout.......1
+2018-12-13 00:33:00,261 DEBUG com.zaxxer.hikari.HikariConfig [main] isolateInternalQueries..........false
+2018-12-13 00:33:00,261 DEBUG com.zaxxer.hikari.HikariConfig [main] jdbc4ConnectionTest.............false
+2018-12-13 00:33:00,262 DEBUG com.zaxxer.hikari.HikariConfig [main] jdbcUrl.........................jdbc:h2:~/h2db
+2018-12-13 00:33:00,262 DEBUG com.zaxxer.hikari.HikariConfig [main] leakDetectionThreshold..........0
+2018-12-13 00:33:00,262 DEBUG com.zaxxer.hikari.HikariConfig [main] maxLifetime.....................1800000
+2018-12-13 00:33:00,263 DEBUG com.zaxxer.hikari.HikariConfig [main] maximumPoolSize.................10
+2018-12-13 00:33:00,263 DEBUG com.zaxxer.hikari.HikariConfig [main] metricRegistry..................none
+2018-12-13 00:33:00,263 DEBUG com.zaxxer.hikari.HikariConfig [main] metricsTrackerFactory...........com.zaxxer.hikari.metrics.micrometer.MicrometerMetricsTrackerFactory@2b34a1e0
+2018-12-13 00:33:00,264 DEBUG com.zaxxer.hikari.HikariConfig [main] minimumIdle.....................10
+2018-12-13 00:33:00,264 DEBUG com.zaxxer.hikari.HikariConfig [main] password........................<masked>
+2018-12-13 00:33:00,264 DEBUG com.zaxxer.hikari.HikariConfig [main] poolName........................"HikariPool-1"
+2018-12-13 00:33:00,265 DEBUG com.zaxxer.hikari.HikariConfig [main] readOnly........................false
+2018-12-13 00:33:00,265 DEBUG com.zaxxer.hikari.HikariConfig [main] registerMbeans..................false
+2018-12-13 00:33:00,265 DEBUG com.zaxxer.hikari.HikariConfig [main] scheduledExecutor...............none
+2018-12-13 00:33:00,266 DEBUG com.zaxxer.hikari.HikariConfig [main] scheduledExecutorService........internal
+2018-12-13 00:33:00,266 DEBUG com.zaxxer.hikari.HikariConfig [main] schema..........................none
+2018-12-13 00:33:00,267 DEBUG com.zaxxer.hikari.HikariConfig [main] threadFactory...................internal
+2018-12-13 00:33:00,267 DEBUG com.zaxxer.hikari.HikariConfig [main] transactionIsolation............default
+2018-12-13 00:33:00,267 DEBUG com.zaxxer.hikari.HikariConfig [main] username........................"sa"
+2018-12-13 00:33:00,268 DEBUG com.zaxxer.hikari.HikariConfig [main] validationTimeout...............5000
+2018-12-13 00:33:00,268 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Starting...
+2018-12-13 00:33:02,684 DEBUG com.zaxxer.hikari.pool.HikariPool [main] HikariPool-1 - Added connection conn0: url=jdbc:h2:~/h2db user=SA
+2018-12-13 00:33:02,752 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Start completed.
+2018-12-13 00:33:02,853 DEBUG com.zaxxer.hikari.pool.HikariPool [HikariPool-1 housekeeper] HikariPool-1 - Pool stats (total=1, active=0, idle=1, waiting=0)
+2018-12-13 00:33:02,856 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn1: url=jdbc:h2:~/h2db user=SA
+2018-12-13 00:33:02,857 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn2: url=jdbc:h2:~/h2db user=SA
+2018-12-13 00:33:02,857 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn3: url=jdbc:h2:~/h2db user=SA
+2018-12-13 00:33:02,858 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn4: url=jdbc:h2:~/h2db user=SA
+2018-12-13 00:33:02,858 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn5: url=jdbc:h2:~/h2db user=SA
+2018-12-13 00:33:02,859 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn6: url=jdbc:h2:~/h2db user=SA
+2018-12-13 00:33:02,860 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn7: url=jdbc:h2:~/h2db user=SA
+2018-12-13 00:33:02,861 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn8: url=jdbc:h2:~/h2db user=SA
+2018-12-13 00:33:02,862 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn9: url=jdbc:h2:~/h2db user=SA
+2018-12-13 00:33:02,862 DEBUG com.zaxxer.hikari.pool.HikariPool [HikariPool-1 connection adder] HikariPool-1 - After adding stats (total=10, active=0, idle=10, waiting=0)

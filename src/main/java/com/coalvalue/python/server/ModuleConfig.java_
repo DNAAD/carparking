@@ -1,0 +1,68 @@
+package com.coalvalue.python.server;
+
+import com.coalvalue.python.IPythonService;
+import io.moquette.BrokerConstants;
+import io.moquette.interception.AbstractInterceptHandler;
+import io.moquette.interception.InterceptHandler;
+import io.moquette.interception.messages.InterceptPublishMessage;
+import io.moquette.server.Server;
+import io.moquette.server.config.IConfig;
+import io.moquette.server.config.MemoryConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.*;
+
+import static io.moquette.spi.impl.Utils.readBytesAndRewind;
+
+@Service
+public class ModuleConfig {
+
+
+    String BROKER_HOST = ModuleMqttBrokerConfig.BROKER_HOST;
+    Integer BROKER_PORT = ModuleMqttBrokerConfig.BROKER_PORT;
+    String TOPIC_COMMAND = ModuleMqttClientConfig.TOPIC_COMMAND;
+    String TOPIC = ModuleMqttClientConfig.TOPIC;
+
+
+
+    public Page<Map> queryModules(Object o, Pageable pageable) {
+
+
+
+
+
+        List<Map> maps  = new ArrayList<>();
+
+
+        Map map = new HashMap();
+        map.put("name", "BROKER_HOST");
+        map.put("value", BROKER_HOST);
+        maps.add(map);
+
+
+        map = new HashMap();
+        map.put("name", "BROKER_PORT");
+        map.put("value", BROKER_PORT);
+        maps.add(map);
+
+        map = new HashMap();
+        map.put("name", "TOPIC_COMMAND");
+        map.put("value", TOPIC_COMMAND);
+        maps.add(map);
+
+        map = new HashMap();
+        map.put("name", "TOPIC");
+        map.put("value", TOPIC);
+        maps.add(map);
+        Page<Map> pages = new PageImpl<Map>(maps,pageable,maps.size());
+        return pages;
+    }
+
+}

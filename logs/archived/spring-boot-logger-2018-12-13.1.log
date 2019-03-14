@@ -1,0 +1,85 @@
+2018-12-13 13:47:01,290 DEBUG org.springframework.context.support.AbstractApplicationContext [main] Unable to locate MessageSource with name 'messageSource': using default [org.springframework.context.support.DelegatingMessageSource@24e14ca6]
+2018-12-13 13:47:01,352 DEBUG org.springframework.context.support.AbstractApplicationContext [main] Unable to locate ApplicationEventMulticaster with name 'applicationEventMulticaster': using default [org.springframework.context.event.SimpleApplicationEventMulticaster@39eab380]
+2018-12-13 13:47:01,730 DEBUG org.springframework.boot.web.servlet.server.DocumentRoot [main] Code archive: C:\Users\silence\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot\2.0.4.RELEASE\c8619c5b06d4dcdb4cac1e5e9c839e6e8b1c8574\spring-boot-2.0.4.RELEASE.jar
+2018-12-13 13:47:01,730 DEBUG org.springframework.boot.web.servlet.server.DocumentRoot [main] Code archive: C:\Users\silence\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot\2.0.4.RELEASE\c8619c5b06d4dcdb4cac1e5e9c839e6e8b1c8574\spring-boot-2.0.4.RELEASE.jar
+2018-12-13 13:47:01,730 DEBUG org.springframework.boot.web.servlet.server.DocumentRoot [main] Document root: E:\carparkingnew\src\main\webapp
+2018-12-13 13:47:02,073 WARN io.undertow.websockets.jsr.Bootstrap [main] UT026009: XNIO worker was not set on WebSocketDeploymentInfo, the default worker will be used
+2018-12-13 13:47:02,073 WARN io.undertow.websockets.jsr.Bootstrap [main] UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+2018-12-13 13:47:02,846 DEBUG com.zaxxer.hikari.HikariConfig [main] Driver class org.h2.Driver found in Thread context class loader sun.misc.Launcher$AppClassLoader@18b4aac2
+2018-12-13 13:47:02,895 DEBUG com.zaxxer.hikari.HikariConfig [main] HikariPool-1 - configuration:
+2018-12-13 13:47:02,897 DEBUG com.zaxxer.hikari.HikariConfig [main] allowPoolSuspension.............false
+2018-12-13 13:47:02,898 DEBUG com.zaxxer.hikari.HikariConfig [main] autoCommit......................true
+2018-12-13 13:47:02,898 DEBUG com.zaxxer.hikari.HikariConfig [main] catalog.........................none
+2018-12-13 13:47:02,899 DEBUG com.zaxxer.hikari.HikariConfig [main] connectionInitSql...............none
+2018-12-13 13:47:02,899 DEBUG com.zaxxer.hikari.HikariConfig [main] connectionTestQuery.............none
+2018-12-13 13:47:02,899 DEBUG com.zaxxer.hikari.HikariConfig [main] connectionTimeout...............30000
+2018-12-13 13:47:02,900 DEBUG com.zaxxer.hikari.HikariConfig [main] dataSource......................none
+2018-12-13 13:47:02,900 DEBUG com.zaxxer.hikari.HikariConfig [main] dataSourceClassName.............none
+2018-12-13 13:47:02,901 DEBUG com.zaxxer.hikari.HikariConfig [main] dataSourceJNDI..................none
+2018-12-13 13:47:02,901 DEBUG com.zaxxer.hikari.HikariConfig [main] dataSourceProperties............{password=<masked>}
+2018-12-13 13:47:02,902 DEBUG com.zaxxer.hikari.HikariConfig [main] driverClassName................."org.h2.Driver"
+2018-12-13 13:47:02,902 DEBUG com.zaxxer.hikari.HikariConfig [main] healthCheckProperties...........{}
+2018-12-13 13:47:02,903 DEBUG com.zaxxer.hikari.HikariConfig [main] healthCheckRegistry.............none
+2018-12-13 13:47:02,903 DEBUG com.zaxxer.hikari.HikariConfig [main] idleTimeout.....................600000
+2018-12-13 13:47:02,903 DEBUG com.zaxxer.hikari.HikariConfig [main] initializationFailFast..........true
+2018-12-13 13:47:02,904 DEBUG com.zaxxer.hikari.HikariConfig [main] initializationFailTimeout.......1
+2018-12-13 13:47:02,905 DEBUG com.zaxxer.hikari.HikariConfig [main] isolateInternalQueries..........false
+2018-12-13 13:47:02,906 DEBUG com.zaxxer.hikari.HikariConfig [main] jdbc4ConnectionTest.............false
+2018-12-13 13:47:02,907 DEBUG com.zaxxer.hikari.HikariConfig [main] jdbcUrl.........................jdbc:h2:~/h2db
+2018-12-13 13:47:02,908 DEBUG com.zaxxer.hikari.HikariConfig [main] leakDetectionThreshold..........0
+2018-12-13 13:47:02,909 DEBUG com.zaxxer.hikari.HikariConfig [main] maxLifetime.....................1800000
+2018-12-13 13:47:02,910 DEBUG com.zaxxer.hikari.HikariConfig [main] maximumPoolSize.................10
+2018-12-13 13:47:02,910 DEBUG com.zaxxer.hikari.HikariConfig [main] metricRegistry..................none
+2018-12-13 13:47:02,911 DEBUG com.zaxxer.hikari.HikariConfig [main] metricsTrackerFactory...........com.zaxxer.hikari.metrics.micrometer.MicrometerMetricsTrackerFactory@18596d47
+2018-12-13 13:47:02,911 DEBUG com.zaxxer.hikari.HikariConfig [main] minimumIdle.....................10
+2018-12-13 13:47:02,912 DEBUG com.zaxxer.hikari.HikariConfig [main] password........................<masked>
+2018-12-13 13:47:02,912 DEBUG com.zaxxer.hikari.HikariConfig [main] poolName........................"HikariPool-1"
+2018-12-13 13:47:02,912 DEBUG com.zaxxer.hikari.HikariConfig [main] readOnly........................false
+2018-12-13 13:47:02,913 DEBUG com.zaxxer.hikari.HikariConfig [main] registerMbeans..................false
+2018-12-13 13:47:02,913 DEBUG com.zaxxer.hikari.HikariConfig [main] scheduledExecutor...............none
+2018-12-13 13:47:02,913 DEBUG com.zaxxer.hikari.HikariConfig [main] scheduledExecutorService........internal
+2018-12-13 13:47:02,914 DEBUG com.zaxxer.hikari.HikariConfig [main] schema..........................none
+2018-12-13 13:47:02,914 DEBUG com.zaxxer.hikari.HikariConfig [main] threadFactory...................internal
+2018-12-13 13:47:02,914 DEBUG com.zaxxer.hikari.HikariConfig [main] transactionIsolation............default
+2018-12-13 13:47:02,915 DEBUG com.zaxxer.hikari.HikariConfig [main] username........................"sa"
+2018-12-13 13:47:02,915 DEBUG com.zaxxer.hikari.HikariConfig [main] validationTimeout...............5000
+2018-12-13 13:47:02,916 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Starting...
+2018-12-13 13:47:03,341 DEBUG com.zaxxer.hikari.pool.HikariPool [main] HikariPool-1 - Added connection conn0: url=jdbc:h2:~/h2db user=SA
+2018-12-13 13:47:03,412 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Start completed.
+2018-12-13 13:47:03,515 DEBUG com.zaxxer.hikari.pool.HikariPool [HikariPool-1 housekeeper] HikariPool-1 - Pool stats (total=1, active=0, idle=1, waiting=0)
+2018-12-13 13:47:03,517 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn1: url=jdbc:h2:~/h2db user=SA
+2018-12-13 13:47:03,518 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn2: url=jdbc:h2:~/h2db user=SA
+2018-12-13 13:47:03,518 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn3: url=jdbc:h2:~/h2db user=SA
+2018-12-13 13:47:03,519 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn4: url=jdbc:h2:~/h2db user=SA
+2018-12-13 13:47:03,519 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn5: url=jdbc:h2:~/h2db user=SA
+2018-12-13 13:47:03,520 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn6: url=jdbc:h2:~/h2db user=SA
+2018-12-13 13:47:03,521 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn7: url=jdbc:h2:~/h2db user=SA
+2018-12-13 13:47:03,522 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn8: url=jdbc:h2:~/h2db user=SA
+2018-12-13 13:47:03,522 DEBUG com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator [HikariPool-1 connection adder] HikariPool-1 - Added connection conn9: url=jdbc:h2:~/h2db user=SA
+2018-12-13 13:47:03,522 DEBUG com.zaxxer.hikari.pool.HikariPool [HikariPool-1 connection adder] HikariPool-1 - After adding stats (total=10, active=0, idle=10, waiting=0)
+2018-12-13 13:47:03,961 DEBUG org.springframework.boot.autoconfigure.AutoConfigurationPackages$BasePackages [main] @EnableAutoConfiguration was declared on a class in the package 'com.coalvalue.configuration,com'. Automatic @Repository and @Entity scanning is enabled.
+2018-12-13 13:47:07,292 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.advanced_payment_transfer if exists
+2018-12-13 13:47:07,292 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.behavioural if exists
+2018-12-13 13:47:07,292 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.being_weight_object if exists
+2018-12-13 13:47:07,292 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.camera if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.company if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.configuration if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.distributor if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.employee if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.equipment if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.event if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.follower if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.id_identification if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.instance_transport if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.inventory if exists
+2018-12-13 13:47:07,307 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.inventory_transfer if exists
+2018-12-13 13:47:07,323 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.item_transfer_entry if exists
+2018-12-13 13:47:07,323 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.live_infor_inventory if exists
+2018-12-13 13:47:07,323 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.loadometer if exists
+2018-12-13 13:47:07,323 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.loadometer_plate_recongise_cemera if exists
+2018-12-13 13:47:07,323 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.location if exists
+2018-12-13 13:47:07,323 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.no_generator if exists
+2018-12-13 13:47:07,323 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.plate_recognition if exists
+2018-12-13 13:47:07,323 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.price_category if exists
+2018-12-13 13:47:07,323 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.product if exists
+2018-12-13 13:47:07,323 DEBUG org.hibernate.engine.jdbc.spi.SqlStatementLogger [main] drop table storage.quality_inspection_report if exists

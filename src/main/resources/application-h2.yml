@@ -1,0 +1,176 @@
+server:
+    port: 80
+#   context-path: /ui3
+    session:
+      cookie:
+        name: WEIXINSESSION
+    error:
+      path: /error2
+
+
+
+
+
+      # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+      # 不要设置过大，如果过大，启动项目会报错：打开文件数过多
+
+    undertow:
+      io-threads: 16
+
+      # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
+      # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+
+      worker-threads: 256
+
+      # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+      # 每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
+
+      buffer-size: 1024
+
+      # 每个区分配的buffer数量 , 所以pool的大小是buffer-size * buffers-per-region
+
+      buffers-per-region: 1024
+
+      # 是否分配的直接内存(NIO直接分配的堆外内存)
+
+      direct-buffers: true
+
+
+
+
+debug: true
+
+#logging:
+#     level:
+#       root: ERROR
+#       org.springframework.security: DEBUG
+#       org.springframework.web: DEBUG
+#       guru.springframework.controllers: DEBUG
+#       org.hibernate: ERROR
+#       coalvalue: DEBUG
+#       coalvalue.configuration: DEBUG
+#logging.level.*=INFO
+## sudo java  -Xverify:none -jar -Dspring.profiles.active=h2 carparking.jar
+
+
+logging:
+     level:
+       root: ERROR
+       org.springframework.security: DEBUG
+       org.springframework.web: ERROR
+       guru.springframework.controllers: DEBUG
+       com: DEBUG
+       org.hibernate: ERROR
+       com.coalvalue: DEBUG
+       com.coalvalue.configuration: DEBUG
+       com.service: DEBUG
+       org.springframework.boot.autoconfigure: DEBUG
+
+spring:
+  freemarker:
+    requestContextAttribute: rc
+    allowRequestOverride: false
+    allowSessionOverride: false
+    cache: false
+    checkTemplateLocation: true
+    contentType: text/html
+    exposeRequestAttributes: false
+    exposeSessionAttributes: false
+    exposeSpringMacroHelpers: false
+    suffix: .ftl
+    templateEncoding: UTF-8
+    #templateLoaderPath: classpath:/templates/  #表示所有的模板文件都放在该目录下
+    templateLoaderPath: /WEB-INF/views/templates/,classpath:/templates/    #表示所有的模板文件都放在该目录下
+
+
+    settings:
+      locale: zh_CN
+      date_format: yyyy-MM-dd
+      time_format: HH:mm:ss
+      datetime_format: yyyy-MM-dd HH:mm:ss
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      write_dates_as_timestamps: false
+  h2:
+    console:
+      path: /h2-console   # h2 web consloe 路径
+      enabled: true       # 开启 h2 web consloe，默认为 false
+      settings:
+        web-allow-others: true    #允许远程访问 h2 web consloe
+#http://localhost:9088/h2-console/login.jsp?jsessionid=8aad54b41619ab0ad0d83cc15c894fa1
+  #用户名 sa 是默认的用户，密码默认为空。
+  datasource:
+    username: sa
+    validation: query=select 1
+    jdbc-url: jdbc:h2:~/h2db  #jdbc:h2:mem:test
+    driver-class-name:  org.h2.Driver  #schema: classpath:db/schema.sql
+    platform: h2
+    #data: classpath:data.sql
+    initialization-mode: always
+#    initialize: true
+    #data: classpath:db/data.sql
+
+#    maxActive: 20
+#    initialSize: 5
+#    minIdle: 5
+#    maxWait: 60000
+#    maxPoolPreparedStatementPerConnectionSize: 20
+#    timeBetweenEvictionRunsMillis: 60000
+#    minEvictableIdleTimeMillis: 300000
+#    poolPreparedStatements: true
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop # update
+#  jpa:
+#    database: H2
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: none # 会加快速度
+#    hibernate:
+#      ddl-auto: update #create-drop
+#      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL5Dialect
+
+
+
+own:
+  configuration:
+    mqtt:
+      broker:
+        url: ${CHANNEL_SERVER:tcp://10.8.0.220:1883}
+      uuid_topic: ${MEI_CHANNEL:q8fwjn3}
+      uuid_topic_default: '000000000000000000000000000000000000000000000000000'
+      public_uuid_topic: ${MEI_PUBLIC_CHANNEL:public}
+
+      local-broker:
+       host: "tcp://localhost:1883"
+
+
+
+
+
+deploy:
+  python:
+    path: E:/mei/backup/storage/carparking/src/main/resources
+  resource:
+    path: E:/mei
+
+
+web:
+  upload-path: D:/temp/study13/
+
+
+configuration:
+  version: 0.0.1
+
+imei: ${MEI_IMEI:868784021789953}
+
+
+
+#SPRING_APPLICATION_JSON: ${SPRING_APPLICATION_JSON}

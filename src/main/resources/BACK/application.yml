@@ -1,0 +1,118 @@
+server:
+    port: 80
+#   context-path: /ui3
+    session:
+      cookie:
+        name: WEIXINSESSION
+    error:
+      path: /error2
+#logging:
+#     level:
+#       root: ERROR
+#       org.springframework.security: DEBUG
+#       org.springframework.web: DEBUG
+#       guru.springframework.controllers: DEBUG
+#       org.hibernate: ERROR
+#       coalvalue: DEBUG
+#       coalvalue.configuration: DEBUG
+#logging.level.*=INFO
+
+logging:
+     level:
+       root: ERROR
+       org.springframework.security: ERROR
+       org.springframework.web: ERROR
+       guru.springframework.controllers: ERROR
+       com: ERROR
+       org.hibernate: ERROR
+       com.coalvalue: ERROR
+       com.coalvalue.configuration: ERROR
+       com.service: ERROR
+       com.jmsService: ERROR
+
+
+spring:
+  freemarker:
+    requestContextAttribute: rc
+    allowRequestOverride: false
+    allowSessionOverride: false
+    cache: false
+    checkTemplateLocation: true
+    contentType: text/html
+    exposeRequestAttributes: false
+    exposeSessionAttributes: false
+    exposeSpringMacroHelpers: false
+    suffix: .ftl
+    templateEncoding: UTF-8
+    #templateLoaderPath: classpath:/templates/  #表示所有的模板文件都放在该目录下
+    templateLoaderPath: /WEB-INF/views/templates/,classpath:/templates/    #表示所有的模板文件都放在该目录下
+
+
+    spring.freemarker.settings:
+      locale: zh_CN
+      date_format: yyyy-MM-dd
+      time_format: HH:mm:ss
+      datetime_format: yyyy-MM-dd HH:mm:ss
+
+  datasource:
+    jdbc-url: jdbc:mysql://mysql:3306/storage?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 123456
+#    driverClassName: com.mysql.jdbc.Driver
+
+    driverClassName: com.mysql.cj.jdbc.Driver
+#    maxActive: 20
+#    initialSize: 5
+#    minIdle: 5
+#    maxWait: 60000
+#    maxPoolPreparedStatementPerConnectionSize: 20
+#    timeBetweenEvictionRunsMillis: 60000
+#    minEvictableIdleTimeMillis: 300000
+#    poolPreparedStatements: true
+
+
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update #create-drop
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
+
+
+own:
+  configuration:
+    mqtt:
+      broker:
+        url: tcp://activemq:1883
+      uuid_topic: ${MEI_CHANNEL:gz8i88j}
+      uuid_topic_default: 000000000000000000000000000000000000000000000000000
+      public_uuid_topic: ${MEI_PUBLIC_CHANNEL:public}
+
+
+
+
+
+
+hubotServiceUrl: http://localhost:9086/hubot/on_message_send
+deploy:
+  python:
+    path: E:/mei/backup/storage/carparking/src/main/resources
+  resource:
+    path: E:/mei
+
+
+web:
+  upload-path: D:/temp/study13/
+
+
+configuration:
+  version: 0.0.1
+
+imei: ${MEI_IMEI:868784020689469}
+
+
+#SPRING_APPLICATION_JSON: ${SPRING_APPLICATION_JSON}

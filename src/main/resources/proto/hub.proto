@@ -1,0 +1,31 @@
+syntax = "proto3";
+package baeldung;
+option java_package = "com.coalvalue.protobuf";
+option java_outer_classname = "Hub";
+
+message Course {
+    int32 id = 1;
+    bytes imageBytes = 2;
+    string object_uuid = 4;
+}
+
+
+message Identity {
+    int32 id = 1;
+    string channelId = 3;
+    string activationCode = 4;
+    string status = 4;
+    string companyNo = 4;
+    string echo_session = 4;
+    string activationCode = 4;
+
+
+    repeated MqttTopic topics = 5;
+}
+
+
+
+message MqttTopic {
+    int32 id = 1;
+    string topic = 3;
+}

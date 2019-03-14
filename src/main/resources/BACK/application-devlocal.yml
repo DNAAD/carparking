@@ -1,0 +1,97 @@
+server:
+    port: 10080
+#    context-path: /ui3
+    session:
+      cookie:
+        name: WEIXINSESSION
+
+logging:
+     level:
+       root: ERROR
+       org.springframework.security: DEBUG
+       org.springframework.web: DEBUG
+       guru.springframework.controllers: DEBUG
+       com: DEBUG
+       org.hibernate: ERROR
+       com.coalvalue: DEBUG
+       com.coalvalue.configuration: DEBUG
+       com.service: DEBUG
+       com.jmsService: DEBUG
+#logging.level.*=INFO
+
+
+spring:
+  freemarker:
+    requestContextAttribute: rc
+    allowRequestOverride: false
+    allowSessionOverride: false
+    cache: false
+    checkTemplateLocation: true
+    contentType: text/html
+    exposeRequestAttributes: false
+    exposeSessionAttributes: false
+    exposeSpringMacroHelpers: false
+    suffix: .ftl
+    templateEncoding: UTF-8
+    templateLoaderPath: /WEB-INF/views/templates/, classpath:/templates/,file:${web.upload-path}
+
+    settings:
+      locale: zh_CN
+      date_format: yyyy-MM-dd
+      time_format: HH:mm:ss
+      datetime_format: yyyy-MM-dd HH:mm:ss
+
+  datasource:
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #initialization-mode: always
+    #schema: classpath:schema.sql
+    #data: classpath:data.sql
+    #initialize: false
+    continue-on-error: true
+
+    jdbc-url: jdbc:mysql://mysql:3306/storage?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useSSL=false
+
+  activemq:
+    broker-url: tcp://10.8.0.220:61616   #spring.activemq.broker-url=failover:(tcp://localhost:61616,tcp://localhost:61617)
+    close-timeout: 5000
+    in-memory: false  #spring.activemq.pool.enabled=true
+    pool.max-connections: 100
+    send-timeout: 3000
+
+
+  jpa:
+    database: MYSQL
+    generate-ddl: true
+
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect # MySQL5InnoDBDialect # org.hibernate.dialect.MySQLInnoDBDialect # org.hibernate.dialect.MySQL5Dialect
+#        default_schema: storage
+
+own:
+  configuration:
+    mqtt:
+      broker:
+        url: tcp://10.8.0.220:1883
+      uuid_topic: gz8i88j
+      uuid_topic_default: 100000000000000000000000000000000000000000000000000
+imei: ${IMEI:868784020689469}
+
+#deploy:
+#  python:
+#    path: E:/mei/backup/storage/carparking/src/main/resources
+#  resource:
+#    path: E:/mei
+
+
+web:
+  upload-path: D:/temp/study13/
+
+#uuid: 1234567890
+##uuid: 1234567890 # 不开启 mqtt服务，
