@@ -2,13 +2,13 @@
 
 
 server:
-    port: 80
+  port: 80
 #   context-path: /ui3
-    session:
-      cookie:
-        name: WEIXINSESSION
-    error:
-      path: /error2
+  session:
+    cookie:
+      name: WEIXINSESSION
+  error:
+    path: /error2
 
 
 
@@ -17,26 +17,26 @@ server:
       # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
       # 不要设置过大，如果过大，启动项目会报错：打开文件数过多
 
-    undertow:
-      io-threads: 16
+  undertow:
+    io-threads: 16
 
       # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
       # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
 
-      worker-threads: 256
+    worker-threads: 256
 
       # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
       # 每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
 
-      buffer-size: 1024
+    buffer-size: 1024
 
       # 每个区分配的buffer数量 , 所以pool的大小是buffer-size * buffers-per-region
 
-      buffers-per-region: 1024
+    buffers-per-region: 1024
 
       # 是否分配的直接内存(NIO直接分配的堆外内存)
 
-      direct-buffers: true
+    direct-buffers: true
 
 
 
@@ -44,15 +44,14 @@ server:
 #debug: true
 
 logging:
-     level:
-       root: ERROR
-       com.coalvalue: DEBUG
-       org.springframework.security: DEBUG
-       org.springframework.web: DEBUG
-       org.springframework.controllers: DEBUG
+  level:
+  root: ERROR
+  com.coalvalue: DEBUG
+  org.springframework.security: DEBUG
+  org.springframework.web: DEBUG
+  org.springframework.controllers: DEBUG
       # org.hibernate: DEBUG
 
-       coalvalue.configuration: DEBUG
 #logging.level.*=INFO
 ## sudo java  -Xverify:none -jar -Dspring.profiles.active=h2 carparking.jar
 
@@ -142,7 +141,7 @@ own:
       public_uuid_topic: ${MEI_PUBLIC_CHANNEL:public}
 
       local-broker:
-       host: "tcp://localhost:1883"
+      host: "tcp://localhost:1883"
 
 
 
@@ -164,7 +163,5 @@ configuration:
 
 imei: ${868784021789953}
 # MEI_IMEI:
-
-
 
 #SPRING_APPLICATION_JSON: ${SPRING_APPLICATION_JSON}
