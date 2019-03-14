@@ -152,9 +152,11 @@
 <div id="section6" class="" style="margin-bottom: 20px;">
 
 
+<#--
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+-->
 
-    <div class="navbar-fixed-bottom_">
+    <div class="navbar-fixed-bottom_ hidden">
 
         <div class="pull-right">
             <div class="material-button-anim">

@@ -1,6 +1,5 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Column;
@@ -14,7 +13,7 @@ import java.math.BigDecimal;
 
 @Entity
 
-@Table(name = "item_transfer_entry")
+@Table(name = "item_transfer_entry",catalog="storage")
 
 public class ItemTransferEntry extends BaseDomain {
 

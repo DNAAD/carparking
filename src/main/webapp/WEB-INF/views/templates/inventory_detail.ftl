@@ -13,6 +13,7 @@
     <title>个人中心 库存详情 </title>
 
     <link href="${rc.contextPath}/components/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${rc.contextPath}/components/bootstrap_table/bootstrap-table.min.css" rel="stylesheet">
 
     <script src="${rc.contextPath}/js/jquery/jquery.js" type="text/javascript"></script>
     <script src="${rc.contextPath}/components/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -33,11 +34,11 @@
 <body>
 <div class="container" style="margin-bottom:80px; margin-top:10px">
 
+    <h1 class="page-header">
+        <small>库存详情  / ${deliveryOrderMap.name!''}</small>
+    </h1>
 
-<ol class="breadcrumb">
-    <li class="active">库存详情</li>
-    <li class="active">${deliveryOrderMap.name!''}</li>
-</ol>
+
 
 <div class=" ">
 <div class="tabpanel">
@@ -213,75 +214,6 @@
 
 
 
-
-    <label>扫一扫微信获得信息 </label>
-
-    <div class="thumbnail">
-        <img src="${qrcodeUrl!'/logo.png'}">
-    </div>
-
-        <#if verification??>
-
-        <table  class="table table-condensed">
-            <thead>
-            <tr>
-                <th>验证信息</th>
-                <th></th>
-
-
-            </tr>
-            </thead>
-            <tbody>
-            <tr  >
-                <td class="active">揽货验证密码：</td>
-                <td >    <input type="text" id="demandNum" name="demandNum"  placeholder="测试-揽货密码" value="${verification.code}"/></td>
-            </tr>
-            <tr>
-                <td class="active">验证二维码</td>
-                <td>
-
-
-                    <script type="text/javascript" src="/qrcode.js"></script>
-                    <input id="text" type="text" value="${qrcodeContent!''}" style="width:80%" />
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <g id="qrcode_div"/>
-                    </svg>
-                    <script type="text/javascript">
-                        var qrcode = new QRCode(document.getElementById("qrcode_div"), {
-                            width : 100,
-                            height : 100,
-                            useSVG: true
-                        });
-
-                        function makeCode () {
-                            var elText = document.getElementById("text");
-
-                            /*                           if (!elText.value) {
-                                                           alert("Input a text");
-                                                           elText.focus();
-                                                           return;
-                                                       }*/
-
-                            qrcode.makeCode(elText.value);
-                        }
-
-                        makeCode();
-
-                        $("#text").
-                                on("blur", function () {
-                                    makeCode();
-                                }).
-                                on("keydown", function (e) {
-                                    if (e.keyCode == 13) {
-                                        makeCode();
-                                    }
-                                });
-                    </script>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        </#if>
 
     </div>
 

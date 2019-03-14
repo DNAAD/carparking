@@ -22,6 +22,9 @@ public class InstanceTransportCreateForm {
     private String status;
     private Integer id;
     private BigDecimal tareWeight;
+    private String no;
+    private String uuid;
+    private String feeUuid;
 
     public String getLineName() {
         return lineName;
@@ -83,5 +86,29 @@ public class InstanceTransportCreateForm {
 
     public void setTareWeight(BigDecimal tareWeight) {
         this.tareWeight = tareWeight;
+    }
+
+    public String getNo() {
+        return no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getFeeUuid() {
+        return feeUuid;
+    }
+
+    public void setFeeUuid(String feeUuid) {
+        this.feeUuid = feeUuid;
     }
 }

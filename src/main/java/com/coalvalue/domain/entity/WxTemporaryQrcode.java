@@ -1,6 +1,5 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Column;
@@ -11,7 +10,7 @@ import javax.persistence.Table;
  * Created by silence on 2016/3/18.
  */
 @Entity
-@Table(name = "wx_temporary_qrcode")
+@Table(name = "wx_temporary_qrcode",catalog="storage")
 
 public class WxTemporaryQrcode extends BaseDomain {
 

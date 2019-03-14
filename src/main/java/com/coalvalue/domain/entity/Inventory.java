@@ -1,12 +1,13 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by yuan zhao  on 08/10/2015.
@@ -14,24 +15,67 @@ import java.math.BigDecimal;
 
 @Entity
 
-@Table(name = "inventory")
+@Table(name = "inventory",catalog="storage")
 
 public class Inventory extends BaseDomain {
 
 
 
+    @NotNull
     @Column(name = "no")
     private String no;
 
 
-
+    @NotNull
     @Column(name = "granularity")
     private String granularity;
+
+    @NotNull
     @Column(name = "coalType")
     private String coalType;
+
+
     private BigDecimal quote;
     @Column(name = "synchronized_status")
     private String synchronizedStatus;
+    @Column(name = "synchronized_time")
+
+    private Date lastSyncTimestamp;
+
+
+    @NotNull
+    private String productNo;
+    private String storageNo;
+    private BigDecimal indicator1;
+    private BigDecimal indicator2;
+    private BigDecimal indicator3;
+    private BigDecimal indicator4;
+    private BigDecimal indicator5;
+
+
+    public BigDecimal getIndicator3() {
+        return indicator3;
+    }
+
+    public void setIndicator3(BigDecimal indicator3) {
+        this.indicator3 = indicator3;
+    }
+
+    public BigDecimal getIndicator4() {
+        return indicator4;
+    }
+
+    public void setIndicator4(BigDecimal indicator4) {
+        this.indicator4 = indicator4;
+    }
+
+    public BigDecimal getIndicator5() {
+        return indicator5;
+    }
+
+    public void setIndicator5(BigDecimal indicator5) {
+        this.indicator5 = indicator5;
+    }
 
     public String getSynchronizedStatus() {
         return synchronizedStatus;
@@ -65,26 +109,8 @@ public class Inventory extends BaseDomain {
         this.coalType = coalType;
     }
 
-    @Column(name = "storage_id")
-    private Integer storageId;
-
-    @Column(name = "item_id")
-    private Integer itemId;
 
 
-    @Column(name = "company_Id")
-    private Integer companyId;
-
-    public Integer getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
-    }
-
-    @Column(name = "item_type")
-    private String itemType;
 
     @Column(name = "quantity_on_hand")
     private BigDecimal quantityOnHand;
@@ -97,29 +123,7 @@ public class Inventory extends BaseDomain {
 
 
 
-    public Integer getStorageId() {
-        return storageId;
-    }
 
-    public void setStorageId(Integer storageId) {
-        this.storageId = storageId;
-    }
-
-    public Integer getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(Integer itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
-    }
 
     public BigDecimal getQuantityOnHand() {
         return quantityOnHand;
@@ -148,6 +152,46 @@ public class Inventory extends BaseDomain {
 
     public void setQuote(BigDecimal quote) {
         this.quote = quote;
+    }
+
+    public Date getLastSyncTimestamp() {
+        return lastSyncTimestamp;
+    }
+
+    public void setLastSyncTimestamp(Date lastSyncTimestamp) {
+        this.lastSyncTimestamp = lastSyncTimestamp;
+    }
+
+    public void setProductNo(String productNo) {
+        this.productNo = productNo;
+    }
+
+    public String getProductNo() {
+        return productNo;
+    }
+
+    public void setStorageNo(String storageNo) {
+        this.storageNo = storageNo;
+    }
+
+    public String getStorageNo() {
+        return storageNo;
+    }
+
+    public void setIndicator1(BigDecimal indicator1) {
+        this.indicator1 = indicator1;
+    }
+
+    public BigDecimal getIndicator1() {
+        return indicator1;
+    }
+
+    public void setIndicator2(BigDecimal indicator2) {
+        this.indicator2 = indicator2;
+    }
+
+    public BigDecimal getIndicator2() {
+        return indicator2;
     }
 
 

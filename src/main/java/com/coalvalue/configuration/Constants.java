@@ -18,9 +18,9 @@ public class Constants {
 
 
  	public static String APP_ID = "BNzuQbRWYegDtrXc6siw";
-
-
-
+    public static String delivery_web_server = "delivery_web_server";
+    public static String core_server_request = "register_request";
+    public static String uuid_configuration_topic = "uuid_configuration_topic";
 
     public static  String APP_SECRET = "B3ezJgetupp5mUUDU4zCV222DlXus07wl4ZU0EdGxZpaQeG9ng";
 
@@ -53,7 +53,8 @@ public class Constants {
     public static final int MAX_CONTEXT_NUM = 100;
     public static final int WX_COMPANY_SCENEID = 10000;
     public static final String WX_QRCODE_TYPE_COMPANY = "company";
-
-
+    public static final String WX_QRCODE_TYPE_COMPANY_BIND_AUTO_SYSTEM = "bind_auto_system";
+    public static final String WX_QRCODE_TYPE_COMPANY_AUTO_SYSTEM_MANAGEMENT = "auto_system_management";
+    public static final String WX_QRCODE_TYPE_STORAGESPACE = "storageSpace";
 
 }

@@ -22,19 +22,9 @@ public enum PriceCategoryTypeEnum {
 */
 
 
-
-
-    MARKET_PRICE ("market price","市场价",1,"车板价格就是卖方把煤炭装到火车上之前的所有价格加一起。煤炭价格+短途运输费+站台费+„„=车板价","市场"),
-
-    BOARDED_PRICE ("boarded price","车板价", 5,"",".."),
-    FOR_PRICE ("FOR price", "车板含税价",6,"",".."),
-    EX_FACTORY_PRICE ("ex-factory price", "含税出厂价",6,"",".."),
-    MINE_MOUTH_PRICE_EXC_VAT ("minemouth price exc. VAT","坑口不含税价", 7,"","出矿不含税"),
-    MINE_MOUTH_PRICE ("minemouth-price","坑口价", 8,"","出矿含税"),
     EX_MINE_PRICE_EXC_VAT ("ex-mine price exc. VAT","出矿不含税", 6,"","出矿不含税"),
-    EX_MINE_PRICE ("ex-mine price","出矿含税价", 6,"","出矿含税"),
-    COAL_PRICES_IN_COAL_PRODUCING_AREAS ("coal prices in coal-producing areas", "场地价",6,"",".."),
-    EX_MINE_COAL_PRICES ("ex-mine coal prices","出矿价", 6,"",".."), ERROR("error", "错误", 6, "dd","..");
+    EX_MINE_PRICE ("ex-mine price","出矿含税价", 6,"","出矿含税");
+
 
 
 

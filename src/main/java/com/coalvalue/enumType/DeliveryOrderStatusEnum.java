@@ -15,7 +15,9 @@ public enum DeliveryOrderStatusEnum {
 
     Invalid (CommonConstant.InvitationCode_STATUS_Invalid, "无效",2,""),
     Valid (CommonConstant.InvitationCode_STATUS_Valid, "有效",2,"") ,
-    Completed (CommonConstant.InvitationCode_STATUS_Invalid, "完成",2,""),
+    Taking_delivery (CommonConstant.InvitationCode_STATUS_Taking_delivery, "正在提货",2,""),
+
+    Completed (CommonConstant.InvitationCode_STATUS_Completed, "完成",2,""),
     ;
 
     private final String statusText;

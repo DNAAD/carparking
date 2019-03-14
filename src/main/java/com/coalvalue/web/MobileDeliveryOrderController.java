@@ -1,13 +1,14 @@
 package com.coalvalue.web;
 
-import com.coalvalue.domain.OperationResult;
 import com.coalvalue.domain.entity.InstanceTransport;
-import com.coalvalue.domain.entity.Line;
+
 import com.coalvalue.domain.entity.ReportDeliveryOrder;
-import com.coalvalue.enumType.ResourceType;
+import com.coalvalue.repository.ReportDeliveryOrderRepository;
 import com.coalvalue.service.*;
+import com.coalvalue.service.other.GeneralServiceImpl;
 import com.coalvalue.web.valid.InstanceTransportCreateForm;
 import com.coalvalue.web.valid.LineCreateForm;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,16 +45,13 @@ public class MobileDeliveryOrderController {
     private static final Logger logger = LoggerFactory.getLogger(MobileDeliveryOrderController.class);
 
 
-
-
-
 /*    @Autowired
     private PlateRecognitionService plateRecognitionService;*/
 
 
 
     @Autowired
-    private LineService lineService;
+    private ReportService lineService;
     @Autowired
     private GeneralServiceImpl generalService;
 
@@ -63,19 +61,28 @@ public class MobileDeliveryOrderController {
     private InstanceTransportService instanceTransportService;
     @Autowired
     private DeliveryOrderService deliveryOrderService;
+    @Autowired
+    private BehaviouralService behaviouralService;
+    @Autowired
+    private ReportDeliveryOrderRepository reportDeliveryOrderRepository;
+
 
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
-    public ModelAndView index(@RequestParam(value = "q", required = false) String searchTerm){//,Authentication authentication)  {
+    public ModelAndView index(@RequestParam(value = "q", required = false) String searchTerm,Authentication authentication)  {
 
-        ModelAndView modelAndView = new ModelAndView("/templates/delivery_order_index");
+        ModelAndView modelAndView = new ModelAndView("/delivery_order_index");
         modelAndView.addObject("q",searchTerm);
 
         String companiesUrl = linkTo(methodOn(MobileDeliveryOrderController.class).stations(null, null)).withSelfRel().getHref();
         logger.debug("============"+companiesUrl);
         modelAndView.addObject("transportUrl",linkTo(methodOn(MobileDeliveryOrderController.class).stations(null, null)).toUri().toASCIIString());
 
-        generalService.setGeneral(modelAndView);
+        try {
+            generalService.setGeneral(modelAndView, "", authentication);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         String createUrl = linkTo(methodOn(MobileDeliveryOrderController.class).createInstanceTransport(null, null)).withSelfRel().getHref();
@@ -132,20 +139,19 @@ public class MobileDeliveryOrderController {
 
 
 
-        Line line = lineService.create(lineCreateForm);
 
-        return line;
+
+        return null;
     }
 
 
 
 
 
-    @RequestMapping(value = "createInstanceTransport", method = RequestMethod.POST)
+    @RequestMapping(value = "createInstanceTransport", method = RequestMethod.PUT)
     @ResponseBody
 
-    public Map createInstanceTransport(@Valid InstanceTransportCreateForm locationCreateForm,
-                                       Authentication authentication) {
+    public Map createInstanceTransport(@Valid InstanceTransportCreateForm locationCreateForm,Authentication authentication) {
 
         logger.debug("----- param is  id : {},  price:{}, notificationToIds:{}, returnTo:{}，sendMessageToFollower is:{}", locationCreateForm.toString());
 
@@ -156,21 +162,22 @@ public class MobileDeliveryOrderController {
         ReportDeliveryOrder reportDeliveryOrder = deliveryOrderService.getById(locationCreateForm.getId());
 
 
-/*
-        OperationResult operationResult = lineService.valid(locationCreateForm.getId());
-        if(!operationResult.isSuccess()){
-            ret.put("message", operationResult.getErrorMessage());
+        InstanceTransport instanceTransport = null;
+        try {
+            instanceTransport = instanceTransportService.createFromDeliveryOrderInputTareWeight(reportDeliveryOrder, null, locationCreateForm);
+            if(instanceTransport != null){
+
+
+                ret.put("status", true);
+            }
+        } catch (MqttException e) {
+            e.printStackTrace();
+            if(instanceTransport != null){
+                ret.put("status", false);
+                ret.put("message", e.getMessage());
+            }
         }
-*/
 
-
-
-        InstanceTransport instanceTransport = instanceTransportService.createFromDeliveryOrder(reportDeliveryOrder, locationCreateForm);
-        if(instanceTransport != null){
-
-
-            ret.put("status", true);
-        }
 
 
         return ret;
@@ -193,13 +200,13 @@ public class MobileDeliveryOrderController {
         }
 
 
-        Line location = lineService.edit(locationCreateForm);
+       /* Line location = lineService.edit(locationCreateForm);
         if(location != null){
 
 
             ret.put("status", true);
         }
-
+*/
 
         return ret;
 
@@ -210,26 +217,20 @@ public class MobileDeliveryOrderController {
 
 
 
-    @RequestMapping( value = "/{id}", method = RequestMethod.GET)
-    public ModelAndView detail(@PathVariable(value = "id", required = false) Integer index, Authentication authentication, @PageableDefault Pageable pageable) {
+    @RequestMapping( value = "/{uuid}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable(value = "uuid", required = false) String uuid, Authentication authentication, @PageableDefault Pageable pageable) {
 
+        ModelAndView modelAndView = new ModelAndView("/deliveryOrder");
 
+        ReportDeliveryOrder deliveryOrder = reportDeliveryOrderRepository.findByUuid(uuid);
+        behaviouralService.add_beingWeighed_Entrance(null, null, deliveryOrder);
 
-
-
-        ModelAndView modelAndView = new ModelAndView("/templates/deliveryOrder");
-
-
-        ReportDeliveryOrder deliveryOrder = deliveryOrderService.getById(index);
 
         String createUrl = linkTo(methodOn(MobileDeliveryOrderController.class).createInstanceTransport(null, null)).withSelfRel().getHref();
         modelAndView.addObject("createUrl",createUrl);
 
-
-
-            modelAndView.addObject("deliveryOrderMap",deliveryOrderService.get(deliveryOrder));
-
-            modelAndView.addObject("deliveryOrder",deliveryOrder);
+        modelAndView.addObject("deliveryOrderMap",deliveryOrder);
+        modelAndView.addObject("deliveryOrder",deliveryOrderService.get(deliveryOrder));
 
    /*         WxTemporaryQrcode wxeneral = wxService.getByTransportation_Deliver_order(deliveryOrder, Constants.WX_QRCODE_TYPE_transportOperation_DELIVER_ORDER);
 
@@ -239,8 +240,13 @@ public class MobileDeliveryOrderController {
         //    modelAndView.addObject("qrcodeUrl",wxeneral.getQrCode());
 
 
-
         return modelAndView;
 
     }
+
+
+
+
+
+
 }

@@ -1,11 +1,11 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import com.coalvalue.enumType.PriceCategoryStatusEnum;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -15,22 +15,31 @@ import java.util.Date;
 
 @Entity
 
-@Table(name = "price_category")
+@Table(name = "price_category",catalog="storage")
 
 public class PriceCategory extends BaseDomain {
 
+    @NotNull
     private String name;
-
+    @NotNull
     private BigDecimal value;
 
     private String itemType;
 
-    private Integer itemId;
-    private String trend;
+
     private Boolean major;
+
+    @NotNull
     private String status;
+
+    @NotNull
     private Integer seq;
+
     private BigDecimal expectedValue;
+    @NotNull
+    private String productNo;
+    @NotNull
+    private String objectUuid;
 
     public Boolean getMajor() {
         return major;
@@ -77,12 +86,13 @@ public class PriceCategory extends BaseDomain {
         this.itemType = itemType;
     }
 
-    public Integer getItemId() {
-        return itemId;
+
+    public String getProductNo() {
+        return productNo;
     }
 
-    public void setItemId(Integer itemId) {
-        this.itemId = itemId;
+    public void setProductNo(String productNo) {
+        this.productNo = productNo;
     }
 
     @Override
@@ -90,13 +100,7 @@ public class PriceCategory extends BaseDomain {
         return ReflectionToStringBuilder.toString(this);
     }
 
-    public void setTrend(String trend) {
-        this.trend = trend;
-    }
 
-    public String getTrend() {
-        return trend;
-    }
 
     public void setLastChangeTime(Date lastChangeTime) {
         this.lastChangeTime = lastChangeTime;
@@ -120,5 +124,13 @@ public class PriceCategory extends BaseDomain {
 
     public void setExpectedValue(BigDecimal expectedValue) {
         this.expectedValue = expectedValue;
+    }
+
+    public String getObjectUuid() {
+        return objectUuid;
+    }
+
+    public void setObjectUuid(String objectUuid) {
+        this.objectUuid = objectUuid;
     }
 }

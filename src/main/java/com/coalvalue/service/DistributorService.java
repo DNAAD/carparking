@@ -1,11 +1,9 @@
 package com.coalvalue.service;
 
-import com.coalvalue.domain.Distributor;
+import com.coalvalue.domain.entity.Distributor;
 import com.coalvalue.domain.entity.*;
-import com.coalvalue.enumType.InventoryStatusEnum;
 import com.coalvalue.web.valid.DistributorCreateForm;
-import com.coalvalue.web.valid.LineCreateForm;
-import com.service.BaseService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,5 +55,12 @@ public interface DistributorService extends BaseService {
     Distributor update(Distributor inventory);
 
     Distributor createDistributorFromMap(Map inventory_);
+
+    List<Distributor> getAll();
+
+    List<Map> getEnumAll();
+
+
+    Page<Map> queryEmployee(Distributor o, Pageable pageable);
 
 }

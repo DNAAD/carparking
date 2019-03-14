@@ -111,6 +111,7 @@ public class DeliveryOrderDto {
     private String province;
     private Integer departureStation;
     private String searchText;
+    private String storageNo;
 
     public Integer getgMax() {
         return gMax;
@@ -608,5 +609,13 @@ public class DeliveryOrderDto {
 
     public String getSearchText() {
         return searchText;
+    }
+
+    public void setStorageNo(String storageNo) {
+        this.storageNo = storageNo;
+    }
+
+    public String getStorageNo() {
+        return storageNo;
     }
 }

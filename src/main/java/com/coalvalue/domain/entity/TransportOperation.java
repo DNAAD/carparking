@@ -1,8 +1,5 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
-import com.coalvalue.enumType.EventEnum;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,15 +10,13 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 /**
  * Created by yuan zhao  on 08/10/2015.
  */
 
 @Entity
 
-@Table(name = "transport_operation")
+@Table(name = "transport_operation",catalog="storage")
 
 public class TransportOperation extends BaseDomain {
 

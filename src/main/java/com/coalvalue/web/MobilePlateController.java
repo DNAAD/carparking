@@ -2,8 +2,8 @@ package com.coalvalue.web;
 
 import com.coalvalue.domain.entity.Location;
 import com.coalvalue.domain.entity.PlateRecognition;
-import com.coalvalue.service.GeneralServiceImpl;
-import com.coalvalue.service.LocationService;
+import com.coalvalue.service.other.GeneralServiceImpl;
+import com.coalvalue.service.VerifyService;
 import com.coalvalue.service.MqttService;
 import com.coalvalue.service.PlateRecognitionService;
 import com.coalvalue.web.valid.LocationCreateForm;
@@ -38,7 +38,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
  */
 
 @Controller
-@RequestMapping(value= {"/plate"})
+@RequestMapping(value= {"/plate_KK"})
 public class MobilePlateController {
     private static final Logger logger = LoggerFactory.getLogger(MobilePlateController.class);
 
@@ -46,7 +46,7 @@ public class MobilePlateController {
 
 
     @Autowired
-    private LocationService locationService;
+    private VerifyService locationService;
 
     @Autowired
     private PlateRecognitionService plateRecognitionService;
@@ -60,25 +60,30 @@ public class MobilePlateController {
 
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
-    public ModelAndView index(@RequestParam(value = "q", required = false) String searchTerm){//,Authentication authentication)  {
+    public ModelAndView index(@RequestParam(value = "q", required = false) String searchTerm,Authentication authentication)  {
         //mqttService.sendNetworkStatus("OK");
 
 
-        ModelAndView modelAndView = new ModelAndView("/templates/plate_index");
+        ModelAndView modelAndView = new ModelAndView("/plate_index");
         modelAndView.addObject("q",searchTerm);
 
-        String companiesUrl = linkTo(methodOn(MobilePlateController.class).stations("", null)).withSelfRel().getHref();
-        modelAndView.addObject("locationsUrl",companiesUrl);
-        String command_create_url = linkTo(methodOn(MobilePlateController.class).create(null, null)).withSelfRel().getHref();
+        String plateUrl = linkTo(methodOn(MobilePlateController.class).plate("", null)).withSelfRel().getHref();
+
+        modelAndView.addObject("plateUrl",plateUrl);
+ /*       String command_create_url = linkTo(methodOn(MobilePlateController.class).create(null, null)).withSelfRel().getHref();
         modelAndView.addObject("command_create_url",command_create_url);
+*/
 
 
         String command_edit_url = linkTo(methodOn(MobilePlateController.class).edit(null, null)).withSelfRel().getHref();
         modelAndView.addObject("command_edit_url",command_edit_url);
 
 
-
-        generalService.setGeneral(modelAndView);
+        try {
+            generalService.setGeneral(modelAndView, "", authentication);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         return modelAndView;
@@ -89,7 +94,7 @@ public class MobilePlateController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public Page<PlateRecognition> stations(@RequestParam(value = "q", required = false) String searchTerm, @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable)  {
+    public Page<PlateRecognition> plate(@RequestParam(value = "q", required = false) String searchTerm, @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable)  {
 
 
 
@@ -100,28 +105,6 @@ public class MobilePlateController {
 
 
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    @ResponseBody
-
-    public Map create(@Valid LocationCreateForm locationCreateForm,
-                                      Authentication authentication) {
-
-        logger.debug("----- param is  id : {},  price:{}, notificationToIds:{}, returnTo:{}，sendMessageToFollower is:{}", locationCreateForm.toString());
-
-        Map ret = new HashMap<String, String>();
-        ret.put("status", false);
-
-            Location location = locationService.create(locationCreateForm);
-            if(location != null){
-
-
-                ret.put("status", true);
-            }
-
-
-        return ret;
-
-    }
 
 
     @RequestMapping(value = "", method = RequestMethod.PUT)

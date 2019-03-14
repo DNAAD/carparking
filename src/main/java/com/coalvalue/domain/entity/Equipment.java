@@ -1,12 +1,12 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by yuan zhao  on 08/10/2015.
@@ -14,34 +14,31 @@ import javax.persistence.Transient;
 
 @Entity
 
-@Table(name = "equipment")
+@Table(name = "equipment",catalog="storage")
 
 public class Equipment extends BaseDomain {
 
 
-
-    @Column(name = "user_id")
-    private Integer userId;
-
-    @Column(name = "company_id")
-    private Integer companyId;
-
     @Column(name = "pin")
     private String pin;
 
+
+    @NotNull
     @Column(name = "name")
     private String name;
-
+    @NotNull
     @Column(name = "status")
     private String status;
+
+    @NotNull
     private String type;
+
+    @NotNull
     private String deviceId;
 
-    @Transient
-    private String displayMode;
+    @NotNull
+    private String hubId;
 
-    @Transient
-    private String displayConent;
 
     public Equipment() {
     }
@@ -54,21 +51,6 @@ public class Equipment extends BaseDomain {
         this.name = name;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
-    }
 
     public String getPin() {
         return pin;
@@ -107,20 +89,12 @@ public class Equipment extends BaseDomain {
         return deviceId;
     }
 
-    public String getDisplayMode() {
-        return displayMode;
+    public void setHubId(String hubId) {
+        this.hubId = hubId;
     }
 
-    public void setDisplayMode(String displayMode) {
-        this.displayMode = displayMode;
-    }
-
-    public void setDisplayConent(String displayConent) {
-        this.displayConent = displayConent;
-    }
-
-    public String getDisplayConent() {
-        return displayConent;
+    public String getHubId() {
+        return hubId;
     }
 
 

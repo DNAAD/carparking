@@ -17,9 +17,6 @@ public enum ConfigurationAttributeEnum {
 
 
 
-
-
-
     private final String statusText;
     private final String displayText;
     private final Integer id;

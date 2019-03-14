@@ -1,6 +1,5 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Column;
@@ -13,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 
-@Table(name = "behavioural")
+@Table(name = "behavioural",catalog="storage")
 
 public class Behavioural extends BaseDomain {
 

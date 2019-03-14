@@ -4,28 +4,32 @@ package com.coalvalue.service;
 import com.coalvalue.configuration.CommonConstant;
 
 import com.coalvalue.configuration.Constants;
-import com.coalvalue.domain.Distributor;
+import com.coalvalue.domain.entity.Distributor;
 import com.coalvalue.domain.OperationResult;
 
 import com.coalvalue.domain.entity.*;
 
+import com.coalvalue.domain.pojo.ReportDeliveryOrder_remote;
 import com.coalvalue.enumType.*;
 
 import com.coalvalue.repository.*;
 
 import com.coalvalue.util.SequenceGenerator;
 
-import com.domain.entity.User;
 
-import com.service.BaseServiceImpl;
+
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -43,8 +47,6 @@ public class TransportOperationServiceImpl extends BaseServiceImpl implements Tr
     private TransportOperationRepository transportOperationRepository;
 
 
-    @Autowired
-    private CompanyService companyService;
 
     @Autowired
     private SequenceGenerator sequenceGenerator;
@@ -53,18 +55,6 @@ public class TransportOperationServiceImpl extends BaseServiceImpl implements Tr
 
     @Autowired
     private ReportDeliveryOrderRepository reportDeliveryOrderRepository;
-
-    @Autowired
-    private WxService wxService;
-
-    @Autowired
-    private BehaviouralService behaviouralService;
-
-
-    @Autowired
-    private InstanceTransportService instantService;
-
-
 
 
     @Autowired
@@ -75,6 +65,8 @@ public class TransportOperationServiceImpl extends BaseServiceImpl implements Tr
 
 
 
+    @Autowired
+    private EmployeeService employeeService;
 
 
 
@@ -99,13 +91,13 @@ public class TransportOperationServiceImpl extends BaseServiceImpl implements Tr
 
     @Override
     public TransportOperation getOperationById(Integer id) {
-        return transportOperationRepository.findOne(id);
+        return transportOperationRepository.findById(id).get();
     }
 
 
     @Override
     public InstanceTransport getInstanceOperationById(Integer id) {
-        return instanceTransportRepository.findOne(id);
+        return instanceTransportRepository.findById(id).get();
     }
 
 
@@ -212,7 +204,7 @@ public class TransportOperationServiceImpl extends BaseServiceImpl implements Tr
         if(transportOperation.getFromTransport() == null && transportOperation.getToTransport() != null){
 
             logger.debug("///开始的 一个");  // 要，下一个 是 完成，（ leave 状态），这个才能设置为leave，
-            toTransportOperation = transportOperationRepository.findById(transportOperation.getToTransport());
+            toTransportOperation = transportOperationRepository.findById(transportOperation.getToTransport()).get();
 
             if(toTransportOperation != null && toTransportOperation.getStatus().equals(TransportOperationStatusEnum.LEAVE.getText())){
                 transportOperation.setStatus(TransportOperationStatusEnum.LEAVE.getText());
@@ -259,8 +251,10 @@ public class TransportOperationServiceImpl extends BaseServiceImpl implements Tr
 */
 
 
+/*
         Company company = companyService.getCompanyById(transportOperation.getPartnerId());
 
+*/
 
 
         return operationResult;
@@ -363,7 +357,7 @@ public class TransportOperationServiceImpl extends BaseServiceImpl implements Tr
 
         if(wxTemporaryQrcodes.getTotalElements() != 0){
             HashMap<String,Object> map = new HashMap<>();
-            TransportOperation operation = transportOperationRepository.findById(wxTemporaryQrcodes.getContent().get(0).getItemId());
+            TransportOperation operation = transportOperationRepository.findById(wxTemporaryQrcodes.getContent().get(0).getItemId()).get();
           //  ledService.transport(operation, user.getCompany());
         }
 
@@ -371,7 +365,7 @@ public class TransportOperationServiceImpl extends BaseServiceImpl implements Tr
         for(WxTemporaryQrcode wxTemporaryQrcode:wxTemporaryQrcodes){
 
 
-            TransportOperation operation = transportOperationRepository.findById(wxTemporaryQrcode.getItemId());
+            TransportOperation operation = transportOperationRepository.findById(wxTemporaryQrcode.getItemId()).get();
 /*
 
             if(operation.getToTransport()!= null){
@@ -386,109 +380,6 @@ public class TransportOperationServiceImpl extends BaseServiceImpl implements Tr
         objectMap.put("totalPages",wxTemporaryQrcodes.getTotalPages());
         objectMap.put("totalElements",wxTemporaryQrcodes.getTotalElements());
         return objectMap;
-    }
-
-    @Override
-    @Transactional
-    public ReportDeliveryOrder createDeliveryOrder_(TransportOperation transportOperation) {
-        List<ReportDeliveryOrder> reportDeliveryOrders = reportDeliveryOrderRepository.findByTransportOperationIdAndStatus(transportOperation.getId(), DeliveryOrderStatusEnum.Valid.getText());
-
-        if(reportDeliveryOrders.size() == 0){
-            ReportDeliveryOrder reportDeliveryOrder = create(transportOperation);
-
-
-/*        reportDeliveryOrder.setCompanyName(user.getCompany().getCompanyName());
-        reportDeliveryOrder.setCompanyNo(user.getCompany().getCompanyNo());*/
-/*        reportDeliveryOrder.setConsigneeName(transportOperationCreateForm.getConsigneeName());
-        reportDeliveryOrder.setConsigneePhone(transportOperationCreateForm.getConsigneePhone());
-        reportDeliveryOrder.setPlateNumbers(transportOperationCreateForm.getPlateNumber());
-        reportDeliveryOrder.setQrcodeUrl(wxQrcode.getQrCode());*/
-
-
-            return reportDeliveryOrder;
-
-        }else{
-
-            ReportDeliveryOrder reportDeliveryOrder = reportDeliveryOrders.get(0);
-            reportDeliveryOrder.setStatus(DeliveryOrderStatusEnum.Invalid.getText());
-            reportDeliveryOrderRepository.save(reportDeliveryOrder);
-
-
-
-             reportDeliveryOrder = create(transportOperation);
-
-            return reportDeliveryOrder;
-
-
-        }
-
-
-
-    }
-
-  @Override
-  @Transactional
-    public ReportDeliveryOrder createDeliveryOrder(Distributor distributor, Map map) {
-
-
-
-
-      String plateNumber =(String)map.get("plateNumber");
-      String traderName =(String)map.get("traderName");
-      String idNumber =(String)map.get("idNumber");
-      String productCoalType =(String)map.get("productCoalType");
-      String productGranularity =(String)map.get("productGranularity");
-      String qrcode =(String)map.get("qrcode");
-      String companyNo =(String)map.get("companyNo");
-      Integer deliveryOrderId =(Integer)map.get("deliveryOrderId");
-      String product =(Integer)map.get("product")+"";
-      String type =(String)map.get("type");
-      String no =(String)map.get("no");
-      String inventoryNo =((String)map.get("inventoryNo")).toString();
-
-      System.out.print("兴建提煤单");
-
-
-        System.out.print("兴建提煤单");
-        ReportDeliveryOrder reportDeliveryOrder = new ReportDeliveryOrder();
-        reportDeliveryOrder.setPlateNumber(plateNumber);
-        reportDeliveryOrder.setIdNumber(idNumber);
-        reportDeliveryOrder.setProductName(productCoalType+" "+ productGranularity);
-        reportDeliveryOrder.setCompanyName(traderName);
-        reportDeliveryOrder.setQrcode(qrcode);
-        reportDeliveryOrder.setNo(no);
-        reportDeliveryOrder.setInventoryNo(inventoryNo);
-        reportDeliveryOrder.setCompanyNo(distributor.getCompanyNo());
-
-      reportDeliveryOrder.setSynthesizedId(deliveryOrderId);
-
-
-        reportDeliveryOrder.setStatus(DeliveryOrderStatusEnum.Valid.getText());
-
-        reportDeliveryOrder = reportDeliveryOrderRepository.save(reportDeliveryOrder);
-
-      return reportDeliveryOrder;
-
-  }
-
-    private ReportDeliveryOrder create(TransportOperation transportOperation) {
-        ReportDeliveryOrder reportDeliveryOrder = new ReportDeliveryOrder();
-        reportDeliveryOrder.setTransportOperationId(transportOperation.getId());
-
-        reportDeliveryOrder.setTransportOperationId(transportOperation.getId());
-        reportDeliveryOrder.setTicket(RandomStringUtils.randomAlphanumeric(40));
-        reportDeliveryOrder.setStatus(DeliveryOrderStatusEnum.Valid.getText());
-
-
-        reportDeliveryOrder.setProductName(" ---product name ");
-        transportOperation.setReportDeliveryOrderId(reportDeliveryOrder.getId());
-
-        reportDeliveryOrder.setAccessCode(RandomStringUtils.randomNumeric(6));
-        reportDeliveryOrder.setItemId(transportOperation.getId());
-        reportDeliveryOrder.setItemType(ResourceType.TRANSPORT_OPERATION.getText());
-        reportDeliveryOrder = reportDeliveryOrder = reportDeliveryOrderRepository.save(reportDeliveryOrder);
-        return reportDeliveryOrder;
-
     }
 
 }

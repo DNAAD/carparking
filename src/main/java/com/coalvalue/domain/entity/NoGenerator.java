@@ -1,7 +1,5 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
-import com.domain.entity.User;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.*;
@@ -14,7 +12,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "no_generator")
+@Table(name = "no_generator",catalog="storage")
 public class NoGenerator extends BaseDomain {
 
 
@@ -26,9 +24,9 @@ public class NoGenerator extends BaseDomain {
     @Column(name = "company_Id")
     private Integer companyId;
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL,fetch = FetchType.LAZY)// mappedBy="user")
+/*    @OneToOne(optional = true, cascade = CascadeType.ALL,fetch = FetchType.LAZY)// mappedBy="user")
     @JoinColumn(name="user_Id" ,referencedColumnName = "id", unique = true)
-    private User user;
+    private User user;*/
 
 	private Integer orderNo;
 	private Integer shipmentNo;
@@ -45,14 +43,14 @@ public class NoGenerator extends BaseDomain {
     public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
-
+/*
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
+    }*/
 
     public Integer getOrderNo() {
         return orderNo;

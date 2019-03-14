@@ -1,22 +1,25 @@
 package com.coalvalue.repository;
 
 
+import com.coalvalue.domain.entity.PriceCategory;
 import com.coalvalue.domain.entity.Product;
-import com.coalvalue.repository.base.BaseJpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by zhao yuan on 01/10/2015.
  */
-public interface ProductRepository extends BaseJpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Product findByItemIdAndItemType(Integer productId, String productType);
 
 
-    Product findById(Integer productId);
+    Optional<Product> findById(Integer productId);
 
     List<Product> findByCompanyId(Integer id);
 
@@ -37,4 +40,11 @@ public interface ProductRepository extends BaseJpaRepository<Product, Integer> {
 
     Page<Product> findByCompanyIdAndStatus(Integer id, String text, Pageable pageRequest);
 
+    Product findByNo(String no);
+
+    List<String> findUuidBy();
+
+    Product findByUuid(String objectUuid);
+
+    List<Product> findByUuidIn(List<String> uuids);
 }

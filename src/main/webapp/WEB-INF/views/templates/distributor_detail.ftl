@@ -11,6 +11,8 @@
     <title>个人中心 客户详情 </title>
 
     <link href="${rc.contextPath}/components/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${rc.contextPath}/components/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="${rc.contextPath}/components/bootstrap_table/bootstrap-table.min.css" rel="stylesheet">
 
     <script src="${rc.contextPath}/js/jquery/jquery.js" type="text/javascript"></script>
     <script src="${rc.contextPath}/components/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -18,493 +20,225 @@
     <script type="text/javascript" src="${rc.contextPath}/components/bootstrap_table/bootstrap-table.min.js"></script>
     <script type="text/javascript" src="${rc.contextPath}/components/bootstrap_table/bootstrap-table-zh-CN.min.js"></script>
     <script type="text/javascript" src="${rc.contextPath}/components/bootstrap-select/js/bootstrap-select.min.js"></script>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
+
+
+<#--    <script src="http://code.highcharts.com/highcharts.js"></script>
     <script type="text/javascript" src="${rc.contextPath}/js/highcharts.js"></script>
     <script src="${rc.contextPath}/js/highcharts-more.js"></script>
     <script src="http://code.highcharts.com/maps/modules/map.js"></script>
-    <script src="http://code.highcharts.com/maps/modules/data.js"></script>
+    <script src="http://code.highcharts.com/maps/modules/data.js"></script>-->
 
 </head>
 <body>
-<div class="container" style="margin-bottom:80px; margin-top:10px">
+<div class="container" style="margin-bottom:80px; margin-top:0px">
 
 
-<ol class="breadcrumb">
-    <li class="active">客户管理</li>
-    <li class="active">${deliveryOrderMap.name}</li>
-</ol>
-
+    <h1 class="page-header">
+        <small>客户详情 / ${deliveryOrderMap.name}</small>
+    </h1>
 <div class=" ">
 <div class="tabpanel">
     <ul class="nav nav-tabs " id="ajaxTabs" role="tablist">
 
         <li role="presentation" class=""><a href="#companies" aria-controls="capitalHistory" role="tab"
                                                   data-toggle="tab">基本信息 <span class="badge"></span></a></li>
-        <li role="presentation" class="active"><a href="#transfer" aria-controls="capitalHistory" role="tab"
+
+        <li role="presentation" class="active"><a href="#deliveryOrer" aria-controls="deliveryOrer" role="tab"
+                                                  data-toggle="tab">提煤单 <span class="badge"></span></a></li>
+
+        <li role="presentation" class=""><a href="#transfer" aria-controls="capitalHistory" role="tab"
                                             data-toggle="tab">发货详情 <span class="badge"></span></a></li>
+        <li role="presentation" class=""><a href="#reconciliation" aria-controls="capitalHistory" role="tab"
+                                            data-toggle="tab">对账单 <span class="badge"></span></a></li>
+
 
         <li role="presentation" class=""><a href="#capital" aria-controls="capitalHistory" role="tab"
-                                            data-toggle="tab">资金统计 <span class="badge"></span></a></li>
+                                            data-toggle="tab">往来帐 <span class="badge"></span></a></li>
+
+
+        <li role="presentation" class=""><a href="#employee" aria-controls="employee" role="tab"
+                                            data-toggle="tab">员工 <span class="badge"></span></a></li>
+
         <li role="presentation" class=""><a href="#statistic" aria-controls="capitalHistory" role="tab"
                                             data-toggle="tab">统计信息 <span class="badge"></span></a></li>
+
+        <li role="presentation" class=""><a href="#fee" aria-controls="quotation" role="tab"
+                                            data-toggle="tab">价格周期 <span class="badge"></span></a></li>
+
     </ul>
 
 
-    <div  class="tab-content">
+    <div  class="tab-content" style="padding-top: 5px;padding-bottom: 10px">
 
     <div class="tab-pane " id="companies">
 
-    <#if deliveryOrderMap??>
-    <div class="">
 
-
-    <div class="">
-
-    <div id="" class="btn-group" >
-
-        <button id="viewCapacityBtn" type="button" class="btn btn-success">
-            <i class="">查看详情</i>
-        </button>
-        <button id="deleteBtn_" type="button" class="btn btn-primary" >
-            添加
-        </button>
-
-
-        <button id="editBtn" type="button" class="btn btn-primary" >
-            修改
-        </button>
-
-
-
-    </div>
-
-
-    <table class="table" data-show-header="false">
-        <thead>
-        <tr>
-            <th colspan="4">基本信息</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td class="active">状态：</td>
-            <td colspan="3">
-
-                <#if deliveryOrderMap.status?? && deliveryOrderMap.status =="Valid">
-
-                    有效
-                <#else>
-                    无效
-                </#if>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="active">是否绑定平台</td>
-            <td colspan="3">
-
-                <#if deliveryOrderMap.status?? && deliveryOrderMap.status =="Valid">
-
-                    有效
-                <#else>
-                    无效
-                </#if>
-                <button id="" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#boundDistributorModal">
-                    绑定
-                </button>
-
-                <button id="" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#getBoundDistributorQrcodeModal">
-                    获取绑定二维码
-                </button>
-
-                <script type="text/javascript">
-
-
-                    function refresh() {
-                        $('#station-table').bootstrapTable('refresh');
-                    }
-
-                    function selectedRow_() {
-                        var row =  $('#station-table').bootstrapTable('getSelections');
-                        return row;
-                    }
-
-
-                    $("#boundBtn").click(function() {
-                        var row = selectedRow_();
-                        $('#boundDistributorModal').modal();
-
-                        if (row != '') {
-                            $('#boundDistributorModal').modal();
-                            //   alert(JSON.stringify(row[0]));
-                            //   $('#addStationModalForm .companyId').val(row[0].id);
-
-                        }
-                    });
-
-
-
-                </script>
-
-
-            </td>
-        </tr>
-
-            <#if  deliveryOrderMap.status?? && deliveryOrderMap.status =="Valid">
-
-            <tr>
-                <td class="active">提货密码：</td>
-                <td colspan="3"><strong>${deliveryOrderMap.accessCode!''}</strong></td>
-            </tr>
-
-            </#if>
-
-
-
-        <tr>
-            <td class="active">贸易商：</td>
-            <td colspan="3"><a href="${deliveryOrderMap.companyUrl!''}">${deliveryOrderMap.companyName!''}</a></td>
-        </tr>
-
-<#--
-        <tr>
-            <td class="active">货物：</td>
-            <td><a href="${deliveryOrderMap.productUrl!''}" > ${deliveryOrderMap.productName!''}</a></td>
-        </tr>
-
-
-        <tr>
-            <td class="active">来源：</td>
-            <td><a href="${deliveryOrderMap.productSourceUrl!''}" > ${deliveryOrderMap.productSource!''}</a></td>
-        </tr>
--->
-
-
-        </tbody>
-    </table>
-
-
-        <#if  deliveryOrderMap.status?? && deliveryOrderMap.status =='Valid'>
-        <table  class="table table-condensed">
-            <thead>
-            <tr>
-                <th>装货信息</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-
-
-
-            <tr id="tr-id-1" class="tr-class-1">
-
-
-                <td id="td-id-1" class="td-class-1">
-                    堆场情况
-                </td>
-                <td>
-                    <#if yard??>
-                    ${yard.loaction!'--'}
-
-                        <h3>等待装车车辆：${yardStatistic.countShipmentsLoading!'--'}</h3>
-                        <h3>正在装车车辆：${yardStatistic.countShipmentsCreated!'--'}</h3>
-
-                    </#if>
-                </td>
-            </tr>
-                <#if deliveryOrderMap.storage??>
-                <tr id="tr-id-1" class="tr-class-1">
-                    <td id="td-id-1" class="td-class-1">
-                        对场地
-                    </td>
-                    <td><a href="${deliveryOrderMap.storage.url}">${deliveryOrderMap.storage.name!''}</a></td>
-                </tr>
-                <tr id="tr-id-1" class="tr-class-1">
-                    <td id="td-id-1" class="td-class-1">
-                        地点
-                    </td>
-
-                    <td>${deliveryOrderMap.storage.province!'---'}${deliveryOrderMap.storage.city!'---'}${deliveryOrderMap.storage.district!'---'}${deliveryOrderMap.storage.street!'---'} </td>
-                </tr>
-                </#if>
-
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1 success">
-                    堆场负责人
-                </td>
-                <td>${deliveryOrderMap.shipperPrincipalName!'---'}</td>
-
-            </tr>
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1 success">
-                    堆场负责人电话
-                </td>
-                <td><a href="tel:${deliveryOrderMap.shipperPrincipalName!'---'}">${deliveryOrderMap.shipperPrincipalPhone!'---'}</a></td>
-            </tr>
-
-
-            <tr>
-                <th>车辆信息</th>
-                <th></th>
-            </tr>
-
-
-
-
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1">
-                    车牌号
-                </td>
-                <td>${deliveryOrderMap.plateNumber!''}</td>
-            </tr>
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1">
-                    载重
-                </td>
-                <td>${deliveryOrderMap.carryingCapacity!''}</td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1">
-                    类型
-                </td>
-                <td>${deliveryOrderMap.vehicleType!'未定义'}</td>
-            </tr>
-
-
-
-
-
-            <tr>
-                <th>司机信息</th>
-                <th></th>
-            </tr>
-
-
-
-
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1 success">
-                    名字
-                </td>
-                <td><a href=""> ${deliveryOrderMap.carrierName!'---'}</a></td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1 success">
-                    电话
-                </td>
-                <td><a href="tel:${deliveryOrderMap.carrierPhone!''}">${deliveryOrderMap.carrierPhone!''}</a>
-                </td>
-            </tr>
-
-
-            <tr>
-                <th>装货情况</th>
-                <th></th>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1 success">
-                    状态
-                </td>
-                <td> ${deliveryOrderMap.operationStatus!'---'}</td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1 success">
-                    入场时间
-                </td>
-                <td>${deliveryOrderMap.boundTime!'--'}
-                </td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1 success">
-                    离场时间
-                </td>
-                <td>${deliveryOrderMap.outboundTime!'--'}
-                </td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1 success">
-                    皮重/净重
-                </td>
-                <td>${deliveryOrderMap.tareWeight!'--'}/${deliveryOrderMap.netWeight!'--'}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-
-
-
-
-
-
-        </#if>
-
-
-    <label>扫一扫微信获得信息 </label>
-
-    <div class="thumbnail">
-        <img src="${qrcodeUrl!'/logo.png'}">
-    </div>
-
-        <#if verification??>
-
-        <table  class="table table-condensed">
-            <thead>
-            <tr>
-                <th>验证信息</th>
-                <th></th>
-
-
-            </tr>
-            </thead>
-            <tbody>
-            <tr  >
-                <td class="active">揽货验证密码：</td>
-                <td >    <input type="text" id="demandNum" name="demandNum"  placeholder="测试-揽货密码" value="${verification.code}"/></td>
-            </tr>
-            <tr>
-                <td class="active">验证二维码</td>
-                <td>
-
-
-                    <script type="text/javascript" src="/qrcode.js"></script>
-                    <input id="text" type="text" value="${qrcodeContent!''}" style="width:80%" />
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <g id="qrcode_div"/>
-                    </svg>
-                    <script type="text/javascript">
-                        var qrcode = new QRCode(document.getElementById("qrcode_div"), {
-                            width : 100,
-                            height : 100,
-                            useSVG: true
-                        });
-
-                        function makeCode () {
-                            var elText = document.getElementById("text");
-
-                            /*                           if (!elText.value) {
-                                                           alert("Input a text");
-                                                           elText.focus();
-                                                           return;
-                                                       }*/
-
-
-                            qrcode.makeCode(elText.value);
-                        }
-
-                        makeCode();
-
-                        $("#text").
-                                on("blur", function () {
-                                    makeCode();
-                                }).
-                                on("keydown", function (e) {
-                                    if (e.keyCode == 13) {
-                                        makeCode();
-                                    }
-                                });
-                    </script>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        </#if>
-
-    </div>
-
-
-
-    </div>
-    <#else>
-    <div class="col-lg-12">
-        <form id="longitudeLatitudeForm" class="navbar-form" role="search" action="${getUrl}">
-            <input  type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
-            <div class="form-group">
-                <input class="input-lg" type="text" class="form-control" name="code" placeholder="" value="">
+    <div class="row">
+        <div class="col-lg-6" style="padding-top: 10px;padding-bottom: 10px">
+            <div class="panel panel-default">
+                <div class="panel-heading">基本信息</div>
+                <div class="panel-body">
+
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item">状态：</li>
+                    <li class="list-group-item">编号： ${deliveryOrderMap.no}</li>
+                    <li class="list-group-item">名称：${deliveryOrderMap.name!''}</li>
+
+                </ul>
             </div>
-        <#--            <div class="form-group">
-                        <input type="text" class="form-control" name="latitude" placeholder="latitude 纬度" value="${destinationLatAndLng.bd09Lat!''}">
-                    </div>-->
-            <button id="longitudeLatitudeFormFormBtn" type="button" class="btn btn-primary  btn-lg">提取</button>
-        </form>
+        </div>
+        <div class="col-lg-6" style="padding-top: 10px;padding-bottom: 10px">
+            <div class="panel panel-default">
+                <div class="panel-heading">财务信息</div>
+                <div class="panel-body">
+                <#if deliveryOrderMap??>
+                <div class="">
 
-        <script  type="text/javascript">
 
-            $("#longitudeLatitudeFormFormBtn").click(function() {
-                alert($('#longitudeLatitudeForm').serialize());
-                var req = $.ajax({
-                    url:  $('#longitudeLatitudeForm').attr('action'),
-                    type: 'POST',
-                    data:  $('#longitudeLatitudeForm').serialize(),
-                });
-                req.done(function (data) {
-                    alert("成功:"+data.message);
+                <div class="">
 
-                    if (data.status) {
-                        alert("成功:"+data.message);
 
-                        window.location.href = data.url;
-                    } else {
-                        alert(data.message);
-                    }
-                });
-            });
-        </script>
+                <table class="table" data-show-header="false">
+                    <thead>
+                    <tr>
+                        <th colspan="4">基本信息</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="active">预收账款：</td>
+                        <td colspan="3"><strong>${deliveryOrderMap.advancedPaymentAmount!''}</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="active">已核算账款：</td>
+                        <td colspan="3"><strong>${deliveryOrderMap.advancedPaymentAmount!''}</strong></td>
+                    </tr>
+
+
+                    <tr>
+                        <td class="active">贸易商：</td>
+                        <td colspan="3"><a href="${deliveryOrderMap.companyUrl!''}">${deliveryOrderMap.abbreviationName!''}</a></td>
+                    </tr>
+
+
+
+                    </tbody>
+                </table>
+
+
+
+                    </div>
+
+
+
+                </div>
+                <#else>
+                <div class="col-lg-12">
+                    <form id="longitudeLatitudeForm" class="navbar-form" role="search" action="${getUrl}">
+                        <input  type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+                        <div class="form-group">
+                            <input class="input-lg" type="text" class="form-control" name="code" placeholder="" value="">
+                        </div>
+
+                        <button id="longitudeLatitudeFormFormBtn" type="button" class="btn btn-primary  btn-lg">提取</button>
+                    </form>
+
+                    <script  type="text/javascript">
+
+                        $("#longitudeLatitudeFormFormBtn").click(function() {
+                            alert($('#longitudeLatitudeForm').serialize());
+                            var req = $.ajax({
+                                url:  $('#longitudeLatitudeForm').attr('action'),
+                                type: 'POST',
+                                data:  $('#longitudeLatitudeForm').serialize(),
+                            });
+                            req.done(function (data) {
+                                alert("成功:"+data.message);
+
+                                if (data.status) {
+                                    alert("成功:"+data.message);
+
+                                    window.location.href = data.url;
+                                } else {
+                                    alert(data.message);
+                                }
+                            });
+                        });
+                    </script>
+
+                </div>
+
+                </#if>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
     </div>
 
-    </#if>
+    <div class="tab-pane" id="transfer" >
+        <div id="toolbar_inventory" class="" >
 
-    </div>
-    <div class="tab-pane active" id="transfer" style="padding-top: 10px;padding-bottom: 10px">
-        <div id="toolbar_inventory" class="btn-group" >
-
-            <button id="viewCapacityBtn" type="button" class="btn btn-success">
-                <i class="">查看详情</i>
-            </button>
-            <button id="deleteBtn_" type="button" class="btn btn-primary" >
-                添加
+            <button id="editBtn" type="button" class="btn btn-success">
+                <i class="">修改</i>
             </button>
 
+            <select class="selectpicker"  id="feature" name="feature" class="form-control" placeholder="开户分销商">
+                <option value="" >--</option>
+            <#if distributors??>
+                <#list distributors as feature>
+                    <option value="${feature.id}" >${feature.id!''}--${feature.displayName!''}</option>
+                </#list>
+            </#if>
+            </select>
 
-            <button id="editBtn" type="button" class="btn btn-primary" >
-                修改
-            </button>
 
-            <button id="addBtn" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addLineModal">
-                添加
+            <button id="createReconciliationBtn" type="button" class="btn btn-primary hidden" >
+                建立对账系统
             </button>
 
             <script type="text/javascript">
+                function refresh() {
+                    $('#station-table').bootstrapTable('refresh');
+                }
+                function selectedRow_() {
+                    var row =  $('#station-table').bootstrapTable('getSelections');
+                    return row;
+                }
+
+                $("#editBtn").click(function() {
+                    var row = selectedRow_();
+                    if (row != '') {
+                        $('#addStationModal').modal();
+                        alert(JSON.stringify(row[0]));
+                        $('#addStationModalForm .companyId').val(row[0].id);
+                    }
+                });
+
 
 
                 function refresh() {
                     $('#station-table').bootstrapTable('refresh');
                 }
 
-                function selectedRow_() {
-                    var row =  $('#station-table').bootstrapTable('getSelections');
+                function selectedRow_transfer() {
+                    var row =  $('#transfer-table').bootstrapTable('getSelections');
                     return row;
                 }
 
 
-                $("#editBtn").click(function() {
-                    var row = selectedRow_();
+                $("#createReconciliationBtn").click(function() {
+                    //  var row = selectedRow_transfer();
+                    $('#reconciliationModal').modal();
 
-                    if (row != '') {
-                        $('#addStationModal').modal();
-                        alert(JSON.stringify(row[0]));
-                        $('#addStationModalForm .companyId').val(row[0].id);
-
-                    }
                 });
+
+
 
 
 
@@ -535,14 +269,14 @@
 
 
                 <th data-field="createDate">名称</th>
+                <th data-field="productName">产品</th>
 
-
-                <th data-field="plateNumber">车牌号</th>
+                <th data-field="license">车牌号</th>
                 <th data-field="amount">净重</th>
 
 
-                <th data-field="status">余额</th>
-
+                <th data-field="balance">余额</th>
+                <th data-field="reconcileStatus" >对账状态</th>
                 <th data-field="description">描述</th>
 
             <#--
@@ -553,7 +287,137 @@
         </table>
 
     </div>
-    <div class="tab-pane " id="capital" style="padding-top: 10px;padding-bottom: 10px">
+
+    <div class="tab-pane " id="reconciliation" >
+
+        <div id="reconciliation_toolbar" class="" >
+
+
+
+        <#--                     <button id="addBtn" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addLineModal">
+                                 添加
+                             </button>-->
+
+            <script type="text/javascript">
+
+
+                function refresh() {
+                    $('#station-table').bootstrapTable('refresh');
+                }
+
+                function selectedRow_transfer() {
+                    var row =  $('#transfer-table').bootstrapTable('getSelections');
+                    return row;
+                }
+
+
+                $("#createReconciliationBtn").click(function() {
+                    var row = selectedRow_transfer();
+
+                    if (row != '') {
+                        $('#reconciliationModal').modal();
+                        alert(JSON.stringify(row[0]));
+                        $('#instanceId').val(row[0].id);
+
+                    }
+                });
+
+
+
+            </script>
+
+
+        </div>
+        <table class=" table-striped" id="transfer-table" data-url="${reconciliationUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+               data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+               data-query-params-type="unlimit"
+               data-query-params="queryParams_company"
+               data-response-handler="handleResponse"
+               data-pagination="true"
+               data-side-pagination="server"
+               data-page-number="1"
+               data-page-list="[10]"
+               data-page-size="10"
+               data-click-to-select="true"
+               data-single-select="true"
+               data-search="true"
+               data-show-refresh="true"
+               data-toolbar="#reconciliation_toolbar">
+            <thead>
+            <tr>
+
+
+
+
+                <th data-field="state" data-checkbox="true"></th>
+                <th data-field="no" >编号</th>
+
+                <th data-field="periodBeginDate">开始时间</th>
+                <th data-field="periedEndDate">结束时间</th>
+                <th data-field="distributor" data-formatter="companyInfoFormatter">分销商</th>
+
+                <th data-field="inventoryNo" >产品编号</th>
+                <th data-field="totalAmount" >金额</th>
+
+                <th data-field="totalQuantity" >数量</th>
+                <th data-field="status" >状态</th>
+
+                <th data-field="no"  data-formatter="reconciliationOperationFormatter">操作</th>
+
+
+            </tr>
+            </thead>
+        </table>
+
+    </div>
+
+    <div class="tab-pane active" id="deliveryOrer" >
+
+        <table class=" table-striped" id="delivery-table" data-url="${orderDeliveryUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+               data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+               data-query-params-type="unlimit"
+               data-query-params="queryParams_company"
+               data-response-handler="handleResponse"
+               data-pagination="true"
+               data-side-pagination="server"
+               data-page-number="1"
+               data-page-list="[10]"
+               data-page-size="10"
+               data-click-to-select="true"
+               data-single-select="true"
+               data-search="true"
+               data-show-refresh="true" >
+            <thead>
+            <tr>
+                <th data-field="state" data-radio="true"></th>
+                <th data-field="createDate">时间</th>
+                <th data-field="no">编号</th>
+
+                <th data-field="license">车牌号</th>
+
+                <th data-field="idNumber">身份证号</th>
+
+                <th data-field="productName">产品</th>
+                <th data-field="inventoryNo">产品编号</th>
+
+
+
+
+
+                <th data-field="operatorNo" >发货员编号</th>
+                <th data-field="operatorName" >姓名</th>
+                <th data-field="operatorPhone" >手机号</th>
+
+                <th data-field="status">状态</th>
+
+                <th data-field="status" data-formatter="operationInfoFormatter">操作</th>
+
+            </tr>
+            </thead>
+        </table>
+
+    </div>
+    <div class="tab-pane " id="capital" >
         <div id="toolbar_advancedPayment" class="btn-group" >
 
 
@@ -624,6 +488,7 @@
                 <th data-field="credit">贷</th>
                 <th data-field="debit">借</th>
                 <th data-field="balance">余额</th>
+                <th data-field="syncStatus">同步状态</th>
                 <th data-field="description">描述</th>
 
             <#--
@@ -829,6 +694,339 @@
 
     </div>
 
+    <div class="tab-pane " id="employee" >
+    <div class="">
+
+        <table class=" table-striped" id="companies-table" data-url="${employeeUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+               data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+               data-query-params-type="unlimit"
+               data-query-params="queryParams_company"
+               data-response-handler="handleResponse"
+               data-pagination="true"
+               data-side-pagination="server"
+               data-page-number="1"
+               data-page-list="[10]"
+               data-page-size="10"
+               data-click-to-select="true"
+               data-single-select="true"
+
+               data-search="true"
+               data-show-refresh="true"
+               data-toolbar="#">
+            <thead>
+            <tr>
+
+
+
+                <th data-field="createDate">名称</th>
+
+                <th data-field="no">编号</th>
+
+                <th data-field="name">名称</th>
+
+
+                <th data-field="phone">手机号</th>
+
+                <th data-field="description">描述</th>
+
+            <#--
+                                            <th data-field="companyName | senderCompanyName"  data-formatter="companyInfoFormatter">发送者</th>
+            -->
+            </tr>
+            </thead>
+        </table>
+
+        <div id="tradeCountContainer" style="width:100%; height: 400px"></div>
+    </div>
+
+
+
+    <script type="text/javascript">
+
+        var chart1; // 全局变量
+        $(document).ready(function() {
+
+            var req = $.ajax({
+                url: '${requestTradeCountTrendUrl}',
+                type: 'post',
+                data: {
+
+                }
+            });
+            req.done(function (data) {
+                getData = data;
+                //   alert(JSON.stringify(data));
+            <#--           alert(JSON.stringify(getData));-->
+                splineIrregularTime();
+            <#--       $("#priceTrendModal").modal();-->
+
+            });
+
+            var splineIrregularTime = function () {
+                Highcharts.setOptions({
+
+                    global: {
+
+                        useUTC: false
+
+                    },
+
+                    lang:{
+
+                        months:['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月','九月',  '十月','十一月', '十二月'],
+
+                        weekdays:['星期日',  '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+
+                    }
+
+                });
+
+
+                var chart1;
+                chart1 = new Highcharts.Chart({
+
+                    chart: {
+                        renderTo: 'tradeCountContainer', //图表放置的容器，DIV
+                        zoomType: 'x',///   //x轴方向可以缩放
+                        type: 'spline'
+                    },
+                    title: {
+                        text: '平台请求成交数量统计'
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        dateTimeLabelFormats: { // don't display the dummy year
+
+                            year: '%b',
+                            month: '%b. %e  ',
+                            month: '%Y-%m',
+                            year: '%Y'
+                        },
+                        title: {
+                            text: '时间'
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: '元/吨'
+                        },
+                        min: 0
+                    },
+                    tooltip: {
+
+                        shared: true,
+                        useHTML: true,
+                        headerFormat: '<small>{series.name}:</small><table>',
+                        pointFormat: '<tr><td ">访问次数：<b>{point.y}</b> </td></tr>' ,
+                        footerFormat: '</table>',
+                        valueDecimals: 2
+
+                    },
+
+                    plotOptions: {
+                        spline: {
+                            marker: {
+                                enabled: true
+                            }
+                        }
+                    },
+
+                    series: getData
+                });
+            };
+            $(window).trigger("resize");
+        });
+    </script>
+    <hr>
+    <div class="">
+        <div id="advancedPaymentTrendCountContainer" style="width:100%; height: 400px"></div>
+    </div>
+    <script type="text/javascript">
+
+        $('.selectpicker').selectpicker();
+
+        var chart1; // 全局变量
+        $(document).ready(function() {
+
+            var req = $.ajax({
+                url: '${getAdvancedPaymentTrendUrl}',
+                type: 'post',
+                data: {
+
+                }
+            });
+            req.done(function (data) {
+                getData = data;
+                //   alert(JSON.stringify(data));
+            <#--           alert(JSON.stringify(getData));-->
+                splineIrregularTime_advancedPaymentTrendCountContainer();
+            <#--       $("#priceTrendModal").modal();-->
+
+            });
+
+            var splineIrregularTime_advancedPaymentTrendCountContainer = function () {
+
+
+
+                var chart1;
+                chart1 = new Highcharts.Chart({
+
+                    chart: {
+                        renderTo: 'advancedPaymentTrendCountContainer', //图表放置的容器，DIV
+                        zoomType: 'x',///   //x轴方向可以缩放
+                        type: 'spline'
+                    },
+                    title: {
+                        text: '资金流转'
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        dateTimeLabelFormats: { // don't display the dummy year
+
+                            year: '%b',
+                            month: '%b. %e  ',
+                            month: '%Y-%m',
+                            year: '%Y'
+                        },
+                        title: {
+                            text: '时间'
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: '元/吨'
+                        },
+                        min: 0
+                    },
+                    tooltip: {
+
+                        shared: true,
+                        useHTML: true,
+                        headerFormat: '<small>{series.name}:</small><table>',
+                        pointFormat: '<tr><td ">访问次数：<b>{point.y}</b> </td></tr>' ,
+                        footerFormat: '</table>',
+                        valueDecimals: 2
+
+                    },
+
+                    plotOptions: {
+                        spline: {
+                            marker: {
+                                enabled: true
+                            }
+                        }
+                    },
+
+                    series: getData
+                });
+            };
+            $(window).trigger("resize");
+        });
+    </script>
+    <hr>
+
+    </div>
+        <div role="tabpanel" class="tab-pane " id="fee">
+
+
+
+        <#--table header row-->
+            <div class="" >
+                <div class="" id="fee_toolbar">
+                    <a class="btn btn-default " id="completeFeeBtn"   ref="{completeFeeUrl}"> <i class="fa fa-certificate"></i> <span>完善费用设置</span> </a>
+                    <a class="btn btn-default " id="addFeeBtn"   ref="{addFeeUrl}"> <i class="fa fa-certificate"></i> <span>增加费用类型</span> </a>
+
+
+
+                    <script type="text/javascript">
+
+
+
+                        $("#completeFeeBtn").click(function() {
+                            var row =  $('#fee-table').bootstrapTable('getSelections');
+
+                            if (row != '') {
+                                $('#completeFeeModal').modal();
+                                //alert(JSON.stringify(row[0]));
+                                $('#completeFeeModalFormId').val(row[0].id);
+                                $('#completeFeeModalFormDescription').val(row[0].id +" "+
+                                        row[0].type+" "+
+                                        row[0].pricingStrategy+" ");
+
+
+                            }
+                        });
+
+                        $("#addFeeBtn").click(function() {
+                            var row =  $('#fee-table').bootstrapTable('getSelections');
+
+                            if (row != '') {
+                                $('#addFeeModal').modal();
+                                //alert(JSON.stringify(row[0]));
+                                $('#addFeeModalFormId').val(row[0].id);
+                                $('#addFeeModalFormDescription').val(row[0].id +" "+
+                                        row[0].type+" "+
+                                        row[0].pricingStrategy+" ");
+
+
+                            }
+                        });
+
+
+                    </script>
+
+                </div>
+
+                <table class="table-striped" id="fee-table" data-url="${feeUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                       data-content-type="orderExecutionView/x-www-form-urlencoded; charset=UTF-8"
+                       data-query-params-type="unlimit"
+                       data-query-params="queryParams"
+                       data-response-handler="handleResponse"
+                       data-pagination="true"
+                       data-side-pagination="server"
+                       data-page-number="1"
+                       data-page-list="[10]"
+                       data-page-size="10"
+                       data-click-to-select="true"
+                       data-single-select="true"
+                       data-toolbar="#fee_toolbar"
+
+
+                       data-search="true"
+                       data-show-refresh="true"
+                >
+
+                    <thead>
+                    <tr>
+
+                        <th data-field="state" data-checkbox="true"></th>
+
+                        <th data-field="createDate">创建时间</th>
+                        <th data-field="no">编号</th>
+
+                        <th data-field="tax">是否含税</th>
+                        <th data-field="type">名称</th>
+                        <th data-field="pricingStrategy">成本策略</th>
+
+
+                        <th data-field="amount">金额</th>
+                        <th data-field="status">状态</th>
+                        <th data-field="" data-formatter="paymentOperationFormatter">操作</th>
+                    </tr>
+                    </thead>
+                </table>
+
+
+            </div>
+
+
+        </div>
 
     </div>
 
@@ -860,30 +1058,6 @@
                                 <span class="help-block"></span>
                             </div>
 
-
-                        <#--
-                                                        <div class="form-group">
-                                                            <label for="username" class="control-label">位置</label>
-
-                                                            <select class="selectpicker" &lt;#&ndash;data-max-options="2" &ndash;&gt; id="departureStation" name="departureStation" class="form-control" placeholder="特征">
-                                                            &lt;#&ndash; <select class="form-control select2" id="userType" name="userType"  placeholder="公司类型"  multiple="multiple">&ndash;&gt;
-
-                                                            <#if stations??>
-                                                                <#list stations as feature>
-                                                                    <option value="${feature.id}" >${feature.id!''}--${feature.name!''}--${feature.description!''}</option>
-
-                                                                </#list>
-                                                            </#if>
-
-                                                            </select>
-
-
-
-                                                            </select>
-                                                            <span class="help-block"></span>
-                                                        </div>
-
-                            -->
 
                             <button id="addLineModalFormBtn"  type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
                         </form>
@@ -1112,6 +1286,14 @@
 
 
 
+    function reconciliationOperationFormatter(value, row, index) {
+
+
+        return   '<strong><a href="'+ row.url + '">操作</a></strong>';
+
+
+
+    }
 
 </script>
 </body>

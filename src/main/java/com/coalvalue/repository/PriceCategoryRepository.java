@@ -1,38 +1,35 @@
 package com.coalvalue.repository;
 
+import com.coalvalue.domain.entity.Inventory;
 import com.coalvalue.domain.entity.PriceCategory;
-import com.coalvalue.repository.base.BaseJpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by zhao yuan on 01/10/2015.
  */
-public interface PriceCategoryRepository extends BaseJpaRepository<PriceCategory, Integer> {
+public interface PriceCategoryRepository extends JpaRepository<PriceCategory, Integer> {
 
 
-    PriceCategory findById(Integer priceId);
-
-    Page<PriceCategory> findByItemIdAndItemType(Integer id, String text, Pageable pageable);
+    Optional<PriceCategory> findById(Integer priceId);
 
 
-    List<PriceCategory> findByItemIdAndItemType(Integer id, String text);
+    PriceCategory findByUuid(String objectUuid);
 
-    PriceCategory findByItemIdAndItemTypeAndMajor(Integer itemId, String text, boolean b);
+    List<PriceCategory> findByProductNo(String productNo);
 
+    List<PriceCategory> findByProductNoOrderBySeqAsc(String productNo);
 
-    PriceCategory findByNameAndItemIdAndItemTypeAndMajor(String text, Integer id, String text1, boolean b);
+    List<PriceCategory> findByUuidIn(List<String> uuids);
 
-    PriceCategory findTop1ByItemIdAndItemTypeAndMajor(Integer id, String text, boolean b);
+    PriceCategory findByNameAndObjectUuidAndMajor(String text, String uuid, boolean b);
 
-    List<PriceCategory> findByItemIdAndItemTypeAndStatus(Integer id, String text, String text1);
+    List<PriceCategory> findByObjectUuid(String uuid);
 
-
-    List<PriceCategory> findByItemIdAndItemTypeAndStatusOrderByIdAsc(Integer id, String text, String text1);
-
-    List<PriceCategory> findByItemIdAndItemTypeAndStatusOrderBySeqAsc(Integer id, String text, String text1);
-
-    PriceCategory findByItemIdAndItemTypeAndName(Integer id, String text, String text1);
+    PriceCategory findByObjectUuidAndName(String uuid, String text);
 }

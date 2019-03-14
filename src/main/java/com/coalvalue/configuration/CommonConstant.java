@@ -1,7 +1,5 @@
 package com.coalvalue.configuration;
 
-import com.coalvalue.domain.Distributor;
-
 /**
  * Created by yunpxu on 1/7/2015.
  */
@@ -181,18 +179,27 @@ public class CommonConstant {
     public static final String RESOURCCE_TYPE_TEAM_DEAL = "team deal";
     public static final String RESOURCCE_TYPE_TOPIC = "topic";
     public static final String RESOURCCE_TYPE_DEAL_INSTANCE = "deal_instance";
+    public static final String RESOURCCE_TYPE_INVENTORY_TRANSFER = "inventory_transfer";
+    public static final String RESOURCCE_TYPE_Advanced_Payment_Transfer = "advanced_payment_transfer";
+    public static final String RESOURCCE_TYPE_Posting = "Posting";
+    public static final String RESOURCCE_TYPE_Employee = "Employee";
     public static final String RESOURCCE_TYPE_PERFORMANCE_INFO = "performance_info";
     public static final String RESOURCCE_TYPE_PERFORMANCE_OBJECT = "performance_object";
-
-
+    public static final String RESOURCCE_TYPE_FEE = "Fee";
+    public static final String RESOURCCE_TYPE_QUOTATION_PLAN = "quotation_plan";
     public static final String RESOURCCE_TYPE_CUSTOMER_NAME = "customer_meno";
     public static final String RESOURCCE_TYPE_MQTT_TOPIC = "mqtt_topic";
     public static final String RESOURCCE_TYPE_YARD_QUEUING = "yard_queuing";
     public static final String RESOURCCE_TYPE_COLLABORATOR = "RESOURCCE_TYPE_COLLABORATOR";
-
+    public static final String RESOURCCE_TYPE_OpeningAccountRequest = "OpeningAccountRequest";
     public static final String RESOURCCE_TYPE_CHECK_COLLECTION = "check_collection";
-
+    public static final String RESOURCCE_TYPE_DELIVERY_ORDER = "Delivery_order";
     public static final String TEAM_DEAL_MULTISTEP_QUOTATION = "team_deal_multistep_quotation";
+    public static final String RESOURCCE_TYPE_INVENTORY = "inventory";
+
+   // public static final String RESOURCCE_TYPE_CONFIGURATION_RESPONSE = "configuration";
+    public static final String RESOURCCE_TYPE_ConfigurationResponse = "configuration_response";
+    public static final String RESOURCCE_TYPE_PriceTendency = "PriceTendency";
 
 
     public static final String NO_TYPE_CANVASSING = "canvassing";
@@ -292,7 +299,7 @@ public class CommonConstant {
 
         public static final String RESOURCCE_TYPE_equipment_led = "equipment_led";
 
-
+    public static final String RESOURCCE_TYPE_Equipment = "Equipment";
     public static final String RESOURCCE_TYPE_system = "system";
     public static final String RESOURCCE_TYPE_district = "district";
     public static final String RESOURCCE_TYPE_attribute = "attribute";
@@ -458,6 +465,7 @@ public class CommonConstant {
 
 
     public static String follow_type_mqtt_topic = "mqtt_topic";
+    public static String TareWeigh_being_weighed = "TareWeigh_being_weighed";
 
 
     private final short CLIENT_CANCHANGETO_PARTIALAPPLICATION = 37;
@@ -845,6 +853,7 @@ public class CommonConstant {
     public static final String InvitationCode_STATUS_Invalid = "Invalid";
     public static final String InvitationCode_STATUS_Valid = "Valid";
     public static final String InvitationCode_STATUS_Completed = "Completed";
+    public static final String InvitationCode_STATUS_Taking_delivery = "Taking_delivery";
 
 
     public static final String BRAND_ENTERPRISE_STATUS_RELEASE = "released";

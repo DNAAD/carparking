@@ -1,72 +1,4 @@
-<#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />
-<style>
-
-    #login-dp{
-        min-width: 250px;
-        padding: 14px 14px 0;
-        overflow:hidden;
-        background-color:rgba(255,255,255,.8);
-    }
-    #login-dp .help-block{
-        font-size:12px
-    }
-    #login-dp .bottom{
-        background-color:rgba(255,255,255,.8);
-        border-top:1px solid #ddd;
-        clear:both;
-        padding:14px;
-    }
-    #login-dp .social-buttons{
-        margin:12px 0
-    }
-    #login-dp .social-buttons a{
-        width: 49%;
-    }
-    #login-dp .form-group {
-        margin-bottom: 10px;
-    }
-    .btn-fb{
-        color: #fff;
-        background-color:#3b5998;
-    }
-    .btn-fb:hover{
-        color: #fff;
-        background-color:#496ebc
-    }
-    .btn-tw{
-        color: #fff;
-        background-color:#55acee;
-    }
-    .btn-tw:hover{
-        color: #fff;
-        background-color:#59b5fa;
-    }
-    @media(max-width:768px){
-        #login-dp{
-            background-color: inherit;
-
-            color: #fff;
-        }
-        #login-dp .bottom{
-            background-color: inherit;
-            border-top:0 none;
-        }
-    }
-    .navbar-login
-    {
-        width: 305px;
-        padding: 10px;
-        padding-bottom: 0px;
-    }
-
-    .navbar-login-session
-    {
-        padding: 10px;
-        padding-bottom: 0px;
-        padding-top: 0px;
-    }
-
-</style>
+<#--<#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />-->
 <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
         <button type="button " class="navbar-toggle btn-primary" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -76,26 +8,60 @@
             <span class="icon-bar"></span>
         </button>
 
-        <a class="navbar-brand" href="#"><img class="" src="${rc.contextPath}/logo_header.png" style="width:100px; ;"></a>
+        <a class="navbar-brand " href="${welcomeUrl}"><img class="" src="${rc.contextPath}/logo_header.png" style="width:100px; ;"></a>
 
-        <a class="navbar-brand " href="#">web yulinmei.cn</a>
+        <a class="navbar-brand " href="${synthesizedUrl}"> <strong class="h3">${companyName!''}</strong> </a>
+ <#--       <span id="mqttConnect" class="label label-danger">status</span>-->
+
+
+
+
+
+
+
+
+     <#include "../tip/status.ftl">
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
 
-            <#if links??>
-                <#list links as link>
+
+                                <#list mainLinks as link>
                     <li class="">
 
                         <#if link.url??>
                             <a href="${link.url!''}">
 
 
-                            ${link.name}
+                                ${link.name}
 
                             </a>
 
-                            <#else>
+
+                        </#if>
+
+
+                    </li>
+                                </#list>
+
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">更多
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                                 <#if links??>
+                                     <#list links as link>
+                    <li class="">
+
+                        <#if link.url??>
+                            <a href="${link.url!''}">
+
+
+                                ${link.name}
+
+                            </a>
+
+                        <#else>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> ${link.name} <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
 
@@ -109,25 +75,79 @@
 
 
                     </li>
-                </#list>
-            </#if>
-
-
+                                     </#list>
+                                 </#if>
+                    <li class="divider"></li>
+                </ul>
+            </li>
 
 
         </ul>
 
 
+    <ul class="nav navbar-nav pull-right">
 
-    <ul class="nav navbar-nav navbar-right">
+
+<#--
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <@security.authentication property="principal.username" /> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+
+
+
+                             <li><a href="${userUrl}">我的账户</a></li>
+
+                    <li class="divider"></li>
+                    <li>
+                        <form action="${rc.contextPath}/logout"  method="post">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+                            <button type="submit" class="btn-link btn-block">登出</button>
+                        </form>
+
+                    </li>
+                    <li class="divider"></li>
+
+
+
+                <div sec:authorize="isAuthenticated()">
+
+                </div>
+                <div sec:authorize="isAnonymous()">
+                </div>
+
+            </ul>
+        </li>
+-->
 
 
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+
+
+
+                <li><a href="/mobile/register/login">登录</a></li>
+
+                <li class="divider"></li>
+
+
+
+            </ul>
+        </li>
+
+
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right hidden">
+
+
+        <li class="dropdown ">
+<#--            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <span class="glyphicon glyphicon-user"></span> 
                 <strong>Nombre</strong>
                 <span class="glyphicon glyphicon-chevron-down"></span>
-            </a>
+            </a>-->
             <ul style="background-color:white;" class="dropdown-menu">
                 <li>
                     <div class="navbar-login">
@@ -138,7 +158,10 @@
                                 </p>
                             </div>
                             <div class="col-lg-8">
-                                <p class="text-left"><strong>Nombre Apellido</strong></p>
+
+
+
+                    <p class="text-left"><strong><#if user??>${user.userName}</#if> </strong></p>
                                 <p class="text-left small">correoElectronico@email.com</p>
                                 <p class="text-left">
                                     <a href="#" class="btn btn-primary btn-block btn-sm">Actualizar Datos</a>
@@ -159,9 +182,21 @@
                         </div>
                     </div>
                 </li>
+
+                <li class="divider"></li>
+                <li>
+                    <form action="http://localhost:8080/addCustomer "  method="post">
+                        <button type="submit">Save</button>
+                        <button type="submit" class="btn-link btn-block">登出</button>
+
+                    </form>
+                <#--
+                                    <button onClick="logout()" class="btn-link ">退出</button>
+                -->
+                </li>
             </ul>
         </li>
-        <li class="dropdown">
+        <li class="dropdown hidden">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">SIGN IN <span class="caret"></span></a>
             <ul id="login-dp" class="dropdown-menu">
                 <li>
@@ -204,19 +239,5 @@
 
 
     </ul>
-<#if searchUrl??>
 
-    <div class="col-sm-3 col-md-3 pull-right">
-        <form class="navbar-form" action="${searchUrl}" role="search">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="输入煤矿名称， 煤种， 公司，区域等信息" name="q">
-                <div class="input-group-btn">
-                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-</#if>
 </nav>

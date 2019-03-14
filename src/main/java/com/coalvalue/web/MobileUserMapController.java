@@ -1,9 +1,10 @@
 package com.coalvalue.web;
 
 
-import com.coalvalue.domain.entity.Station;
+//import com.coalvalue.domain.entity.Station;
+import com.coalvalue.domain.entity.StorageSpace;
 import com.coalvalue.service.CompanyService;
-import com.coalvalue.service.StationService;
+import com.coalvalue.service.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+//import org.springframework.web.servlet.ModelAndView;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -43,7 +45,7 @@ public class MobileUserMapController extends BaseController {
 
 
     @Autowired
-    private StationService stationService;
+    private StorageService stationService;
 
 
 
@@ -53,11 +55,11 @@ public class MobileUserMapController extends BaseController {
     @RequestMapping( value = "/map_config", method = RequestMethod.GET)
     public ModelAndView map_config(@RequestParam(value = "id", required = false) Integer index, Authentication authentication) {
 
-        ModelAndView modelAndView = new ModelAndView("/templates/map_configuration");
+        ModelAndView modelAndView = new ModelAndView("/map_configuration");
 
-            Station station = stationService.getById(index);
+            StorageSpace station = stationService.getById(index);
 
-            Map location = stationService.getLocation(station);
+            Map location = null;// stationService.getLocation(station);
 
 
             modelAndView.addObject("station",station);
@@ -86,18 +88,18 @@ public class MobileUserMapController extends BaseController {
 
 
 
-        Station station = stationService.getById(id);
+        StorageSpace station = stationService.getById(id);
 
 
         String[] parts = longitudeLatitude.split(",");
         String longitude = parts[0];
         String latitude = parts[1];
-        station = stationService.updateLongitudeLatitude(station,longitude,latitude);
+      //  station = stationService.updateLongitudeLatitude(station,longitude,latitude);
 
 
 
-        result.put("companyName", station.getLatitude());
-        result.put("abbreviationName", station.getLongitude());
+      ///  result.put("companyName", station.getLatitude());
+     //   result.put("abbreviationName", station.getLongitude());
 
 
         ret.put("result", result);

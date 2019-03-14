@@ -12,7 +12,8 @@ public enum SynchronizeEnum {
 
 
     Been_synchronized ("synchronized","已经同步的", 2,""),
-    Not_Been_synchronized ("Not_synchronized","未同步的", 2,""),
+    SyncPending("SyncPending","未同步的", 2,""),
+    Syncing("Syncing","正在同步", 2,""),
 
     ;
 

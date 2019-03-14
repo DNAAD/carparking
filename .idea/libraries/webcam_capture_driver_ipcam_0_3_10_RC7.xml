@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="webcam-capture-driver-ipcam-0.3.10-RC7">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/webcam-capture-driver-ipcam-0.3.10-RC7.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

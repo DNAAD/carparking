@@ -4,7 +4,7 @@ package com.coalvalue.service;
 import com.coalvalue.domain.entity.QualityInspectionReport;
 import com.coalvalue.domain.entity.QualityTestItem;
 import com.coalvalue.enumType.QualityIndicatorEnum;
-import com.service.BaseService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

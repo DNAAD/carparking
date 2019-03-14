@@ -2,7 +2,7 @@ package com.coalvalue.service;
 
 import com.coalvalue.domain.entity.*;
 
-import com.service.BaseService;
+
 
 
 /**
@@ -18,8 +18,5 @@ public interface WxService extends BaseService {
 
 
 
-
-
-    WxTemporaryQrcode getVariableByChannel(String channel, String wxQrcodeTypeWorkbenchConfiguration, Integer time, Integer count);
 
 }

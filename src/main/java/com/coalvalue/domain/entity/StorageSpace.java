@@ -1,6 +1,5 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Column;
@@ -14,7 +13,7 @@ import javax.persistence.Transient;
 
 @Entity
 
-@Table(name = "storage_space")
+@Table(name = "storage_space",catalog="storage")
 
 public class StorageSpace extends BaseDomain {
 

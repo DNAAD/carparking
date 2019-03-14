@@ -1,6 +1,5 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Entity;
@@ -13,7 +12,7 @@ import java.math.BigDecimal;
 
 @Entity
 
-@Table(name = "advanced_payment_transfer")
+@Table(name = "advanced_payment_transfer",catalog="storage")
 
 public class AdvancedPaymentTransfer extends BaseDomain {
 
@@ -26,6 +25,9 @@ public class AdvancedPaymentTransfer extends BaseDomain {
     private String type;
 
     private String debitCreditType;
+    private String syncStatus;
+    private String distributorNo;
+    private String inventoryNo;
 
     public String getDebitCreditType() {
         return debitCreditType;
@@ -35,7 +37,7 @@ public class AdvancedPaymentTransfer extends BaseDomain {
         this.debitCreditType = debitCreditType;
     }
 
-    private Integer distributorId;
+
     private Integer instanceId;
 
     private Integer inventoryId;
@@ -84,13 +86,7 @@ public class AdvancedPaymentTransfer extends BaseDomain {
         return ReflectionToStringBuilder.toString(this);
     }
 
-    public void setDistributorId(Integer distributor) {
-        this.distributorId = distributor;
-    }
 
-    public Integer getDistributorId() {
-        return distributorId;
-    }
 
     public void setInstanceId(Integer instanceId) {
         this.instanceId = instanceId;
@@ -98,6 +94,30 @@ public class AdvancedPaymentTransfer extends BaseDomain {
 
     public Integer getInstanceId() {
         return instanceId;
+    }
+
+    public void setSyncStatus(String syncStatus) {
+        this.syncStatus = syncStatus;
+    }
+
+    public String getSyncStatus() {
+        return syncStatus;
+    }
+
+    public void setDistributorNo(String distributorNo) {
+        this.distributorNo = distributorNo;
+    }
+
+    public String getDistributorNo() {
+        return distributorNo;
+    }
+
+    public void setInventoryNo(String inventoryNo) {
+        this.inventoryNo = inventoryNo;
+    }
+
+    public String getInventoryNo() {
+        return inventoryNo;
     }
 
     ;

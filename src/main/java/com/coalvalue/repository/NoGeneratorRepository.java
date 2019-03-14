@@ -1,12 +1,12 @@
 package com.coalvalue.repository;
 
 import com.coalvalue.domain.entity.NoGenerator;
-import com.coalvalue.repository.base.BaseJpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Created by zohu on 3/21/2015.
  */
-public interface NoGeneratorRepository extends BaseJpaRepository<NoGenerator, Integer> {
+public interface NoGeneratorRepository extends JpaRepository<NoGenerator, Integer> {
 
 
 

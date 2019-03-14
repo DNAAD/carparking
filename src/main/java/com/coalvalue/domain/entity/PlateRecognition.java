@@ -1,6 +1,5 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Column;
@@ -14,7 +13,7 @@ import java.util.Date;
 
 @Entity
 
-@Table(name = "plate_recognition")
+@Table(name = "plate_recognition",catalog="storage")
 
 public class PlateRecognition extends BaseDomain {
 
@@ -34,6 +33,7 @@ public class PlateRecognition extends BaseDomain {
     @Column(name = "timeStamp")
     private Date timeStamp;
     private String path;
+    private String deviceId;
 
     public Integer getColourCode() {
         return colourCode;
@@ -95,5 +95,13 @@ public class PlateRecognition extends BaseDomain {
 
     public String getPath() {
         return path;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
     }
 }

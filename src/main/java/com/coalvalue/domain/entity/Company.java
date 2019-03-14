@@ -1,7 +1,6 @@
 package com.coalvalue.domain.entity;
 
 import com.coalvalue.configuration.CommonConstant;
-import com.coalvalue.domain.BaseDomain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +17,7 @@ import java.util.Set;
  * Created by Peter Xu on 06/30/2015.
  */
 @Entity
-@Table(name = "company")
+@Table(name = "company",catalog="storage")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 public class Company extends BaseDomain {
 

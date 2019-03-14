@@ -11,7 +11,10 @@ import java.util.List;
 public enum FinancialStatusEnum {
 
 
-    nsettled ("nsettled","nsettled", 2,""),
+    unsettled("unsettled","未结算", 2,""),
+    checked ("checked","以结算", 2,""),
+    correct ("correct","修正", 2,""),
+
 
     ;
 

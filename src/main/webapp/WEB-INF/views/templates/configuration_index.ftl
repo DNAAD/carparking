@@ -70,367 +70,56 @@
     </style>
 
 
-    <style type="text/css">
-    /*
-LISTINGS
-*/
-
-
-
-    .tab-box {
-        background: #f8f8f8;
-        position: relative;
-    }
-
-    .tab-filter {
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
-
-
-    .adds-wrapper {
-        background: #fff;
-        clear: both;
-        display: block;
-        height: auto;
-        overflow: auto;
-        width: 100%;
-    }
-    .listing-filter {
-        border-bottom: solid 1px #ddd;
-        padding: 15px 0;
-    }
-
-    .listings p {
-        margin: 0;
-    }
-    .listings h3 {
-        margin: 0;
-    }
-    .listings .listing-row {
-        border-bottom: 1px solid #e6e6e6;
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-    .listings .listing-row:nth-child(even) {
-        background: #fafafa;
-    }
-    .listings .premium.listing-row {
-        background: #FFFFDD;
-        background: #E0F4FF;
-        border-bottom: 1px solid #c6ebff;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        position: relative;
-    }
-    .listings .listing-row.last {
-        border-bottom: 1px solid #fff;
-    }
-    .recent-listings .panel-body {
-        padding: 0 15px;
-    }
-    .recent-listings .price-text {
-        text-align: right;
-    }
-    .recent-listings .listing-row {
-        border-bottom: 1px solid #e6e6e6;
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-    .recent-listings .listing-row:nth-child(even) {
-        background: #fafafa;
-    }
-    .ad-options {
-        margin: 0;
-        padding: 0;
-    }
-    .ad-options li {
-        display: inline;
-        list-style-type: none;
-        padding-right: 20px;
-    }
-    .account-sidebar h3 {
-        margin: 0;
-    }
-    .home-search {
-        padding-bottom: 0;
-    }
-    .home-search .main_description {
-        text-align: center;
-    }
-    .home-search .form-control {
-        padding: 10px 8px;
-    }
-    .home-search .input-group-addon {
-        padding: 0;
-    }
-    .home-search .input-group-addon.input-group-addon-text {
-        background: #ffffff;
-        color: #000;
-        border: none;
-        padding-right: 20px;
-    }
-    .home-search .input-group-addon .btn {
-        padding: 9px 18px;
-    }
-    .home-search .input-group-addon li a {
-        text-align: left;
-        padding: 10px 18px;
-    }
-    .home-search .input-group-addon .btn {
-        text-transform: none;
-    }
-    .home-search .input-group-addon .btn {
-        color: #000;
-        font-weight: 100;
-    }
-    .home-search .input-group-addon .btn .dropdown-menu ul il a {
-        text-align: left;
-    }
-    .featured-gallery {
-        border: none;
-        padding-left: 15px;
-        padding-right: 15px;
-        margin-bottom: 0px;
-    }
-    .featured-gallery img {
-        text-align: center;
-        height: 60px;
-        width: 121px;
-    }
-    .featured-gallery .featured-thumbnail {
-        margin-bottom: 5px;
-        padding-left: 2px;
-        padding-right: 2px;
-    }
-    .featured-gallery .featured-thumbnail img {
-        width: 100%;
-    }
-    #listings-page .price {
-        font-size: 24px;
-        text-align: left;
-    }
-    #listings-page hr {
-        margin-bottom: 10px;
-    }
-    #visualization {
-        height: 300px;
-        width: 98%;
-        margin-top: 40px;
-        margin-bottom: 40px;
-    }
-    p.muted {
-        color: #999999;
-    }
-    .edit-listings tr:hover .remove-ad {
-        display: inline;
-    }
-    .edit-listings tr:hover .extend-ad:after {
-        content: " | ";
-        color: #222222;
-    }
-    .edit-listings .no-views {
-        color: #555555;
-        margin-left: 10px;
-    }
-    .edit-listings .edit-ad:after {
-        content: " | ";
-        color: #222222;
-        text-decoration: none !important;
-    }
-    .edit-listings .edit-ad:after:hover {
-        text-decoration: none;
-    }
-    .edit-listings .remove-ad {
-        color: #FF0000;
-        display: none;
-    }
-    .edit-listings .remove-ad:hover {
-        color: #FF0000;
-        text-decoration: underline;
-    }
-    .edit-listings .edit-ad {
-        color: #79a618;
-    }
-    .edit-listings .edit-ad:hover {
-        color: #79a618;
-        text-decoration: underline;
-    }
-    .edit-listings .extend-ad {
-        color: #79a618;
-    }
-    .edit-listings .extend-ad:hover {
-        color: #79a618;
-        text-decoration: underline;
-    }
-    .nav-category .remove-category {
-        display: none;
-    }
-    .nav-category li:hover .remove-category {
-        display: block;
-        float: right;
-    }
-    .nav-category li:hover .remove-category i {
-        color: #FF0000;
-    }
-    #gallery .thumbnail img {
-        max-height: 80px;
-    }
-    #my-dropzone .dropzone .dz-default.dz-message {
-        width: 100%;
-    }
-    @media (min-width: 768px) {
-        #listings-page .price {
-            text-align: right;
-        }
-        .footer {
-            text-align: left;
-        }
-        .footer .footer-links {
-            float: right;
-        }
-    }
-    #modalLogin .modal-dialog,
-    #modalSignup .modal-dialog {
-        width: 400px;
-    }
-    .topbar {
-        border: 3px solid #D2160A;
-    }
-    .post-ad-btn {
-        padding: 2px 10px;
-        height: 25px;
-        width: auto;
-        margin-left: 5px;
-    }
-    .search-btn {
-        width: 180px;
-        float: none;
-    }
-    .form-inline .form-control {
-        width: 100%;
-    }
-    /*Just for preview*/
-    #theme_switcher {
-        top: 10px;
-        left: 10px;
-        position: fixed;
-    }
-
-    </style>
-    <style type="text/css">
-
-    .list-group-unbordered>.list-group-item {
-        border-left: 0;
-        border-right: 0;
-        border-radius: 0;
-        padding-left: 0;
-        padding-right: 0;
-    }
-    .box.box-primary {
-        border-top-color: #3c8dbc;
-    }
-    .box {
-        position: relative;
-        border-radius: 3px;
-        background: #ffffff;
-        border-top: 3px solid #d2d6de;
-        margin-bottom: 20px;
-        width: 100%;
-        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-    }
-    .box-body {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        padding: 10px;
-    }
-    </style>
-
-
 </head>
 
 <body>
 <div class="container" style="margin-bottom:80px; margin-top:10px ">
-<#include "./common/front_page_header_section.ftl">
 
-<div class=" well hidden " data-offset-top="100" ><!--data-spy="affix"-->
-
-        <div class="input-group">
-            <div class="input-group-btn search-panel">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span id="search_concept">全部</span> <span class="camake-list ret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu"  style="z-index:99999">
-
-                    <li><a href="#contains">找公司</a></li>
-                    <li><a href="#its_equal">找供应商</a></li>
-                    <li><a href="#greather_than">找货源</a></li>
-                    <li class="divider"></li>
-                </ul>
-            </div>
-            <input type="hidden" name="search_param" value="all">
-            <input type="text" class="form-control"  id="search_param"  name="x" value="${q!''}" placeholder="输入搜索关键字...，如 神木, 三八块">
-                <span class="input-group-btn">
-                    <button class="btn btn-info searchBtn" type="button"><span class="glyphicon glyphicon-search "></span></button>
-                </span>
-        </div>
-
-
-</div>
-
-
+    <h1 class="page-header">
+        <small>配置管理</small>
+    </h1>
 
 
     <div class="row "  style="">
 
 
         <div class="col-sm-12">
-            <div class="box hidden box-primary">
-                <div class="box-body box-profile">
-                    <div class="list-group list-group-unbordered">
-                        <li class="list-group-item">
-                            <h4 class="list-group-item-heading">
-                                运力申请
-                                <span class="small pull-right" style="padding-top:.2em">换一批&nbsp;&nbsp;更多&gt;</span>
-                            </h4>
-                        </li>
-
-
-
-
-                    </div>
-                </div>
-            </div>
 
             <div class="tab-box ">
 
                 <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                     <li class="active"><a href="#companies" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">配置 <span class="badge"></span></a></li>
+                    <li class=""><a href="#modules" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">模块配置 <span class="badge"></span></a></li>
+                    <li class=""><a href="#modules_config" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">模块 <span class="badge"></span></a></li>
+                    <li class=""><a href="#loadometer" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">地磅 <span class="badge"></span></a></li>
+                    <li class=""><a href="#info" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">其他 配置 <span class="badge"></span></a></li>
+
+                    <li class=""><a href="#statusinfo" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">联通状态 <span class="badge"></span></a></li>
+
                 </ul>
 
             </div>
 
-             <div  class="tab-content">
+             <div  class="tab-content" style="padding-top: 10px;padding-bottom: 10px">
 
 
-                    <div class="tab-pane active" id="companies" style="padding-top: 10px;padding-bottom: 10px">
+                    <div class="tab-pane active" id="companies" >
 
-
+<#--
                         <div class="col-lg-6">
                             <input class="form-control" value="${configuration.appId}">
                         </div>
 
                         <div class="col-lg-6">
                             <input class="form-control" value="${configuration.appSecret}">
-                            <button id="editBtn" type="button" class="btn btn-primary" >
+                            <button id="refreshBtn" type="button" class="btn btn-primary" >
                                 刷新配置信息
                             </button>
+
+
                         </div>
-                        <hr>
-                        <div id="toolbar" class="btn-group" >
+                        <hr>-->
+                        <div id="toolbar" class="btn-group hidden" >
 
                             <button id="viewCapacityBtn" type="button" class="btn btn-success">
                                 <i class="">查看详情</i>
@@ -439,9 +128,6 @@ LISTINGS
 
 
 
-                            <button id="editBtn" type="button" class="btn btn-primary" >
-                                修改
-                            </button>
 
                             <button id="addBtn" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addStationModal">
                                 添加
@@ -472,6 +158,13 @@ LISTINGS
                                     }
                                 });
 
+                                $("#refreshBtn").click(function() {
+
+                                    $('#refreshModal').modal();
+
+
+                                });
+
 
 
                             </script>
@@ -497,15 +190,514 @@ LISTINGS
                                 >
                             <thead>
                             <tr>
-                                <th data-field="name">名称</th>
-                                <th data-field="value">类型</th>
+                                <th data-field="key">名称</th>
+                                <th data-field="stringValue">类型</th>
 
                                 <th data-field="status">状态</th>
                             </tr>
                             </thead>
                         </table>
 
+
+
                  </div>
+                 <div class="tab-pane " id="modules" >
+
+
+                         <div id="module_config_toolbar" class="hidden" >
+
+                             <button id="viewCapacityBtn" type="button" class="btn btn-success">
+                                 <i class="">查看详情</i>
+                             </button>
+
+
+
+
+
+                             <button id="addBtn" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addStationModal">
+                                 添加
+                             </button>
+
+
+                             <script type="text/javascript">
+
+
+                                 function refresh() {
+                                     $('#station-table').bootstrapTable('refresh');
+                                 }
+
+                                 function selectedRow_() {
+                                     var row =  $('#station-table').bootstrapTable('getSelections');
+                                     return row;
+                                 }
+
+
+                                 $("#editBtn").click(function() {
+                                     var row = selectedRow_();
+
+                                     if (row != '') {
+                                         $('#addStationModal').modal();
+                                         alert(JSON.stringify(row[0]));
+                                         $('#addStationModalForm .companyId').val(row[0].id);
+
+                                     }
+                                 });
+
+                                 $("#refreshBtn").click(function() {
+
+                                     $('#refreshModal').modal();
+
+
+                                 });
+
+
+
+                             </script>
+
+                         </div>
+
+
+                         <table class=" table-striped" id="station-table" data-url="${queryModuleConfigUrl!''}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                                data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                                data-query-params-type="unlimit"
+                                data-query-params="queryParams_company"
+                                data-response-handler="handleResponse"
+                                data-pagination="true"
+                                data-side-pagination="server"
+                                data-page-number="1"
+                                data-page-list="[10]"
+                                data-page-size="10"
+                                data-click-to-select="true"
+                                data-single-select="true"
+                                data-search="true"
+                                data-show-refresh="true"
+                                data-toolbar="#module_config_toolbar"
+                                 >
+                             <thead>
+                             <tr>
+                                 <th data-field="name">名称</th>
+                                 <th data-field="value">类型</th>
+
+                             </tr>
+                             </thead>
+                         </table>
+
+
+
+                 </div>
+                    <div class="tab-pane " id="modules_config" >
+
+
+
+                            <div id="module_toolbar" class="" >
+
+                            <#--
+                                                     <button id="viewCapacityBtn" type="button" class="btn btn-success">
+                                                         <i class="">查看详情</i>
+                                                     </button>
+                            -->
+
+
+
+
+                                <button id="startModuleBtn" type="button" class="btn btn-primary" >
+                                    启动服务
+                                </button>
+
+                                <button id="addBtn" type="button" class="btn btn-danger"  data-toggle="modal" data-target="#addStationModal">
+                                    停止服务
+                                </button>
+
+
+                                <script type="text/javascript">
+
+
+                                    function refresh() {
+                                        $('#module-table').bootstrapTable('refresh');
+                                    }
+
+                                    function selectedRowModule() {
+                                        var row =  $('#module-table').bootstrapTable('getSelections');
+                                        return row;
+                                    }
+
+
+                                    $("#startModuleBtn").click(function() {
+                                        var row = selectedRowModule();
+
+                                        if (row != '') {
+                                            $('#addStationModal').modal();
+                                            //alert(JSON.stringify(row[0]));
+                                            $('#addStationModalForm .companyId').val(row[0].id);
+
+                                        }
+                                    });
+
+                                    $("#refreshBtn").click(function() {
+
+                                        $('#refreshModal').modal();
+
+
+                                    });
+
+
+
+                                </script>
+
+                            </div>
+
+
+
+                            <table class=" table-striped" id="module-table" data-url="${queryModulesUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                                   data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                                   data-query-params-type="unlimit"
+                                   data-query-params="queryParams_company"
+                                   data-response-handler="handleResponse"
+                                   data-pagination="true"
+                                   data-side-pagination="server"
+                                   data-page-number="1"
+                                   data-page-list="[10]"
+                                   data-page-size="10"
+                                   data-click-to-select="true"
+                                   data-single-select="true"
+                                   data-search="true"
+                                   data-show-refresh="true"
+
+                                   data-toolbar="#module_toolbar"
+
+                                    >
+                                <thead>
+                                <tr>
+
+                                    <th data-field="state" data-checkbox="true"></th>
+                                    <th data-field="id">编号</th>
+
+
+                                    <th data-field="name">名称</th>
+                                    <th data-field="fileName">文件名称</th>
+
+                                    <th data-field="status">状态</th>
+                                    <th data-field="id" data-formatter="operationFormatter">操作</th>
+
+                                </tr>
+                                </thead>
+                            </table>
+
+
+
+                    </div>
+
+                 <div class="tab-pane " id="loadometer" >
+
+
+
+                     <div id="loadometer_toolbar" class="" >
+
+                     <#--
+                                              <button id="viewCapacityBtn" type="button" class="btn btn-success">
+                                                  <i class="">查看详情</i>
+                                              </button>
+                     -->
+
+
+
+
+                         <button id="createLoadometerBtn" type="button" class="btn btn-primary" >
+                             新建地磅
+                         </button>
+
+                         <button id="addBtn" type="button" class="btn btn-danger"  >
+                             关联车牌识别摄像头
+                         </button>
+
+
+                         <script type="text/javascript">
+
+
+                             function refresh() {
+                                 $('#module-table').bootstrapTable('refresh');
+                             }
+
+                             function selectedRowModule() {
+                                 var row =  $('#loadometer-table').bootstrapTable('getSelections');
+                                 return row;
+                             }
+
+
+
+                             $("#createLoadometerBtn").click(function() {
+
+                                     $('#addLoadometerModal').modal();
+                                     //alert(JSON.stringify(row[0]));
+                                     $('#addLoadometerModal .companyId').val(row[0].id);
+
+                             });
+                             $("#addBtn").click(function() {
+                                 var row = selectedRowModule();
+
+                                 if (row != '') {
+                                     $('#addLoadometerCameraModal').modal();
+                                     //alert(JSON.stringify(row[0]));
+                                     $('#addLoadometerCameraModal .companyId').val(row[0].id);
+
+                                 }
+                             });
+
+                             $("#refreshBtn").click(function() {
+
+                                 $('#refreshModal').modal();
+
+
+                             });
+
+
+
+                         </script>
+
+                     </div>
+
+
+
+                     <table class=" table-striped" id="loadometer-table" data-url="${loadometerUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                            data-query-params-type="unlimit"
+                            data-query-params="queryParams_company"
+                            data-response-handler="handleResponse"
+                            data-pagination="true"
+                            data-side-pagination="server"
+                            data-page-number="1"
+                            data-page-list="[10]"
+                            data-page-size="10"
+                            data-click-to-select="true"
+                            data-single-select="true"
+                            data-search="true"
+                            data-show-refresh="true"
+
+                            data-toolbar="#loadometer_toolbar"
+
+                     >
+                         <thead>
+                         <tr>
+
+                             <th data-field="state" data-checkbox="true"></th>
+                             <th data-field="id">编号</th>
+
+
+                             <th data-field="name">名称</th>
+                             <th data-field="fileName">文件名称</th>
+
+                             <th data-field="status">状态</th>
+                             <th data-field="id" data-formatter="operationFormatter">操作</th>
+
+                         </tr>
+                         </thead>
+                     </table>
+
+                     <table class=" table-striped" id="module-table" data-url="${loadometerCemeraUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                            data-query-params-type="unlimit"
+                            data-query-params="queryParams_company"
+                            data-response-handler="handleResponse"
+                            data-pagination="true"
+                            data-side-pagination="server"
+                            data-page-number="1"
+                            data-page-list="[10]"
+                            data-page-size="10"
+                            data-click-to-select="true"
+                            data-single-select="true"
+                            data-search="true"
+                            data-show-refresh="true"
+
+                            startModuleUrl
+                     >
+                         <thead>
+                         <tr>
+
+                             <th data-field="state" data-checkbox="true"></th>
+                             <th data-field="id">编号</th>
+
+
+                             <th data-field="name">名称</th>
+                             <th data-field="fileName">文件名称</th>
+
+                             <th data-field="status">状态</th>
+                             <th data-field="id" data-formatter="operationFormatter">操作</th>
+
+                         </tr>
+                         </thead>
+                     </table>
+
+
+                 </div>
+
+                 <div class="tab-pane " id="info" >
+                     <div id="info_toolbar" class="" >
+
+                         <button id="createLoadometerBtn" type="button" class="btn btn-primary" >
+                             新建地磅
+                         </button>
+
+                         <button id="addBtn" type="button" class="btn btn-danger"  >
+                             关联车牌识别摄像头
+                         </button>
+
+
+                         <script type="text/javascript">
+
+
+                             function refresh() {
+                                 $('#module-table').bootstrapTable('refresh');
+                             }
+
+                             function selectedRowModule() {
+                                 var row =  $('#loadometer-table').bootstrapTable('getSelections');
+                                 return row;
+                             }
+
+
+
+                             $("#createLoadometerBtn").click(function() {
+
+                                 $('#addLoadometerModal').modal();
+                                 //alert(JSON.stringify(row[0]));
+                                 $('#addLoadometerModal .companyId').val(row[0].id);
+
+                             });
+                             $("#addBtn").click(function() {
+                                 var row = selectedRowModule();
+
+                                 if (row != '') {
+                                     $('#addLoadometerCameraModal').modal();
+                                     //alert(JSON.stringify(row[0]));
+                                     $('#addLoadometerCameraModal .companyId').val(row[0].id);
+
+                                 }
+                             });
+
+                             $("#refreshBtn").click(function() {
+
+                                 $('#refreshModal').modal();
+
+
+                             });
+
+
+
+                         </script>
+
+                     </div>
+
+                     <table class=" table-striped" id="info-table" data-url="${infoUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                            data-query-params-type="unlimit"
+                            data-query-params="queryParams_company"
+                            data-response-handler="handleResponse"
+                            data-pagination="true"
+                            data-side-pagination="server"
+                            data-page-number="1"
+                            data-page-list="[10]"
+                            data-page-size="10"
+                            data-click-to-select="true"
+                            data-single-select="true"
+                            data-toolbar="#info_toolbar"
+                     >
+                         <thead>
+                         <tr>
+                             <th data-field="name"  >名称</th>
+                             <th data-field="url" >值</th>
+
+                         </tr>
+                         </thead>
+                     </table>
+
+                 </div>
+
+                 <div class="tab-pane " id="statusinfo" >
+                     <div id="statusinfo_toolbar" class="hidden" >
+
+                         <button id="createLoadometerBtn" type="button" class="btn btn-primary" >
+                             新建地磅
+                         </button>
+
+                         <button id="addBtn" type="button" class="btn btn-danger"  >
+                             关联车牌识别摄像头
+                         </button>
+
+
+                         <script type="text/javascript">
+
+
+                             function refresh() {
+                                 $('#module-table').bootstrapTable('refresh');
+                             }
+
+                             function selectedRowModule() {
+                                 var row =  $('#loadometer-table').bootstrapTable('getSelections');
+                                 return row;
+                             }
+
+
+
+                             $("#createLoadometerBtn").click(function() {
+
+                                 $('#addLoadometerModal').modal();
+                                 //alert(JSON.stringify(row[0]));
+                                 $('#addLoadometerModal .companyId').val(row[0].id);
+
+                             });
+                             $("#addBtn").click(function() {
+                                 var row = selectedRowModule();
+
+                                 if (row != '') {
+                                     $('#addLoadometerCameraModal').modal();
+                                     //alert(JSON.stringify(row[0]));
+                                     $('#addLoadometerCameraModal .companyId').val(row[0].id);
+
+                                 }
+                             });
+
+                             $("#refreshBtn").click(function() {
+
+                                 $('#refreshModal').modal();
+
+
+                             });
+
+
+
+                         </script>
+
+                     </div>
+
+                     <table class=" table-striped" id="info-table" data-url="${statusinfoUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                            data-query-params-type="unlimit"
+                            data-query-params="queryParams_company"
+                            data-response-handler="handleResponse"
+                            data-pagination="true"
+                            data-side-pagination="server"
+                            data-page-number="1"
+                            data-page-list="[10]"
+                            data-page-size="10"
+                            data-click-to-select="true"
+                            data-single-select="true"
+                            data-toolbar="#statusinfo_toolbar"
+
+                            data-search="true"
+                            data-show-refresh="true"
+                     >
+                         <thead>
+                         <tr>
+                             <th data-field="name"  >名称</th>
+                             <th data-field="url" >值</th>
+
+                         </tr>
+                         </thead>
+                     </table>
+
+                 </div>
+
+
              </div>
 
         </div>
@@ -593,34 +785,19 @@ LISTINGS
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">添加区域</h4>
+                <h4 class="modal-title" id="myModalLabel">startModuleUrl</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="well">
 
-                            <form id="addStationModalForm"   novalidate="novalidate" action="${command_create_url}">
-                                <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId hidden" name="companyId" value=""  >
+                            <form id="addStationModalForm"   novalidate="novalidate" action="${startModuleUrl}">
+                                <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId hidden" name="modualId" value=""  >
+
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
 
-                                <div class="form-group">
-                                    <label for="username" class="control-label">线路</label>
-
-                                    <select class="selectpicker" <#--data-max-options="2" --> id="locationId" name="lineId" class="form-control" placeholder="特征">
-                                    <#-- <select class="form-control select2" id="userType" name="userType"  placeholder="公司类型"  multiple="multiple">-->
-
-                                    <#if lines??>
-                                        <#list lines as feature>
-                                            <option value="${feature.id}" >${feature.id!''}--${feature.name!''}--${feature.description!''}</option>
-
-                                        </#list>
-                                    </#if>
-
-                                    </select>
-
-                                    <span class="help-block"></span>
-                                </div>
 
 
 
@@ -776,10 +953,260 @@ LISTINGS
     </div>
 </div>
 
+<div id="refreshModal" class="modal fade" role="dialog">
+    <div id="login-overlay" class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">刷新配置信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="well">
+
+                            <form id="refreshModalForm"   novalidate="novalidate" action="${command_reflesh_url}">
+                                <input style="margin-bottom: 15px;" type="" placeholder="Username" class="id hidden" name="id" value=""  >
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+                                <div class="form-group">
+                                    <label for="username" class="control-label">appId</label>
+                                    <input style="margin-bottom: 15px;" type="" placeholder="Username" class="name form-control" name="appId" value="${configuration.appId!''}"  >
+
+                                    <span class="help-block"></span>
+                                </div>
+
+                        </div>
+
+                        <div class="col-lg-6">
+                            <input class="form-control" value="">
+
+
+                                <div class="form-group">
+                                    <label for="username" class="control-label">appSecret</label>
+                                    <input style="margin-bottom: 15px;" type="" placeholder="Username" class="postalCode form-control" name="appSecret" value="${configuration.appSecret!''}"  >
+                                    <span class="help-block"></span>
+                                </div>
+
+
+
+                                <button id="refreshModalFormBtn"  type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
+                            </form>
+                            <script  type="text/javascript">
+
+                                $("#refreshModalFormBtn").click(function() {
+                                    alert($('#refreshModalForm').serialize());
+
+                                    var req = $.ajax({
+                                        url:  $('#refreshModalForm').attr('action'),
+                                        type: 'POST',
+                                        data:  $('#refreshModalForm').serialize(),
+                                    });
+                                    req.done(function (data) {
+                                        if (data.status) {
+                                            alert("成功:"+data.message);
+                                            window.location.reload(true);
+                                        } else {
+                                            alert(data.message);
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div id="addLoadometerCameraModal" class="modal fade" role="dialog">
+        <div id="login-overlay" class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">关联车牌识别</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="well">
+
+                                <form id="addStationModalForm"   novalidate="novalidate" action="${startModuleUrl}">
+                                    <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId hidden" name="modualId" value=""  >
+
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+
+
+                                        <select class="form-control select2" id="userType" name="userType"  placeholder="公司类型"  multiple="multiple">
+
+                                        <#if cameras??>
+                                            <#list cameras as feature>
+                                                <option value="${feature.id}" >${feature.no!''}--${feature.type!''}</option>
+
+                                            </#list>
+                                        </#if>
+
+                                    </select>
+
+
+                                    <div class="form-group">
+                                        <label for="username" class="control-label">自备</label>
+                                        <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId form-control" name="flatWagonPrice" value=""  >
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username" class="control-label">敞口</label>
+                                        <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId form-control" name="openTopWagonPrice" value=""  >
+                                        <span class="help-block"></span>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="username" class="control-label">描述</label>
+                                        <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId form-control" name="description" value=""  >
+                                        <span class="help-block"></span>
+                                    </div>
+
+
+
+
+                                    <button id="addStationModalFormBtn"  type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
+                                </form>
+                                <script  type="text/javascript">
+
+                                    $("#addStationModalFormBtn").click(function() {
+                                        alert($('#addStationModalForm').serialize());
+
+                                        var req = $.ajax({
+                                            url:  $('#addStationModalForm').attr('action'),
+                                            type: 'post',
+                                            data:  $('#addStationModalForm').serialize(),
+                                        });
+                                        req.done(function (data) {
+                                            if (data.status) {
+                                                alert("成功:"+data.message);
+                                                window.location.reload(true);
+                                            } else {
+                                                alert(data.message);
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addLoadometerModal" class="modal fade" role="dialog">
+        <div id="login-overlay" class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">关联车牌识别</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="well">
+
+                                <form id="addLoadometerModalForm"   novalidate="novalidate" action="${createLoadometerUrl}">
+                                    <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId hidden" name="modualId" value=""  >
+
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+
+
+                                    <select class="form-control select2" id="userType" name="userType"  placeholder="公司类型"  multiple="multiple">
+
+                                        <#if cameras??>
+                                            <#list cameras as feature>
+                                                <option value="${feature.id}" >${feature.no!''}--${feature.type!''}</option>
+
+                                            </#list>
+                                        </#if>
+
+                                    </select>
+
+
+                                    <div class="form-group">
+                                        <label for="username" class="control-label">自备</label>
+                                        <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId form-control" name="flatWagonPrice" value=""  >
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username" class="control-label">敞口</label>
+                                        <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId form-control" name="openTopWagonPrice" value=""  >
+                                        <span class="help-block"></span>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="username" class="control-label">描述</label>
+                                        <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId form-control" name="description" value=""  >
+                                        <span class="help-block"></span>
+                                    </div>
+
+
+
+
+                                    <button id="addLoadometerFormBtn"  type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
+                                </form>
+                                <script  type="text/javascript">
+
+                                    $("#addLoadometerFormBtn").click(function() {
+                                        alert($('#addLoadometerModalForm').serialize());
+
+                                        var req = $.ajax({
+                                            url:  $('#addLoadometerModalForm').attr('action'),
+                                            type: 'post',
+                                            data:  $('#addLoadometerModalForm').serialize(),
+                                        });
+                                        req.done(function (data) {
+                                            if (data.status) {
+                                                alert("成功:"+data.message);
+                                                window.location.reload(true);
+                                            } else {
+                                                alert(data.message);
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<#--
 <#include "./common/page_foot_section.ftl">
 
 <#include "./common/hotline_section.ftl">
 
+-->
 
 
 
@@ -832,7 +1259,13 @@ function originToDestinationInfoFormatter(value, row, index) {
 
         }
     });
+function operationFormatter(value, row, index) {
 
+
+
+    return '<div class=""><a href="'+row.url+'">查看</a></div>';
+
+}
 
 
     function ompanyInfoFormatter(value, row, index) {

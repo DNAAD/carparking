@@ -9,6 +9,7 @@
     <title>榆林煤 堆场库存</title>
     <link href="${rc.contextPath}/components/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${rc.contextPath}/components/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="${rc.contextPath}/components/bootstrap_table/bootstrap-table.min.css" rel="stylesheet">
 
     <script src="${rc.contextPath}/js/jquery/jquery.js" type="text/javascript"></script>
    <script src="${rc.contextPath}/components/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -70,315 +71,14 @@
     </style>
 
 
-    <style type="text/css">
-
-
-
-
-    .tab-box {
-        background: #f8f8f8;
-        position: relative;
-    }
-
-    .tab-filter {
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
-
-
-    .adds-wrapper {
-        background: #fff;
-        clear: both;
-        display: block;
-        height: auto;
-        overflow: auto;
-        width: 100%;
-    }
-    .listing-filter {
-        border-bottom: solid 1px #ddd;
-        padding: 15px 0;
-    }
-
-    .listings p {
-        margin: 0;
-    }
-    .listings h3 {
-        margin: 0;
-    }
-    .listings .listing-row {
-        border-bottom: 1px solid #e6e6e6;
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-    .listings .listing-row:nth-child(even) {
-        background: #fafafa;
-    }
-    .listings .premium.listing-row {
-        background: #FFFFDD;
-        background: #E0F4FF;
-        border-bottom: 1px solid #c6ebff;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        position: relative;
-    }
-    .listings .listing-row.last {
-        border-bottom: 1px solid #fff;
-    }
-    .recent-listings .panel-body {
-        padding: 0 15px;
-    }
-    .recent-listings .price-text {
-        text-align: right;
-    }
-    .recent-listings .listing-row {
-        border-bottom: 1px solid #e6e6e6;
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-    .recent-listings .listing-row:nth-child(even) {
-        background: #fafafa;
-    }
-    .ad-options {
-        margin: 0;
-        padding: 0;
-    }
-    .ad-options li {
-        display: inline;
-        list-style-type: none;
-        padding-right: 20px;
-    }
-    .account-sidebar h3 {
-        margin: 0;
-    }
-    .home-search {
-        padding-bottom: 0;
-    }
-    .home-search .main_description {
-        text-align: center;
-    }
-    .home-search .form-control {
-        padding: 10px 8px;
-    }
-    .home-search .input-group-addon {
-        padding: 0;
-    }
-    .home-search .input-group-addon.input-group-addon-text {
-        background: #ffffff;
-        color: #000;
-        border: none;
-        padding-right: 20px;
-    }
-    .home-search .input-group-addon .btn {
-        padding: 9px 18px;
-    }
-    .home-search .input-group-addon li a {
-        text-align: left;
-        padding: 10px 18px;
-    }
-    .home-search .input-group-addon .btn {
-        text-transform: none;
-    }
-    .home-search .input-group-addon .btn {
-        color: #000;
-        font-weight: 100;
-    }
-    .home-search .input-group-addon .btn .dropdown-menu ul il a {
-        text-align: left;
-    }
-    .featured-gallery {
-        border: none;
-        padding-left: 15px;
-        padding-right: 15px;
-        margin-bottom: 0px;
-    }
-    .featured-gallery img {
-        text-align: center;
-        height: 60px;
-        width: 121px;
-    }
-    .featured-gallery .featured-thumbnail {
-        margin-bottom: 5px;
-        padding-left: 2px;
-        padding-right: 2px;
-    }
-    .featured-gallery .featured-thumbnail img {
-        width: 100%;
-    }
-    #listings-page .price {
-        font-size: 24px;
-        text-align: left;
-    }
-    #listings-page hr {
-        margin-bottom: 10px;
-    }
-    #visualization {
-        height: 300px;
-        width: 98%;
-        margin-top: 40px;
-        margin-bottom: 40px;
-    }
-    p.muted {
-        color: #999999;
-    }
-    .edit-listings tr:hover .remove-ad {
-        display: inline;
-    }
-    .edit-listings tr:hover .extend-ad:after {
-        content: " | ";
-        color: #222222;
-    }
-    .edit-listings .no-views {
-        color: #555555;
-        margin-left: 10px;
-    }
-    .edit-listings .edit-ad:after {
-        content: " | ";
-        color: #222222;
-        text-decoration: none !important;
-    }
-    .edit-listings .edit-ad:after:hover {
-        text-decoration: none;
-    }
-    .edit-listings .remove-ad {
-        color: #FF0000;
-        display: none;
-    }
-    .edit-listings .remove-ad:hover {
-        color: #FF0000;
-        text-decoration: underline;
-    }
-    .edit-listings .edit-ad {
-        color: #79a618;
-    }
-    .edit-listings .edit-ad:hover {
-        color: #79a618;
-        text-decoration: underline;
-    }
-    .edit-listings .extend-ad {
-        color: #79a618;
-    }
-    .edit-listings .extend-ad:hover {
-        color: #79a618;
-        text-decoration: underline;
-    }
-    .nav-category .remove-category {
-        display: none;
-    }
-    .nav-category li:hover .remove-category {
-        display: block;
-        float: right;
-    }
-    .nav-category li:hover .remove-category i {
-        color: #FF0000;
-    }
-    #gallery .thumbnail img {
-        max-height: 80px;
-    }
-    #my-dropzone .dropzone .dz-default.dz-message {
-        width: 100%;
-    }
-    @media (min-width: 768px) {
-        #listings-page .price {
-            text-align: right;
-        }
-        .footer {
-            text-align: left;
-        }
-        .footer .footer-links {
-            float: right;
-        }
-    }
-    #modalLogin .modal-dialog,
-    #modalSignup .modal-dialog {
-        width: 400px;
-    }
-    .topbar {
-        border: 3px solid #D2160A;
-    }
-    .post-ad-btn {
-        padding: 2px 10px;
-        height: 25px;
-        width: auto;
-        margin-left: 5px;
-    }
-    .search-btn {
-        width: 180px;
-        float: none;
-    }
-    .form-inline .form-control {
-        width: 100%;
-    }
-    /*Just for preview*/
-    #theme_switcher {
-        top: 10px;
-        left: 10px;
-        position: fixed;
-    }
-
-    </style>
-    <style type="text/css">
-
-    .list-group-unbordered>.list-group-item {
-        border-left: 0;
-        border-right: 0;
-        border-radius: 0;
-        padding-left: 0;
-        padding-right: 0;
-    }
-    .box.box-primary {
-        border-top-color: #3c8dbc;
-    }
-    .box {
-        position: relative;
-        border-radius: 3px;
-        background: #ffffff;
-        border-top: 3px solid #d2d6de;
-        margin-bottom: 20px;
-        width: 100%;
-        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-    }
-    .box-body {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        padding: 10px;
-    }
-    </style>
-
 
 </head>
 
 <body>
 <div class="container" style="margin-bottom:80px; margin-top:10px ">
-<#include "./common/front_page_header_section.ftl">
-
-<div class=" well hidden " data-offset-top="100" ><!--data-spy="affix"-->
-
-        <div class="input-group">
-            <div class="input-group-btn search-panel">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span id="search_concept">全部</span> <span class="camake-list ret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu"  style="z-index:99999">
-
-                    <li><a href="#contains">找公司</a></li>
-                    <li><a href="#its_equal">找供应商</a></li>
-                    <li><a href="#greather_than">找货源</a></li>
-                    <li class="divider"></li>
-                </ul>
-            </div>
-            <input type="hidden" name="search_param" value="all">
-            <input type="text" class="form-control"  id="search_param"  name="x" value="${q!''}" placeholder="输入搜索关键字...，如 神木, 三八块">
-                <span class="input-group-btn">
-                    <button class="btn btn-info searchBtn" type="button"><span class="glyphicon glyphicon-search "></span></button>
-                </span>
-        </div>
-
-
-</div>
-
+    <h1 class="page-header">
+        <small>库存管理</small>
+    </h1>
 
 
 
@@ -386,53 +86,147 @@
 
 
         <div class="col-sm-12">
-            <div class="box hidden box-primary">
-                <div class="box-body box-profile">
-                    <div class="list-group list-group-unbordered">
-                        <li class="list-group-item">
-                            <h4 class="list-group-item-heading">
-                                运力申请
-                                <span class="small pull-right" style="padding-top:.2em">换一批&nbsp;&nbsp;更多&gt;</span>
-                            </h4>
-                        </li>
-
-
-
-
-                    </div>
-                </div>
-            </div>
 
             <div class="tab-box ">
 
                 <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
+                    <li class=""><a href="#product" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">产品 <span class="badge"></span></a></li>
                     <li class="active"><a href="#companies" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">库存 <span class="badge"></span></a></li>
+                    <li class=""><a href="#priceCategory" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">价格 <span class="badge"></span></a></li>
+
                 </ul>
 
             </div>
 
              <div  class="tab-content">
+                 <div class="tab-pane " id="product" style="padding-top: 10px;padding-bottom: 10px">
 
+
+                     <div id="product_toolbar" class="" >
+
+
+
+                         <button id="editBtn" type="button" class="btn btn-primary" >
+                             修改
+                         </button>
+
+
+                         <script type="text/javascript">
+
+                             function selectedRow_() {
+                                 return row;
+                             }
+
+
+                             $("#editBtn").click(function() {
+                                 var row =  $('#product-table').bootstrapTable('getSelections');
+
+                                 if (row != '') {
+                                     $('#productModal').modal();
+                                     alert(JSON.stringify(row[0]));
+                                     $('#productModalForm .uuid').val(row[0].uuid);
+
+
+
+
+                                 }
+                             });
+                             $("#synchronizeBtn").click(function() {
+
+                                 var req = $.ajax({
+                                     url:  $('#synchronizeBtn').attr('ref'),
+                                     type: 'post',
+                                     data:  $('#addLineModalForm').serialize(),
+                                 });
+                                 req.done(function (data) {
+                                     if (data.status) {
+                                         alert("成功:"+data.message);
+                                         window.location.reload(true);
+                                     } else {
+                                         alert(data.message);
+                                     }
+                                 });
+
+                                 var row = selectedRow_();
+
+                                 if (row != '') {
+                                     //  $('#addStationModal').modal();
+                                     //  alert(JSON.stringify(row[0]));
+                                     //  $('#addStationModalForm .companyId').val(row[0].id);
+
+                                 }
+                             });
+
+
+                         </script>
+
+                     </div>
+
+
+                     <table class=" table-striped" id="product-table" data-url="${productUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                            data-query-params-type="unlimit"
+                            data-query-params="queryParams_company"
+                            data-response-handler="handleResponse"
+                            data-pagination="true"
+                            data-side-pagination="server"
+                            data-page-number="1"
+                            data-page-list="[10]"
+                            data-page-size="10"
+
+                            data-click-to-select="true"
+                            data-single-select="true"
+
+                            data-single-select="true"
+                            data-search="true"
+                            data-show-refresh="true"
+                            data-toolbar="#product_toolbar">
+                         <thead>
+                         <tr>
+
+
+                             <th data-field="state" data-radio="true"></th>
+
+                             <th data-field="no">编号</th>
+
+                             <th data-field="coalType">名称</th>
+                             <th data-field="granularity">类型</th>
+
+
+                             <th data-field="quote">当前价格</th>
+                             <th data-field="status">状态</th>
+
+                             <th data-field="status" data-formatter="operationInfoFormatter">操作</th>
+                         </tr>
+                         </thead>
+                     </table>
+
+                 </div>
 
                     <div class="tab-pane active" id="companies" style="padding-top: 10px;padding-bottom: 10px">
 
 
-                        <div id="toolbar" class="btn-group" >
+                        <div id="toolbar" class="" >
 
-                            <button id="synchronizeBtn" type="button" ref="${synchronize_url}" class="btn btn-danger">
+<#--                            <button id="synchronizeBtn" type="button" ref="${synchronize_url}" class="btn btn-danger">
                                 <i class="">同步  deltas work.</i>
-                            </button>
+                            </button>-->
+
+                            <select class="selectpicker" data-max-options="2"  id="storage_company_no" class="form-control" placeholder="特征">
+                                <option value="" >全部</option>
+
+                                <#list storages as feature>
+                                    <option value="${feature.no}" >${feature.no!''}--${feature.name!''}</option>
+                                </#list>
 
 
+                            </select>
 
 
                             <button id="editBtn" type="button" class="btn btn-primary" >
                                 修改
                             </button>
 
-<#--                            <button id="addBtn" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addStationModal">
-                                添加
-                            </button>-->
 
                             <script type="text/javascript">
 
@@ -505,7 +299,11 @@
 
                                data-click-to-select="true"
                                data-single-select="true"
-">
+
+                               data-single-select="true"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-toolbar="#toolbar">
                             <thead>
                             <tr>
 
@@ -516,6 +314,7 @@
 
                                 <th data-field="coalType">名称</th>
                                 <th data-field="granularity">类型</th>
+                                <th data-field="storageNo">堆场编号</th>
 
 
                                 <th data-field="quantityOnHand">当前库存</th>
@@ -528,87 +327,139 @@
                         </table>
 
                  </div>
+                 <div class="tab-pane " id="priceCategory" style="padding-top: 10px;padding-bottom: 10px">
+
+
+                     <div id="priceCategory_toolbar" class="" >
+
+                     <#--                            <button id="synchronizeBtn" type="button" ref="${synchronize_url}" class="btn btn-danger">
+                                                     <i class="">同步  deltas work.</i>
+                                                 </button>-->
+
+                         <select class="selectpicker" data-max-options="2"  id="storage_company_no" class="form-control" placeholder="特征">
+                             <option value="" >全部</option>
+
+                                <#list storages as feature>
+                                    <option value="${feature.no}" >${feature.no!''}--${feature.name!''}</option>
+                                </#list>
+
+
+                         </select>
+
+
+                         <button id="editBtn" type="button" class="btn btn-primary" >
+                             修改
+                         </button>
+
+
+                         <script type="text/javascript">
+
+
+                             function refresh() {
+                                 $('#station-table').bootstrapTable('refresh');
+                             }
+
+                             function selectedRow_() {
+                                 var row =  $('#station-table').bootstrapTable('getSelections');
+                                 return row;
+                             }
+
+
+                             $("#editBtn").click(function() {
+                                 var row = selectedRow_();
+
+                                 if (row != '') {
+                                     $('#editStationModal').modal();
+                                     alert(JSON.stringify(row[0]));
+                                     $('#editStationModalForm .inventoryId').val(row[0].id);
+
+
+
+
+                                 }
+                             });
+                             $("#synchronizeBtn").click(function() {
+
+                                 var req = $.ajax({
+                                     url:  $('#synchronizeBtn').attr('ref'),
+                                     type: 'post',
+                                     data:  $('#addLineModalForm').serialize(),
+                                 });
+                                 req.done(function (data) {
+                                     if (data.status) {
+                                         alert("成功:"+data.message);
+                                         window.location.reload(true);
+                                     } else {
+                                         alert(data.message);
+                                     }
+                                 });
+
+                                 var row = selectedRow_();
+
+                                 if (row != '') {
+                                     //  $('#addStationModal').modal();
+                                     //  alert(JSON.stringify(row[0]));
+                                     //  $('#addStationModalForm .companyId').val(row[0].id);
+
+                                 }
+                             });
+
+
+                         </script>
+
+                     </div>
+
+
+                     <table class=" table-striped" id="station-table" data-url="${priceCategoryUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                            data-query-params-type="unlimit"
+                            data-query-params="queryParams_company"
+                            data-response-handler="handleResponse"
+                            data-pagination="true"
+                            data-side-pagination="server"
+                            data-page-number="1"
+                            data-page-list="[10]"
+                            data-page-size="10"
+
+                            data-click-to-select="true"
+                            data-single-select="true"
+
+                            data-single-select="true"
+                            data-search="true"
+                            data-show-refresh="true"
+                            data-toolbar="#priceCategory_toolbar">
+                         <thead>
+                         <tr>
+
+
+                             <th data-field="state" data-radio="true"></th>
+
+                             <th data-field="no">编号</th>
+
+                             <th data-field="coalType">名称</th>
+                             <th data-field="itemType">类型</th>
+                             <th data-field="productNo">产品</th>
+
+
+                             <th data-field="name">类型</th>
+                             <th data-field="value">当前价格</th>
+                             <th data-field="status">状态</th>
+
+                             <th data-field="status" data-formatter="operationInfoFormatter">操作</th>
+                         </tr>
+                         </thead>
+                     </table>
+
+                 </div>
+
+
+
              </div>
 
         </div>
 
     </div>
 
-<#--
-    <div id="addStationModal" class="modal fade" role="dialog">
-        <div id="login-overlay" class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">添加区域</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="well">
-
-                                <form id="deleteFeatureForm"   novalidate="novalidate">
-                                    <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId" name="companyId" value=""  >
-
-
-                                    <div class="form-group">
-                                        <label for="username" class="control-label">特征</label>
-
-                                        <select class="selectpicker" data-max-options="2"  id="feature" name="feature" class="form-control" placeholder="特征">
-                                        &lt;#&ndash; <select class="form-control select2" id="userType" name="userType"  placeholder="公司类型"  multiple="multiple">&ndash;&gt;
-
-                                        <#if featuresEnum??>
-                                            <#list featuresEnum as feature>
-                                                <option value="${feature.id}" >${feature.id!''}--${feature.displayName!''}</option>
-
-                                            </#list>
-                                        </#if>
-
-                                        </select>
-
-
-
-                                        </select>
-                                        <span class="help-block"></span>
-                                    </div>
-
-
-                                    <button id="deleteFeatureModalBtn" ref="{deleteFeatureCommandUrl}" type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
-                                </form>
-                                <script  type="text/javascript">
-
-                                    $("#deleteFeatureModalBtn").click(function() {
-                                        alert($('#deleteFeatureForm').serialize());
-
-                                        var req = $.ajax({
-                                            url:  $(this).attr('ref'),
-                                            type: 'post',
-                                            data:  $('#deleteFeatureForm').serialize(),
-                                        });
-                                        req.done(function (data) {
-                                            if (data.status) {
-                                                alert("成功:"+data.message);
-                                                window.location.reload(true);
-                                            } else {
-                                                alert(data.message);
-                                            }
-                                        });
-                                    });
-                                </script>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-
-
-
-                </div>
-            </div>
-        </div>
-    </div>
--->
 
 <div id="addStationModal" class="modal fade" role="dialog">
     <div id="login-overlay" class="modal-dialog">
@@ -717,6 +568,7 @@
 
                             <form id="editStationModalForm"   novalidate="novalidate" action="${command_edit_url}">
                                 <input style="margin-bottom: 15px;" type="" placeholder="Username" class="id hidden inventoryId" name="id" value=""  >
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
 
                                 <div class="form-group">
@@ -732,28 +584,8 @@
 
 
 
-                                <button id="editStationModalFormBtn"  type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
                             </form>
-                            <script  type="text/javascript">
 
-                                $("#editStationModalFormBtn").click(function() {
-                                    alert($('#editStationModalForm').serialize());
-
-                                    var req = $.ajax({
-                                        url:  $('#editStationModalForm').attr('action'),
-                                        type: 'put',
-                                        data:  $('#editStationModalForm').serialize(),
-                                    });
-                                    req.done(function (data) {
-                                        if (data.status) {
-                                            alert("成功:"+data.message);
-                                            window.location.reload(true);
-                                        } else {
-                                            alert(data.message);
-                                        }
-                                    });
-                                });
-                            </script>
                         </div>
 
 
@@ -763,9 +595,94 @@
 
 
             </div>
+            <div class="modal-footer">
+                <button id="editStationModalFormBtn"  type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
+
+                <script  type="text/javascript">
+
+                    $("#editStationModalFormBtn").click(function() {
+                        alert($('#editStationModalForm').serialize());
+
+                        var req = $.ajax({
+                            url:  $('#editStationModalForm').attr('action'),
+                            type: 'put',
+                            data:  $('#editStationModalForm').serialize(),
+                        });
+                        req.done(function (data) {
+                            if (data.status) {
+                                alert("成功:"+data.message);
+                                window.location.reload(true);
+                            } else {
+                                alert(data.message);
+                            }
+                        });
+                    });
+                </script>
+                </div>
         </div>
     </div>
 </div>
+    <div id="productModal" class="modal fade" role="dialog">
+        <div id="login-overlay" class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">编辑价格</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+
+
+                            <form id="productModalForm"   novalidate="novalidate" action="${commandProductEditUrl}">
+                                <input  type="" placeholder="Username" class="id hidden inventoryId" name="uuid" value=""  >
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+
+                                <div class="form-group">
+                                    <label for="username" class="control-label">价格</label>
+                                    <input style="margin-bottom: 15px;" type="" placeholder="Username" class="postalCode form-control" name="quotation" value=""  >
+                                    <span class="help-block"></span>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button id="editStationModalFormBtn"  type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
+
+                    <script  type="text/javascript">
+
+                        $("#editStationModalFormBtn").click(function() {
+                            alert($('#editStationModalForm').serialize());
+
+                            var req = $.ajax({
+                                url:  $('#editStationModalForm').attr('action'),
+                                type: 'put',
+                                data:  $('#editStationModalForm').serialize(),
+                            });
+                            req.done(function (data) {
+                                if (data.status) {
+                                    alert("成功:"+data.message);
+                                    window.location.reload(true);
+                                } else {
+                                    alert(data.message);
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <#include "./common/page_foot_section.ftl">
 
@@ -806,7 +723,11 @@ function originToDestinationInfoFormatter(value, row, index) {
         params.size = params.pageSize;
 
         var sender = $.trim($("#search_param").val());
+        var storage_company_no = $.trim($("#storage_company_no").val());
 
+        if (storage_company_no) {
+            params.storageNo = storage_company_no;
+        }
         if (sender) {
             params.q = sender;
         }

@@ -1,15 +1,15 @@
 package com.coalvalue.service;
 
-import com.coalvalue.domain.Distributor;
-import com.coalvalue.domain.TemporaryQrcode;
-import com.coalvalue.domain.entity.PlateRecognition;
+import com.coalvalue.domain.entity.Distributor;
+import com.coalvalue.domain.entity.TemporaryQrcode;
+import com.coalvalue.domain.entity.StorageSpace;
+import com.coalvalue.domain.entity.WxPermanentQrcode;
 import com.coalvalue.notification.NotificationData;
-import com.service.BaseService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.Map;
 
 /**
@@ -35,4 +35,13 @@ public interface QrcodeService extends BaseService {
 
     @Transactional
     TemporaryQrcode upDateBindQrcodeForDistributor(String u, Map map);
+
+    WxPermanentQrcode createQrcode(StorageSpace storageSpace);
+
+
+    void saveStorageQrocde(String storageNo, String content);
+
+    WxPermanentQrcode getCompany();
+
+
 }

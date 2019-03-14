@@ -13,7 +13,8 @@ public enum EquipmentTypeEnum {
 
     Bulletin ("公告牌", "公告牌",2,""),
     Printer ("Printer", "打印机",2,""),
-    Camera ("Camera", "摄像机",2,""),;
+    Camera ("Camera", "摄像机",2,""),
+    License_Plate_Capture_Cameras ("License_Plate_Capture_Cameras", "摄像机",2,"");
 
 
 

@@ -1,17 +1,15 @@
 package com.coalvalue.web;
 
-import com.LPRMain;
 import com.coalvalue.domain.OperationResult;
 import com.coalvalue.domain.entity.InstanceTransport;
-import com.coalvalue.domain.entity.InventoryTransfer;
-import com.coalvalue.domain.entity.Line;
-import com.coalvalue.domain.entity.ReportDeliveryOrder;
-import com.coalvalue.service.GeneralServiceImpl;
+
+import com.coalvalue.domain.entity.User;
+import com.coalvalue.service.other.GeneralServiceImpl;
 import com.coalvalue.service.InstanceTransportService;
-import com.coalvalue.service.LineService;
+import com.coalvalue.service.ReportService;
 import com.coalvalue.service.PlateRecognitionService;
-import com.coalvalue.web.valid.InstanceTransportCreateForm;
 import com.coalvalue.web.valid.LineCreateForm;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import reactor.bus.EventBus;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class MobileInstanceTransprotController {
     @Autowired
     private PlateRecognitionService plateRecognitionService;
     @Autowired
-    private LineService lineService;
+    private ReportService lineService;
     @Autowired
     private GeneralServiceImpl generalService;
 
@@ -63,18 +62,25 @@ public class MobileInstanceTransprotController {
     @Autowired
     private InstanceTransportService instanceTransportService;
 
+    @Autowired
+    private EventBus eventBus;
+
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
-    public ModelAndView index(@RequestParam(value = "q", required = false) String searchTerm){//,Authentication authentication)  {
+    public ModelAndView index(@RequestParam(value = "q", required = false) String searchTerm,Authentication authentication)  {
 
-        ModelAndView modelAndView = new ModelAndView("/templates/transport_index");
+        ModelAndView modelAndView = new ModelAndView("/transport_index");
         modelAndView.addObject("q",searchTerm);
 
-        String companiesUrl = linkTo(methodOn(MobileInstanceTransprotController.class).stations("", null)).withSelfRel().getHref();
+        String companiesUrl = linkTo(methodOn(MobileInstanceTransprotController.class).transports("", null)).withSelfRel().getHref();
         modelAndView.addObject("transportUrl",companiesUrl);
-        generalService.setGeneral(modelAndView);
+        try {
+            generalService.setGeneral(modelAndView, "", authentication);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        String createTransferUrl = linkTo(methodOn(MobileInstanceTransprotController.class).create(null,null, null)).toUri().toASCIIString();
+        String createTransferUrl = linkTo(methodOn(MobileInstanceTransprotController.class).createTransfer(null, null, null)).toUri().toASCIIString();
 
         modelAndView.addObject("createTransferUrl",createTransferUrl);
         return modelAndView;
@@ -87,7 +93,7 @@ public class MobileInstanceTransprotController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
-    public Page<Map> stations(@RequestParam(value = "q", required = false) String searchTerm, @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC)  Pageable pageable)  {
+    public Page<Map> transports(@RequestParam(value = "q", required = false) String searchTerm, @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable)  {
 
 
 
@@ -123,45 +129,44 @@ public class MobileInstanceTransprotController {
 
 
 
-        Line line = lineService.create(lineCreateForm);
 
-        return line;
+        return null;
     }
 
 
 
 
 
-    @RequestMapping(value = "createTransfer", method = RequestMethod.POST)
+    @RequestMapping(value = "/createTransfer", method = RequestMethod.POST)
     @ResponseBody
 
-    public Map create(@RequestParam(value = "instanceId",required = false) Integer id,@Valid InventoryTransferCreateForm locationCreateForm,
-                      Authentication authentication) {
+    public Map createTransfer(@RequestParam(value = "instanceId", required = false) Integer id, @Valid InventoryTransferCreateForm locationCreateForm,
+                              Authentication authentication) {
 
-        logger.debug("----- param is  id : {},  price:{}, notificationToIds:{}, returnTo:{}，sendMessageToFollower is:{}", locationCreateForm.toString());
+
+        User user = (User)authentication.getPrincipal();
+        logger.debug("----- param is  id : {},  price:{}, notificationToIds:{}, returnTo:{}，sendMessageToFollower is:{}",id, locationCreateForm.toString());
 
         Map ret = new HashMap<String, String>();
         ret.put("status", false);
 
-
         InstanceTransport instanceTransport = instanceTransportService.getById(id);
 
-/*
-        OperationResult operationResult = lineService.valid(locationCreateForm);
-        if(!operationResult.isSuccess()){
-            ret.put("message", operationResult.getErrorMessage());
+        OperationResult operationResult = null;
+        try {
+            operationResult = instanceTransportService.createTransfer(instanceTransport, locationCreateForm,user);
+
+            if(operationResult.isSuccess()){
+                ret.put("status", true);
+
+            }else{
+                ret.put("message", operationResult.getErrorMessage());
+            }
+        } catch (MqttException e) {
+            e.printStackTrace();
+            ret.put("status", false);
+            ret.put("status", e.getMessage());
         }
-*/
-
-
-
-        InventoryTransfer location = instanceTransportService.createTransfer(instanceTransport, locationCreateForm);
-        if(location != null){
-
-
-            ret.put("status", true);
-        }
-
 
         return ret;
 
@@ -183,12 +188,6 @@ public class MobileInstanceTransprotController {
         }
 
 
-        Line location = lineService.edit(locationCreateForm);
-        if(location != null){
-
-
-            ret.put("status", true);
-        }
 
 
         return ret;
@@ -205,19 +204,19 @@ public class MobileInstanceTransprotController {
 
 
 
-        ModelAndView modelAndView = new ModelAndView("/templates/instance_transport_detail");
+        ModelAndView modelAndView = new ModelAndView("/transport_detail");
 
 
-        InstanceTransport deliveryOrder = instanceTransportService.getById(index);
+        InstanceTransport instanceTransport = instanceTransportService.getById(index);
 
-        String createUrl = linkTo(methodOn(MobileInstanceTransprotController.class).create(deliveryOrder.getId(), null,null)).withSelfRel().getHref();
+        String createUrl = linkTo(methodOn(MobileInstanceTransprotController.class).createTransfer(instanceTransport.getId(), null, null)).withSelfRel().getHref();
         modelAndView.addObject("createUrl",createUrl);
 
 
 
-        modelAndView.addObject("deliveryOrderMap",instanceTransportService.get(deliveryOrder));
+        modelAndView.addObject("transportMap",instanceTransportService.get(instanceTransport));
 
-        modelAndView.addObject("deliveryOrder",deliveryOrder);
+        modelAndView.addObject("deliveryOrder",instanceTransport);
 
    /*         WxTemporaryQrcode wxeneral = wxService.getByTransportation_Deliver_order(deliveryOrder, Constants.WX_QRCODE_TYPE_transportOperation_DELIVER_ORDER);
 

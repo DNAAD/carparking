@@ -1,7 +1,6 @@
 package com.coalvalue.web;
 
 import com.coalvalue.configuration.CommonConstant;
-import com.coalvalue.configuration.Constants;
 import com.coalvalue.domain.OperationResult;
 
 import com.coalvalue.domain.entity.*;
@@ -15,7 +14,7 @@ import com.coalvalue.service.DeliveryOrderService;
 import com.coalvalue.service.ProductService;
 import com.coalvalue.service.WxService;
 
-import com.domain.entity.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -79,7 +78,7 @@ public class MobileBillWorkbenchController extends BaseController {
 
         if(wxTemporaryQrcode != null){
             ModelAndView modelAndView = new ModelAndView("/mobile/bill_workbench");
-            Company company = companyService.getCompanyById(index);
+          //  Company company = companyService.getCompanyById(index);
            // mobileService.setWebSocketUrl(authentication,modelAndView,WebSocketServerUrlTypeEnum.Bill_workbench,company.getId());
           //  mobileService.setAuthenticationInfo(authentication,modelAndView);
             //   mobileService.set
@@ -90,7 +89,7 @@ public class MobileBillWorkbenchController extends BaseController {
 
           //  StorageSpace storageSpace = storageSpaces.get(0);
           //  mobileService.setWebSocketUrl(authentication,modelAndView,WebSocketServerUrlTypeEnum.Bill_workbench,storageSpace.getId());
-            modelAndView.addObject("company", company);
+          //  modelAndView.addObject("company", company);
 
 
 
@@ -112,14 +111,14 @@ public class MobileBillWorkbenchController extends BaseController {
            // modelAndView.addObject("storageSpaceCreateOperationsUrl",storageSpaceCreateOperationsUrl);
 
 
-            String storageSpaceLoadingOperationsUrl =   linkTo(methodOn(MobileInstanceTransprotController.class).stations(TransportOperationStatusEnum.LOADING.getText(),null)).withSelfRel().getHref();
+            String storageSpaceLoadingOperationsUrl =   linkTo(methodOn(MobileInstanceTransprotController.class).transports(TransportOperationStatusEnum.LOADING.getText(), null)).withSelfRel().getHref();
             modelAndView.addObject("storageSpaceLoadingOperationsUrl",storageSpaceLoadingOperationsUrl);
 
 
-            String storageSpaceLeaveOperationsUrl =   linkTo(methodOn(MobileInstanceTransprotController.class).stations(TransportOperationStatusEnum.LEAVE.getText(), null)).withSelfRel().getHref();
+            String storageSpaceLeaveOperationsUrl =   linkTo(methodOn(MobileInstanceTransprotController.class).transports(TransportOperationStatusEnum.LEAVE.getText(), null)).withSelfRel().getHref();
             modelAndView.addObject("storageSpaceLeaveOperationsUrl",storageSpaceLeaveOperationsUrl);
 
-            String storageSpaceRejectOperationsUrl =   linkTo(methodOn(MobileInstanceTransprotController.class).stations(TransportOperationStatusEnum.REJECT.getText(), null)).withSelfRel().getHref();
+            String storageSpaceRejectOperationsUrl =   linkTo(methodOn(MobileInstanceTransprotController.class).transports(TransportOperationStatusEnum.REJECT.getText(), null)).withSelfRel().getHref();
             modelAndView.addObject("storageSpaceRejectOperationsUrl",storageSpaceRejectOperationsUrl);
 
 
@@ -153,14 +152,14 @@ public class MobileBillWorkbenchController extends BaseController {
             reportDeliveryOrderMap = deliveryOrderService.getValidPage(ResourceType.TRANSPORT_OPERATION,verificationCode, user, pageable);
         }
 
-        Page<Map> page = reportDeliveryOrderMap.map(new Converter<ReportDeliveryOrder, Map>() {
-            public Map convert(ReportDeliveryOrder objectEntity) {
+        Page<Map> page = reportDeliveryOrderMap.map(new Function<ReportDeliveryOrder, Map>() {
+            public Map apply(ReportDeliveryOrder objectEntity) {
 
                 Map map = new HashMap();
 
 
 
-                TransportOperation operation = transportOperationRepository.findById(objectEntity.getItemId());
+                TransportOperation operation = transportOperationRepository.findByUuid(objectEntity.getTransportOperationUuid());
                 Product product = productService.getById(operation.getProductId());
                 Company productRcompany = null;
                 if(product != null){
@@ -175,7 +174,6 @@ public class MobileBillWorkbenchController extends BaseController {
 
                 StorageSpace storageSpace  = null;//storageSpaceService.getStorageSpace(operation.getSpaceId());
 
-                Company distributorCompany = companyService.getCompanyById(storageSpace.getCompanyId());
 
 
                     map.put("plateNumber", operation.getPlateNumber());
@@ -208,11 +206,11 @@ public class MobileBillWorkbenchController extends BaseController {
                 }
 
 
-                Company company = companyService.getCompanyById(operation.getCompanyId());
+/*                Company company = companyService.getCompanyById(operation.getCompanyId());
                 if(company != null){
                     map.put("companyLogoUrl", company.getSmallImage());
                     map.put("partnerCompanyName", company.getCompanyName());
-                }
+                }*/
 
 
 
@@ -285,14 +283,14 @@ public class MobileBillWorkbenchController extends BaseController {
 
 
         ModelAndView modelAndView = new ModelAndView("/mobile/bill_workbench_waiting");
-        Company company = companyService.getCompanyById(index);
+        //Company company = companyService.getCompanyById(index);
     //    mobileService.setWebSocketUrl(authentication,modelAndView,WebSocketServerUrlTypeEnum.CONFIGURATION,company.getId());
      //   mobileService.setAuthenticationInfo(authentication,modelAndView);
 
 
 
 
-        String url =   linkTo(methodOn(MobileBillWorkbenchController.class).redirect(company.getId(),null,null)).withSelfRel().getHref();
+        String url =  "";// linkTo(methodOn(MobileBillWorkbenchController.class).redirect(company.getId(),null,null)).withSelfRel().getHref();
 
         modelAndView.addObject("url",url);
 

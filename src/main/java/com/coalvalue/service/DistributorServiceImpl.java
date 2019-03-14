@@ -1,7 +1,7 @@
 package com.coalvalue.service;
 
 
-import com.coalvalue.domain.Distributor;
+import com.coalvalue.domain.entity.Distributor;
 import com.coalvalue.domain.entity.*;
 import com.coalvalue.enumType.FinancialConstants;
 import com.coalvalue.enumType.SynchronizeEnum;
@@ -9,12 +9,11 @@ import com.coalvalue.repository.*;
 import com.coalvalue.web.MobileDistributorController;
 import com.coalvalue.web.valid.DistributorCreateForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.BaseServiceImpl;
+
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -49,15 +49,18 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
     @Autowired
     private AdvancedPaymentTransferRepository advancedPaymentTransferRepository;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     @Override
     @Transactional
     public Distributor getDistributor(String companyNo, String traderName) {
 
-        Distributor distributor = distributorRepository.getByCompanyNo(companyNo);
+        Distributor distributor = distributorRepository.findByNo(companyNo);
         if(distributor == null){
             distributor = new Distributor();
             distributor.setName(traderName);
-            distributor.setCompanyNo(companyNo);
+            distributor.setName(companyNo);
             distributor = distributorRepository.save(distributor);
         }
         return distributor;
@@ -68,18 +71,23 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
 
         Page<Distributor> distributors = distributorRepository.findAll(pageable);
 
-        Page<Map> page = distributors.map(new Converter<Distributor, Map>() {
-            public Map convert(Distributor objectEntity) {
+        Page<Map> page = distributors.map(new Function<Distributor, Map>() {
+            public Map apply(Distributor objectEntity) {
 
                 ObjectMapper m = new ObjectMapper();
                 Map<String,Object> mappedObject = m.convertValue(objectEntity,Map.class);
 
 
-                String companiesUrl = linkTo(methodOn(MobileDistributorController.class).detail(objectEntity.getId(), null)).withSelfRel().getHref();
+                String companiesUrl = linkTo(methodOn(MobileDistributorController.class).detail(objectEntity.getNo(), null)).withSelfRel().getHref();
 
                 mappedObject.put("url",companiesUrl);
 
+                if(objectEntity.getAdvancedPaymentAmount() == null){
 
+                }else{
+                    objectEntity.setAdvancedPaymentAmount(new BigDecimal(0));
+                    distributorRepository.save(objectEntity);
+                }
 
 
                 return mappedObject;
@@ -94,7 +102,7 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
     public Distributor getById(Integer index) {
 
 
-        return distributorRepository.findById(index);
+        return distributorRepository.findById(index).get();
     }
 
     @Override
@@ -103,7 +111,7 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
         Map<String,Object> mappedObject = m.convertValue(deliveryOrder,Map.class);
 
 
-        String companiesUrl = linkTo(methodOn(MobileDistributorController.class).detail(deliveryOrder.getId(), null)).withSelfRel().getHref();
+        String companiesUrl = linkTo(methodOn(MobileDistributorController.class).detail(deliveryOrder.getNo(), null)).withSelfRel().getHref();
 
         mappedObject.put("url",companiesUrl);
         return mappedObject;
@@ -111,41 +119,37 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
 
     @Override
     public Distributor getByNo(String index) {
-        return distributorRepository.findByCompanyNo(index);
+        return distributorRepository.findByNo(index);
     }
 
     @Override
     public Page<Map> queryInventoryTransfer(Distributor o, Pageable pageable) {
 
 
-        Page<InventoryTransfer> pages = inventoryTransferRepository.findByDistributor(o.getId(),pageable);
+        Page<InventoryTransfer> pages = inventoryTransferRepository.findByDistributorNo(o.getNo(),pageable);
 
 
 
-        Page<Map> page = pages.map(new Converter<InventoryTransfer, Map>() {
-            public Map convert(InventoryTransfer objectEntity) {
+        Page<Map> page = pages.map(new Function<InventoryTransfer, Map>() {
+            public Map apply(InventoryTransfer objectEntity) {
 
                 ObjectMapper m = new ObjectMapper();
                 Map<String,Object> mappedObject = m.convertValue(objectEntity,Map.class);
 
 
-/*                String companiesUrl = linkTo(methodOn(MobileDistributorController.class).detail(objectEntity.getCollaboratorId(), null, null)).withSelfRel().getHref();
 
-                mappedObject.put("distributorUrl",companiesUrl);*/
-
-
-                InstanceTransport instanceTransport = instanceTransportRepository.findById(objectEntity.getInstanceId());
+                InstanceTransport instanceTransport = instanceTransportRepository.findByUuid(objectEntity.getInstanceUuid());
 
 
-                mappedObject.put("plateNumber",instanceTransport.getPlateNumber());
+                mappedObject.put("plateNumber",instanceTransport.getLicense());
 
 
-                Distributor distributor = distributorService.getById(objectEntity.getDistributor());
-                String distributorUrl = linkTo(methodOn(MobileDistributorController.class).detail(distributor.getId(), null)).withSelfRel().getHref();
+                Distributor distributor = distributorService.getByNo(objectEntity.getDistributorNo());
+                String distributorUrl = linkTo(methodOn(MobileDistributorController.class).detail(distributor.getNo(), null)).withSelfRel().getHref();
 
                 mappedObject.put("distributorUrl",distributorUrl);
 
-
+                mappedObject.put("createDate",objectEntity.getCreateDate());
 
                 return mappedObject;
             }
@@ -157,7 +161,7 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
     public List<InventoryTransfer> getTransfers(Distributor distributor) {
 
 
-        return inventoryTransferRepository.findByDistributor(distributor.getId());
+        return inventoryTransferRepository.findByDistributorNo(distributor.getNo());
     }
 
 
@@ -166,13 +170,9 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
     @Transactional
     public AdvancedPaymentTransfer createAdvancedPayment(InstanceTransport instanceTransport, BigDecimal amount) {
 
-        Distributor inventory = distributorRepository.findById(instanceTransport.getDistibutorId());
+        Distributor inventory = distributorRepository.findByNo(instanceTransport.getDistributorNo());
 
-        if(inventory.getAdvancedPaymentAmount() == null){
 
-        }else{
-            inventory.setAdvancedPaymentAmount(new BigDecimal(0));
-        }
         BigDecimal balance = inventory.getAdvancedPaymentAmount().subtract(amount);
         if(balance.floatValue()>0){
 
@@ -187,7 +187,7 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
             inventoryTransfer.setAmount(amount);
             inventoryTransfer.setBalance(balance);
 
-            inventoryTransfer.setDistributorId(instanceTransport.getDistibutorId());
+            inventoryTransfer.setDistributorNo(instanceTransport.getDistributorNo());
             inventoryTransfer.setInstanceId(instanceTransport.getId());
 
 
@@ -210,28 +210,30 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
 
     @Override
     @Transactional
-    public AdvancedPaymentTransfer addAdvancedPayment(Distributor inventory, BigDecimal amount) {
+    public AdvancedPaymentTransfer addAdvancedPayment(Distributor distributor, BigDecimal amount) {
 
 
-        if(inventory.getAdvancedPaymentAmount() == null){
-            inventory.setAdvancedPaymentAmount(new BigDecimal(0));
+        if(distributor.getAdvancedPaymentAmount() == null){
+            distributor.setAdvancedPaymentAmount(new BigDecimal(0));
         }
 
 
 
-            inventory.setAdvancedPaymentAmount(inventory.getAdvancedPaymentAmount().add(amount));
-        inventory = distributorRepository.save(inventory);
+            distributor.setAdvancedPaymentAmount(distributor.getAdvancedPaymentAmount().add(amount));
+        distributor = distributorRepository.save(distributor);
 
 
 
             AdvancedPaymentTransfer inventoryTransfer = new AdvancedPaymentTransfer();
             inventoryTransfer.setAmount(amount);
-            inventoryTransfer.setBalance(inventory.getAdvancedPaymentAmount());
+            inventoryTransfer.setBalance(distributor.getAdvancedPaymentAmount());
 
-            inventoryTransfer.setDistributorId(inventory.getId());
+            inventoryTransfer.setDistributorNo(distributor.getNo());
 
 
-            inventoryTransfer.setInventoryId(inventory.getId());
+            inventoryTransfer.setInventoryId(distributor.getId());
+
+
 
             return advancedPaymentTransferRepository.save(inventoryTransfer);
 
@@ -243,12 +245,12 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
     @Override
     public Page<Map> queryAdvancedPaymentTransferr(Distributor distributor, Pageable pageable) {
 
-        Page<AdvancedPaymentTransfer> pages = advancedPaymentTransferRepository.findByDistributorId(distributor.getId(),pageable);
+        Page<AdvancedPaymentTransfer> pages = advancedPaymentTransferRepository.findByDistributorNo(distributor.getNo(),pageable);
 
 
 
-        Page<Map> page = pages.map(new Converter<AdvancedPaymentTransfer, Map>() {
-            public Map convert(AdvancedPaymentTransfer objectEntity) {
+        Page<Map> page = pages.map(new Function<AdvancedPaymentTransfer, Map>() {
+            public Map apply(AdvancedPaymentTransfer objectEntity) {
 
                 ObjectMapper m = new ObjectMapper();
                 Map<String,Object> mappedObject = m.convertValue(objectEntity,Map.class);
@@ -259,8 +261,8 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
                 mappedObject.put("distributorUrl",companiesUrl);*/
 
                 if(objectEntity.getInstanceId()!= null){
-                    InstanceTransport instanceTransport = instanceTransportRepository.findById(objectEntity.getInstanceId());
-                    mappedObject.put("plateNumber",instanceTransport.getPlateNumber());
+                    InstanceTransport instanceTransport = instanceTransportRepository.findById(objectEntity.getInstanceId()).get();
+                    mappedObject.put("plateNumber",instanceTransport.getLicense());
 
                 }
 
@@ -279,6 +281,7 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
                     mappedObject.put("distributor",distributor.getName()+distributor.getCompanyNo());
                 }
 */
+                mappedObject.put("createDate",objectEntity.getCreateDate());
                 return mappedObject;
             }
         });
@@ -296,7 +299,7 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
     public List<AdvancedPaymentTransfer> getAdvancedPaymentTransfers(Distributor distributor) {
 
 
-        return advancedPaymentTransferRepository.findByDistributorId(distributor.getId());
+        return advancedPaymentTransferRepository.findByDistributorNo(distributor.getNo());
     }
 
     @Override
@@ -311,9 +314,9 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
         if(distributor == null){
             distributor = new Distributor();
             distributor.setName(distributorCreateForm.getName());
-            distributor.setName(distributorCreateForm.getName());
+
             distributor.setStatus(distributorCreateForm.getName());
-            distributor.setSynchronizedStatus(SynchronizeEnum.Not_Been_synchronized.getText());
+            distributor.setSynchronizedStatus(SynchronizeEnum.SyncPending.getText());
 
 
             distributor.setUniqueId( RandomStringUtils.randomAlphanumeric(30).toUpperCase());
@@ -343,12 +346,66 @@ public class DistributorServiceImpl extends BaseServiceImpl implements Distribut
     @Transactional
 
     public Distributor createDistributorFromMap(Map inventory_) {
-
-        Distributor distributor = new Distributor();
-        distributor.setCompanyNo((String)inventory_.get("no"));
+        String no = (String)inventory_.get("no");
+        Distributor distributor = distributorRepository.findByNo(no);
+        if(distributor== null){
+            distributor = new Distributor();
+            distributor.setNo((String)inventory_.get("no"));
+            distributor.setUniqueId( RandomStringUtils.randomAlphanumeric(30).toUpperCase());
+            distributor.setAdvancedPaymentAmount(new BigDecimal(0));
+            distributor.setSynchronizedStatus(SynchronizeEnum.SyncPending.getText());
+            //  distributor.setName((String)inventory_.get("name"));
+        }
         distributor.setName((String) inventory_.get("name"));
-      //  distributor.setName((String)inventory_.get("name"));
         return distributorRepository.save(distributor);
+
+    }
+
+    @Override
+    public List<Distributor> getAll() {
+
+
+        return distributorRepository.findAll();
+    }
+
+    @Override
+    public List<Map> getEnumAll() {
+        Page<Distributor> distributors = distributorRepository.findAll(new PageRequest(0,1000));
+
+        Page<Map> page = distributors.map(new Function<Distributor, Map>() {
+            public Map apply(Distributor objectEntity) {
+
+                ObjectMapper m = new ObjectMapper();
+                Map<String,Object> mappedObject = m.convertValue(objectEntity,Map.class);
+
+
+                String companiesUrl = linkTo(methodOn(MobileDistributorController.class).detail(objectEntity.getNo(), null)).withSelfRel().getHref();
+
+                mappedObject.put("url",companiesUrl);
+
+                mappedObject.put("name",objectEntity.getName());
+
+
+                return mappedObject;
+            }
+        });
+        return page.getContent();
+
+
+    }
+
+    @Override
+    public Page<Map> queryEmployee(Distributor distributor, Pageable pageable) {
+        Page<Employee> distributors = employeeRepository.findByCompanyNo(distributor.getNo(),pageable);
+
+        Page<Map> page = distributors.map(new Function<Employee, Map>() {
+            public Map apply(Employee objectEntity) {
+                ObjectMapper m = new ObjectMapper();
+                Map<String,Object> mappedObject = m.convertValue(objectEntity,Map.class);
+                return mappedObject;
+            }
+        });
+        return page;
     }
 
 

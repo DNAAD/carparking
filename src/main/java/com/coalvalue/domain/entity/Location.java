@@ -1,6 +1,5 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Column;
@@ -11,7 +10,7 @@ import javax.persistence.Table;
  * Created by Peter Xu on 09/24/2017.
  */
 @Entity
-@Table(name = "location")
+@Table(name = "location",catalog="storage")
 public class Location extends BaseDomain {
 
     @Column(name = "name")

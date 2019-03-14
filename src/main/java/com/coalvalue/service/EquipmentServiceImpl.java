@@ -1,35 +1,41 @@
 package com.coalvalue.service;
 
 import com.alibaba.fastjson.JSON;
+import com.coalvalue.domain.entity.Camera;
 import com.coalvalue.domain.OperationResult;
-import com.coalvalue.domain.entity.Company;
-import com.coalvalue.domain.entity.Equipment;
-import com.coalvalue.domain.entity.StorageSpace;
+import com.coalvalue.domain.entity.*;
+import com.coalvalue.domain.pojo.PlateRecogniseCameraPOJO;
+import com.coalvalue.enumType.CameraTypeEnum;
 import com.coalvalue.enumType.EquipmentBulletinDisplayModeEnum;
 import com.coalvalue.enumType.EquipmentStatusEnum;
 import com.coalvalue.enumType.EquipmentTypeEnum;
 
+import com.coalvalue.repository.CameraRepository;
 import com.coalvalue.repository.EquipmentRepository;
 //import com.coalvalue.util.SequenceGenerator;
-import com.domain.entity.User;
-import com.service.BaseServiceImpl;
-import org.apache.activemq.command.ActiveMQQueue;
+
+import com.coalvalue.web.MobileCameraController;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+//import org.apache.activemq.command.ActiveMQQueue;
+import freemarker.ext.beans.HashAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
+//import org.springframework.jms.core.JmsTemplate;
+//import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jms.JMSException;
-import javax.jms.MapMessage;
-import javax.jms.Session;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
+import java.util.function.Function;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /**
  * Created by silence yuan on 2015/7/25.
@@ -40,8 +46,8 @@ public class EquipmentServiceImpl extends BaseServiceImpl implements EquipmentSe
 
     public static final String myTopic_messages = "queue.led";
 
-   // @Value("${server_live.url}")
-   // private String serverLiveUrl;
+    // @Value("${server_live.url}")
+    // private String serverLiveUrl;
 
     @Autowired
     private EquipmentRepository equipmentRepository;
@@ -50,229 +56,75 @@ public class EquipmentServiceImpl extends BaseServiceImpl implements EquipmentSe
     private CompanyService companyService;
 
 
+/*    @Autowired
+    private JmsTemplate jmsTemplate;*/
+    //  @Autowired
+    // private SequenceGenerator sequenceGenerator;
+
+
+
     @Autowired
-    private JmsTemplate jmsTemplate;
-  //  @Autowired
-   // private SequenceGenerator sequenceGenerator;
+    private CameraRepository cameraRepository;
 
 
-
-
-
-
-    @Override
-    public Equipment userLogin(String userId, String pwd, String loginIP, Object o) {
-        return null;
-    }
-
-    @Override
-    public Equipment login(String userId, String pwd, String loginIP, Object o) {
-
-
-        return equipmentRepository.findByUserIdAndPin(userId, pwd);
-    }
-
-    @Override
-    public Page<Equipment> query(Pageable pageRequest, User user) {
-
-
-        return equipmentRepository.findByCompanyId(user.getCompanyId(), pageRequest);
-    }
 
     @Override
     @Transactional
-    public OperationResult create(String deviceId, EquipmentTypeEnum typeEnum, User user) {
+    public Equipment create(String deviceId, EquipmentTypeEnum typeEnum, User user) {
         OperationResult operationResult = new OperationResult();
         operationResult.setSuccess(true);
 
-        Equipment equipment = equipmentRepository.findByCompanyIdAndTypeAndName(user.getCompanyId(), EquipmentTypeEnum.Bulletin.getText(), deviceId);
+        Equipment equipment = equipmentRepository.findByTypeAndDeviceId( typeEnum.getText(), deviceId);
         if(equipment== null){
 
             equipment = new Equipment();
-            equipment.setName(deviceId);
-
-          //  equipment.setDeviceId(sequenceGenerator.nextUuidNO());
+            equipment.setDeviceId(deviceId);
             equipment.setType(typeEnum.getText());
-            equipment.setCompanyId(user.getCompanyId());
+            equipment.setUuid(UUID.randomUUID().toString());
 
             equipmentRepository.save(equipment);
         }
         operationResult.setResultObject(equipment);
-        return operationResult;
+        return equipment;
     }
-
     @Override
-    public Map<String, Object> getByMapId(Integer clientId) {
-        Equipment equipment = equipmentRepository.findById(clientId);
+    public Page<Map> queryCamera(Object o, Pageable pageable) {
 
 
-        return getContent(equipment,true);
-    }
+        Page<Camera> cameras =  cameraRepository.findAll(pageable);
 
-    @Override
-    public void sendMessage(Equipment transportOperation, String message, User user) {
-
-    }
-
-    @Override
-    public String getBulletinDisplayContent(Equipment equipment) {
-
-        if(equipment.getType().equals(EquipmentTypeEnum.Bulletin.getText())){
-            String attribute =null;// ledService.getAttribute(equipment.getId());
-            return attribute;
-        }
-
-        return "";
-
-    }
-
-    @Override
-    public OperationResult command_change_diplay_content(Equipment transportOperation, String message, User user) {
-        OperationResult operationResult = new OperationResult();
-
-         transportOperation.setDisplayConent(message);
-        operationResult.setResultObject(transportOperation);
-        operationResult.setSuccess(true);
-        return operationResult;
-    }
-
-
-    @Override
-    public List<Equipment> getPrinterForCompany(Company company) {
-        OperationResult operationResult = new OperationResult();
-
-        List<Equipment> equipments = equipmentRepository.findByCompanyIdAndType(company.getId(), EquipmentTypeEnum.Printer.getText());
-
-        return equipments;
-    }
-
-
-    @Override
-    public OperationResult printer( StorageSpace storageSpace, String text) {
-        OperationResult operationResult = new OperationResult();
-
-        Company company = companyService.getCompanyById(storageSpace.getCompanyId());
-/*        Equipment equipments = equipmentRepository.findByCompanyIdAndTypeAndName(company.getId(),EquipmentTypeEnum.Printer.getText(),ResourceType.STORAGE.getText()+""+storageSpace.getId());
-
-        if(equipments != null){
-
-            Channel c = GatewayService.get(equipments.getDeviceId());
-            c.write(text);
-        }*/
-
-
-        List<Equipment> equipments = equipmentRepository.findByCompanyIdAndType(company.getId(), EquipmentTypeEnum.Printer.getText());
-
-        if(equipments.size() != 0){
-
-    /*        ChannelHandlerContext c = GatewayService.get(equipments.get(0).getDeviceId());
-            if(c != null && c.channel().isActive()){
-                Map<String, Object> retsult = new LinkedHashMap<>();
-
-                String jsonStrin = JSON.toJSONString(retsult);
-                retsult.put("id", transportOperation.getId()+"");
-                WxTemporaryQrcode wxeneral = wxService.getByTransportation(transportOperation, Constants.WX_QRCODE_TYPE_transportOperation);
-                retsult.put("weixin_qrcode_content", wxeneral.getContent());
-
-                retsult.put("no", transportOperation.getNo());
-                retsult.put("driverName", transportOperation.getDriverName());
-                retsult.put("driverPhone", transportOperation.getDriverPhone());
-                Test.ProtoTest res = Test.ProtoTest.newBuilder()
-                        .setId(1)
-                        .setTitle("res 提煤单 ")
-                        .setContent(jsonStrin)
-                        .build();
-                c.writeAndFlush(res);
-
-                operationResult.setResultMessage("发送成功");
-            }else{
-                operationResult.setResultMessage("设备 不在线，发送 失败");
-            }*/
-
-        }
-        return operationResult;
-    }
-
-    @Override
-    public List<Equipment> getLedForCompany(Company company) {
-
-        return equipmentRepository.findByCompanyIdAndType(company.getId(),EquipmentTypeEnum.Bulletin.getText());
-    }
-
-    @Override
-    public Map<String,Object> getEquipmentByCompany(Company company, Pageable pageable, User user) {
-
-
-
-        Page<Equipment> page = equipmentRepository.findByCompanyId(company.getId(),pageable);
-        String url = "";
-
-        Map<String,Object> objectMap = new HashMap<>();
-        objectMap.put("totalElements",page.getTotalElements());
-        objectMap.put("totalPages",page.getTotalPages());
-
-
-
-        objectMap.put("totalElements",page.getTotalElements());
-        objectMap.put("content",getContent(page, true));
-        return objectMap;
+        Page<Map> pages = cameras.map(new Function<Camera, Map>() {
+            public Map apply(Camera objectEntity) {
 
 
 
 
+                HashMap<String,Object> map = new HashMap<>();
+                map.put("rstpUrl",objectEntity.getRstpUrl());
+                map.put("path",objectEntity.getPath());
+                map.put("no",objectEntity.getNo());
+                map.put("createDate",objectEntity.getCreateDate());
+                map.put("username",objectEntity.getUsername());
+                map.put("password",objectEntity.getPassword());
+                map.put("ip",objectEntity.getIp());
+                map.put("type", CameraTypeEnum.fromString(objectEntity.getType()).getDisplayText());
+                String companiesUrl = linkTo(methodOn(MobileCameraController.class).detail(objectEntity.getId(), null)).withSelfRel().getHref();
 
-    }
-
-    @Override
-    public Equipment getById(Integer clientId) {
-        return equipmentRepository.findById(clientId);
-
-      //  new Location();
-    }
-
-    @Override
-    @Transactional
-    public Equipment updateEquipment(Equipment equipment) {
-
-        return equipmentRepository.save(equipment);
-    }
-
-    @Override
-    public void setAttribute(Equipment equipment, String text) {
+                map.put("url",companiesUrl);
 
 
-    }
 
-    @Override
-    public void changePrice(Company company, Map map) {
+                return map;
 
-        System.out.println("Producer sends "  + " using map message");
-        ActiveMQQueue destination = new ActiveMQQueue(myTopic_messages);
-
-
-        List<Equipment> equipments = equipmentRepository.findByCompanyIdAndType(company.getId(),EquipmentTypeEnum.Bulletin.getText());
-        System.out.println("equipments size "  +equipments.size());
-
-        for(Equipment equipment:equipments){
-            if(equipment.getStatus().equals(EquipmentStatusEnum.Bound.getText())){
-                System.out.println("设备 绑定了 绑定了"  +equipments.toString());
-                jmsTemplate.send(destination, new MessageCreator() {
-                    public javax.jms.Message createMessage(Session session) throws JMSException {
-                        MapMessage mapMessage = session.createMapMessage();
-                        mapMessage.setString("event", "changePrice");
-                        mapMessage.setString("equipmentId", equipment.getDeviceId());
-                        mapMessage.setString("content", JSON.toJSONString(map));
-                        return mapMessage;
-
-                    }});
-            }else{
-                System.out.println("该设备没有绑定 "  +equipments.toString());
             }
+        });
 
-        }
+        //Page<Map> pages = new PageImpl<Map>(list,pageable,list.size());
 
+        return pages;
 
     }
+
     //@Scheduled(cron="0/3 * * * * ?")
     public void executeUploadTask() {
 
@@ -280,7 +132,7 @@ public class EquipmentServiceImpl extends BaseServiceImpl implements EquipmentSe
         Thread current = Thread.currentThread();
         System.out.println("equipments size " );
 
-        ActiveMQQueue destination = new ActiveMQQueue(myTopic_messages);
+      /*  ActiveMQQueue destination = new ActiveMQQueue(myTopic_messages);
 
         jmsTemplate.send(destination, new MessageCreator() {
             public javax.jms.Message createMessage(Session session) throws JMSException {
@@ -292,169 +144,124 @@ public class EquipmentServiceImpl extends BaseServiceImpl implements EquipmentSe
                 return mapMessage;
 
             }});
-
+*/
 
     }
 
-    private List<Map<String, Object>> getContent(Page<Equipment> result, boolean isMoobile){
-        List<Map<String, Object>> content = new LinkedList<>();
-        for(Equipment transport :result){
+    @Override
+    public Page<Map> queryCamera(EquipmentTypeEnum equipmentTypeEnum, Pageable pageable) {
 
-            Map<String, Object> supplyContainer = new HashMap<String, Object>();
-
-            supplyContainer.put("id", transport.getId());
-            supplyContainer.put("companyId", transport.getId());
-
-
-            supplyContainer.put("name", transport.getName());
-
-            supplyContainer.put("deviceId",  transport.getDeviceId());
-
-
-            //supplyContainer.put("equipmentType", EquipmentTypeEnum.fromString(transport.getType()).getDisplayText());
-
- /*           if(transport.getDisplayMode() != null){
-                supplyContainer.put("displayMode", EquipmentBulletinDisplayModeEnum.fromString(transport.getDisplayMode()).getDisplayText());
-            }else {
-                supplyContainer.put("displayMode", "");
-            }*/
-
-
-            supplyContainer.put("displayContent", getBulletinDisplayContent(transport) );
-
-            supplyContainer.put("driverName",  transport.getType());
-
-            supplyContainer.put("driverPhone",  transport.getId());
-
-
-            String authenticateCommandUri = "";//linkTo(methodOn(MobileEquipmentController.class).detail(transport.getId(), null)).withSelfRel().getHref();
-            supplyContainer.put("url", authenticateCommandUri);
-
-
-            if(EquipmentTypeEnum.Bulletin.getText().equals(transport.getType())){
-
-                if(transport.getDeviceId() != null){
-             /*       if(GatewayService.getLedEquipments().contains(transport.getDeviceId())){
-                        supplyContainer.put("status", EquipmentStatusEnum.Online.getDisplayText());
-                    }else{
-
-                        supplyContainer.put("status",  EquipmentStatusEnum.Offline.getDisplayText());
-                    }*/
-                }
-
-
-            }else {
-                if(transport.getDeviceId() != null){
-                 /*   ChannelHandlerContext channelHandlerContext = GatewayService.get(transport.getDeviceId());
-                    if(channelHandlerContext != null){
-                        Channel channal =channelHandlerContext.channel();
-
-                        if(channal.isActive()){
-                            supplyContainer.put("status", EquipmentStatusEnum.Online.getDisplayText());
-                        }else{
-
-                            supplyContainer.put("status",  EquipmentStatusEnum.Offline.getDisplayText());
-                        }
-                    }else{
-                        supplyContainer.put("status",  EquipmentStatusEnum.Offline.getDisplayText());
-
-                    }*/
-
-                }else {
-                    supplyContainer.put("status",  EquipmentStatusEnum.Unbound.getDisplayText());
-
-                }
-            }
-
-
-
-
-            content.add(supplyContainer);
+        Page<Camera> cameras = null;
+        if(equipmentTypeEnum== null){
+            cameras = cameraRepository.findAll(pageable);
+        }else{
+            cameras = cameraRepository.findByType(equipmentTypeEnum.getText(), pageable);
         }
 
 
-        return content;
+        Page<Map> pages = cameras.map(new Function<Camera, Map>() {
+            public Map apply(Camera objectEntity) {
+
+
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("rstpUrl", objectEntity.getRstpUrl());
+                map.put("path", objectEntity.getPath());
+                map.put("no", objectEntity.getNo());
+                map.put("createDate", objectEntity.getCreateDate());
+                map.put("username", objectEntity.getUsername());
+                map.put("password", objectEntity.getPassword());
+                map.put("ip", objectEntity.getIp());
+                map.put("type", CameraTypeEnum.fromString(objectEntity.getType()).getDisplayText());
+                String companiesUrl = linkTo(methodOn(MobileCameraController.class).detail(objectEntity.getId(), null)).withSelfRel().getHref();
+
+                map.put("url", companiesUrl);
+
+
+                return map;
+
+            }
+        });
+
+
+        return pages;
+
     }
 
 
-    private Map<String, Object> getContent(Equipment transport, boolean isMoobile){
+    @Override
+    public Page<Map> queryEquipment(EquipmentTypeEnum equipmentTypeEnum, Pageable pageable) {
+
+        Page<Equipment> cameras = cameras = equipmentRepository.findAll( pageable);
 
 
-            Map<String, Object> supplyContainer = new HashMap<String, Object>();
+        Page<Map> pages = cameras.map(new Function<Equipment, Map>() {
+            public Map apply(Equipment objectEntity) {
 
-            supplyContainer.put("id", transport.getId());
-            supplyContainer.put("companyId", transport.getId());
-
-
-            supplyContainer.put("name", transport.getName());
-
-            supplyContainer.put("deviceId",  transport.getDeviceId());
-
-
-            supplyContainer.put("equipmentType", EquipmentTypeEnum.fromString(transport.getType()).getDisplayText());
-
-            if(transport.getDisplayMode() != null){
-                supplyContainer.put("displayMode", EquipmentBulletinDisplayModeEnum.fromString(transport.getDisplayMode()).getDisplayText());
-            }else {
-                supplyContainer.put("displayMode", "");
-            }
-
-
-            supplyContainer.put("displayContent", getBulletinDisplayContent(transport) );
+                ObjectMapper m = new ObjectMapper();
+                Map<String,Object> map = m.convertValue(objectEntity,Map.class);
 
 
 
+                map.put("type", EquipmentTypeEnum.fromString(objectEntity.getType()).getDisplayText());
+                String companiesUrl = linkTo(methodOn(MobileCameraController.class).detail(objectEntity.getId(), null)).withSelfRel().getHref();
 
-            String authenticateCommandUri = "";//linkTo(methodOn(MobileEquipmentController.class).detail(transport.getId(), null)).withSelfRel().getHref();
-            supplyContainer.put("url", authenticateCommandUri);
+                map.put("url", companiesUrl);
 
 
-            if(EquipmentTypeEnum.Bulletin.getText().equals(transport.getType())){
+                PlateRecogniseCameraPOJO plateRecogniseCameraPOJO = deviceMap.get(objectEntity.getName());
 
-                if(transport.getDeviceId() != null){
-            /*        if(GatewayService.getLedEquipments().contains(transport.getDeviceId())){
-                        supplyContainer.put("status", EquipmentStatusEnum.Online.getDisplayText());
-                    }else{
-
-                        supplyContainer.put("status",  EquipmentStatusEnum.Offline.getDisplayText());
-                    }*/
+                if(plateRecogniseCameraPOJO!= null){
+                    map.put("deviceName", plateRecogniseCameraPOJO.getDevice_name());
+                    map.put("ipaddr", plateRecogniseCameraPOJO.getIpaddr());
+                    map.put("port", plateRecogniseCameraPOJO.getPort());
+                    map.put("timeStamp", plateRecogniseCameraPOJO.getTimeStemp());
                 }
 
+                return map;
 
-            }else {
-                if(transport.getDeviceId() != null){
-                  /*  ChannelHandlerContext channelHandlerContext = GatewayService.get(transport.getDeviceId());
-                    if(channelHandlerContext != null){
-                        Channel channal =channelHandlerContext.channel();
-
-                        if(channal.isActive()){
-                            supplyContainer.put("status", EquipmentStatusEnum.Online.getDisplayText());
-                        }else{
-
-                            supplyContainer.put("status",  EquipmentStatusEnum.Offline.getDisplayText());
-                        }
-                    }else{
-                        supplyContainer.put("status",  EquipmentStatusEnum.Offline.getDisplayText());
-
-                    }*/
-
-                }else {
-                    supplyContainer.put("status",  EquipmentStatusEnum.Unbound.getDisplayText());
-
-                }
             }
-       // supplyContainer.put("serverUrl", getServerUrl(transport));
+        });
 
 
+        return pages;
 
-        return supplyContainer;
     }
 
-   /* private String getServerUrl(Equipment transport) {
+    Map<String,PlateRecogniseCameraPOJO> deviceMap = new HashMap();
 
-        if(EquipmentTypeEnum.Camera.getText().equals(transport.getType())){
-            return serverLiveUrl;
+
+
+
+    @Override
+    public void updateEquipmentLiveInfo(Equipment equipment, PlateRecogniseCameraPOJO device_name) {
+        device_name.setTimeStemp(LocalDateTime.now());
+        deviceMap.put(device_name.getSerialno(),device_name);
+
+    }
+
+
+    @Override
+    @Transactional
+    public Equipment createEquipment(String deviceId, EquipmentTypeEnum typeEnum) {
+        OperationResult operationResult = new OperationResult();
+        operationResult.setSuccess(true);
+
+        Equipment equipment = equipmentRepository.findByTypeAndName(typeEnum.getText(), deviceId);
+        if(equipment== null){
+
+            equipment = new Equipment();
+            equipment.setName(deviceId);
+
+            //  equipment.setDeviceId(sequenceGenerator.nextUuidNO());
+            equipment.setType(typeEnum.getText());
+            equipment = equipmentRepository.save(equipment);
         }
+        operationResult.setResultObject(equipment);
+        return equipment;
+    }
+
+    @Override
+    public Object getPlateRecongniseCamera() {
         return null;
-    }*/
+    }
 }

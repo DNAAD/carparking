@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,480 +7,377 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>榆林煤 ${companyName}</title>
+   <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <title>榆林煤 ${companyName!''}</title>
     <link href="${rc.contextPath}/components/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${rc.contextPath}/components/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
-    <link href="${rc.contextPath}/css/lightbox/ekko-lightbox.css" rel="stylesheet">
+  <#--  <link href="${rc.contextPath}/css/lightbox/ekko-lightbox.css" rel="stylesheet">-->
+    <link href="${rc.contextPath}/components/bootstrap_table/bootstrap-table.min.css" rel="stylesheet">
+
     <script src="${rc.contextPath}/js/jquery/jquery.js" type="text/javascript"></script>
-    <script src="${rc.contextPath}/js/lightbox/ekko-lightbox.min.js" type="text/javascript"></script>
+<#--    <script src="${rc.contextPath}/js/lightbox/ekko-lightbox.min.js" type="text/javascript"></script>-->
 
    <script src="${rc.contextPath}/components/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
-    <style type="text/css">
 
 
-        .target-fix {
-            padding-top: 45px;
-            margin-top: -10px;
-            display: block;
-            height: 0;
-            overflow: hidden;
-        }
+    <script type="text/javascript"    src="${rc.contextPath}/js/bootstrap3-typeahead.js"></script>
 
-        .first {
-            width: 10%;
-        }
-
-        .second {
-            width: 30%;
-        }
-        .third {
-            width: 40%;
-        }
-
-        .forth {
-            width: 10%;
-        }
-
-        .img-comment-list  > div {
-            display:table-cell;
-        }
-
-        .img-comment-list img {
-            border-radius:50%;
-            width: 80px;
-            height: 80px;
-            margin-right: 10px;
-            margin-top: 20px;
-        }
-
-        .img-comment-list p {
-            margin: 0;
-        }
-
-        .img-comment-list span {
-            font-size: .8em;
-            color: #aaa;
-        }
-
-        .xs-first {
-            width: 25%;
-        }
-
-        .xs-second {
-            width: 25%;
-        }
-    </style>
-
-
-    <style type="text/css">
-    /*
-LISTINGS
-*/
-
-
-
-    .tab-box {
-        background: #f8f8f8;
-        position: relative;
-    }
-
-    .tab-filter {
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
-
-
-    .adds-wrapper {
-        background: #fff;
-        clear: both;
-        display: block;
-        height: auto;
-        overflow: auto;
-        width: 100%;
-    }
-    .listing-filter {
-        border-bottom: solid 1px #ddd;
-        padding: 15px 0;
-    }
-
-    .listings p {
-        margin: 0;
-    }
-    .listings h3 {
-        margin: 0;
-    }
-    .listings .listing-row {
-        border-bottom: 1px solid #e6e6e6;
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-    .listings .listing-row:nth-child(even) {
-        background: #fafafa;
-    }
-    .listings .premium.listing-row {
-        background: #FFFFDD;
-        background: #E0F4FF;
-        border-bottom: 1px solid #c6ebff;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        position: relative;
-    }
-    .listings .listing-row.last {
-        border-bottom: 1px solid #fff;
-    }
-    .recent-listings .panel-body {
-        padding: 0 15px;
-    }
-    .recent-listings .price-text {
-        text-align: right;
-    }
-    .recent-listings .listing-row {
-        border-bottom: 1px solid #e6e6e6;
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-    .recent-listings .listing-row:nth-child(even) {
-        background: #fafafa;
-    }
-    .ad-options {
-        margin: 0;
-        padding: 0;
-    }
-    .ad-options li {
-        display: inline;
-        list-style-type: none;
-        padding-right: 20px;
-    }
-    .account-sidebar h3 {
-        margin: 0;
-    }
-    .home-search {
-        padding-bottom: 0;
-    }
-    .home-search .main_description {
-        text-align: center;
-    }
-    .home-search .form-control {
-        padding: 10px 8px;
-    }
-    .home-search .input-group-addon {
-        padding: 0;
-    }
-    .home-search .input-group-addon.input-group-addon-text {
-        background: #ffffff;
-        color: #000;
-        border: none;
-        padding-right: 20px;
-    }
-    .home-search .input-group-addon .btn {
-        padding: 9px 18px;
-    }
-    .home-search .input-group-addon li a {
-        text-align: left;
-        padding: 10px 18px;
-    }
-    .home-search .input-group-addon .btn {
-        text-transform: none;
-    }
-    .home-search .input-group-addon .btn {
-        color: #000;
-        font-weight: 100;
-    }
-    .home-search .input-group-addon .btn .dropdown-menu ul il a {
-        text-align: left;
-    }
-    .featured-gallery {
-        border: none;
-        padding-left: 15px;
-        padding-right: 15px;
-        margin-bottom: 0px;
-    }
-    .featured-gallery img {
-        text-align: center;
-        height: 60px;
-        width: 121px;
-    }
-    .featured-gallery .featured-thumbnail {
-        margin-bottom: 5px;
-        padding-left: 2px;
-        padding-right: 2px;
-    }
-    .featured-gallery .featured-thumbnail img {
-        width: 100%;
-    }
-    #listings-page .price {
-        font-size: 24px;
-        text-align: left;
-    }
-    #listings-page hr {
-        margin-bottom: 10px;
-    }
-    #visualization {
-        height: 300px;
-        width: 98%;
-        margin-top: 40px;
-        margin-bottom: 40px;
-    }
-    p.muted {
-        color: #999999;
-    }
-    .edit-listings tr:hover .remove-ad {
-        display: inline;
-    }
-    .edit-listings tr:hover .extend-ad:after {
-        content: " | ";
-        color: #222222;
-    }
-    .edit-listings .no-views {
-        color: #555555;
-        margin-left: 10px;
-    }
-    .edit-listings .edit-ad:after {
-        content: " | ";
-        color: #222222;
-        text-decoration: none !important;
-    }
-    .edit-listings .edit-ad:after:hover {
-        text-decoration: none;
-    }
-    .edit-listings .remove-ad {
-        color: #FF0000;
-        display: none;
-    }
-    .edit-listings .remove-ad:hover {
-        color: #FF0000;
-        text-decoration: underline;
-    }
-    .edit-listings .edit-ad {
-        color: #79a618;
-    }
-    .edit-listings .edit-ad:hover {
-        color: #79a618;
-        text-decoration: underline;
-    }
-    .edit-listings .extend-ad {
-        color: #79a618;
-    }
-    .edit-listings .extend-ad:hover {
-        color: #79a618;
-        text-decoration: underline;
-    }
-    .nav-category .remove-category {
-        display: none;
-    }
-    .nav-category li:hover .remove-category {
-        display: block;
-        float: right;
-    }
-    .nav-category li:hover .remove-category i {
-        color: #FF0000;
-    }
-    #gallery .thumbnail img {
-        max-height: 80px;
-    }
-    #my-dropzone .dropzone .dz-default.dz-message {
-        width: 100%;
-    }
-    @media (min-width: 768px) {
-        #listings-page .price {
-            text-align: right;
-        }
-        .footer {
-            text-align: left;
-        }
-        .footer .footer-links {
-            float: right;
-        }
-    }
-    #modalLogin .modal-dialog,
-    #modalSignup .modal-dialog {
-        width: 400px;
-    }
-    .topbar {
-        border: 3px solid #D2160A;
-    }
-    .post-ad-btn {
-        padding: 2px 10px;
-        height: 25px;
-        width: auto;
-        margin-left: 5px;
-    }
-    .search-btn {
-        width: 180px;
-        float: none;
-    }
-    .form-inline .form-control {
-        width: 100%;
-    }
-    /*Just for preview*/
-    #theme_switcher {
-        top: 10px;
-        left: 10px;
-        position: fixed;
-    }
-
-    </style>
-    <style type="text/css">
-
-    .list-group-unbordered>.list-group-item {
-        border-left: 0;
-        border-right: 0;
-        border-radius: 0;
-        padding-left: 0;
-        padding-right: 0;
-    }
-    .box.box-primary {
-        border-top-color: #3c8dbc;
-    }
-    .box {
-        position: relative;
-        border-radius: 3px;
-        background: #ffffff;
-        border-top: 3px solid #d2d6de;
-        margin-bottom: 20px;
-        width: 100%;
-        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-    }
-    .box-body {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        padding: 10px;
-    }
-    </style>
 
 
 </head>
 
 <body>
-<div class="container" style="margin-bottom:80px; margin-top:10px ">
+<div class="container" style="margin-bottom:80px; margin-top:5px ">
 
 <#include "./common/front_page_header_section.ftl">
+    <a class="btn btn-default pull-right" href="${selectStorageUrl}"><i class="fa fa-fw -square -circle fa-plus-square"></i> 选择堆场</a>
 
-<div class=" well hidden" data-offset-top="100" ><!--data-spy="affix"-->
+    <#if preference?? && preference.storageSpaceNo??>
+        <a href="${preference.reportUrl}">${preference.storageSpaceName} / ${preference.storageSpaceNo}</a>
 
-        <div class="input-group">
-            <div class="input-group-btn search-panel">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span id="search_concept">全部</span> <span class="camake-list ret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu"  style="z-index:99999">
+    </#if>
 
-                    <li><a href="#contains">找公司</a></li>
-                    <li><a href="#its_equal">找供应商</a></li>
-                    <li><a href="#greather_than">找货源</a></li>
-                    <li class="divider"></li>
-                </ul>
-            </div>
-            <input type="hidden" name="search_param" value="all">
-            <input type="text" class="form-control"  id="search_param"  name="x" value="${q!''}" placeholder="输入搜索关键字...，如 神木, 三八块">
-                <span class="input-group-btn">
-                    <button class="btn btn-info searchBtn" type="button"><span class="glyphicon glyphicon-search "></span></button>
-                </span>
-        </div>
+<div class="row">
+    <div id="" class="col-lg-12"   style="margin-bottom:10px">
+
+        <#if distributors??>
+            <#list distributors as feature>
+                <option value="${feature.id}" >${feature.id!''}--${feature.displayName!''}</option>
+
+            </#list>
+        </#if>
+
+        </select>
 
 
+
+
+        <script type="text/javascript">
+
+
+            function refresh() {
+                $('#station-table').bootstrapTable('refresh');
+            }
+
+            function selectedRow_transfer() {
+                var row =  $('#transfer-table').bootstrapTable('getSelections');
+                return row;
+            }
+
+
+            $("#createReconciliationBtn").click(function() {
+                var row = selectedRow_transfer();
+
+                if (row != '') {
+                    $('#editLineModal').modal();
+                    alert(JSON.stringify(row[0]));
+                    $('#instanceId').val(row[0].id);
+
+                }
+            });
+
+
+
+        </script>
+
+
+    </div>
 </div>
-
 
 
 
     <div class="row "  style="">
 
 
+
         <div class="col-sm-12">
-            <div class="box hidden box-primary">
-                <div class="box-body box-profile">
-                    <div class="list-group list-group-unbordered">
-                        <li class="list-group-item">
-                            <h4 class="list-group-item-heading">
-                                运力申请
-                                <span class="small pull-right" style="padding-top:.2em">换一批&nbsp;&nbsp;更多&gt;</span>
-                            </h4>
-                        </li>
-
-
-
-
-                    </div>
-                </div>
-            </div>
 
             <div class="tab-box ">
 
                 <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
-                    <li class="active"><a href="#companies" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">智能识别<span class="badge"></span></a></li>
 
-                    <li class=""><a href="#search" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">预提煤单<span class="badge"></span></a></li>
+                                        <#if faceRemoteControl.intelligentIdentification_tab>
+
+                                            <li class="active"><a href="#companies" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">智能识别<span class="badge"></span></a></li>
+                                                   <li class=""><a href="#delivery-order" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">预提煤单（有效）<span class="badge"></span></a></li>
+
+                                        <#else>
+                                                   <li class="active"><a href="#delivery-order" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">预提煤单（有效）<span class="badge"></span></a></li>
+
+                                        </#if>
 
                     <li class=""><a href="#instanceTransport" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">堆场正在装货<span class="badge"></span></a></li>
-                    <li class=""><a href="#instanceTransport_loaded" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">已装货<span class="badge"></span></a></li>
+                    <li class=""><a href="#instanceTransport_loaded" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">出库<span class="badge"></span></a></li>
 
-                    <li class=""><a href="#statistic" data-url="ajax/2.html" role="tab" data-toggle="tab" aria-expanded="false">统计信息<span class="badge"></span></a></li>
 
                 </ul>
-                <div class="tab-filter hidden">
-                    <div class="" tabindex="0">
-                        <select class="selectpicker " data-style="btn-select" data-width="auto" tabindex="-1">
-                        <option value="Short by">Short by</option>
-                        <option value="Price: Low to High">价格: 低 to 高</option>
-                        <option value="Price: High to Low">价格: 高 to 低</option>
-                    </select>
 
-                    </div>
-                </div>
             </div>
-<#--            <div class="listing-filter">
-                <div class="pull-left col-xs-6">
-                    <div class="breadcrumb-list hidden"> <a href="#" class="current"> <span>All ads</span></a> in New York <a href="#selectRegion" id="dropdownMenu1" data-toggle="modal"> <span class="caret"></span> </a> </div>
-                </div>
-                <div class="pull-right col-xs-6 text-right listing-view-action"> <span class="list-view active"><i class="  icon-th"></i></span> <span class="compact-view"><i class=" icon-th-list  "></i></span> <span class="grid-view"><i class=" icon-th-large "></i></span> </div>
-                <div style="clear:both"></div>
-            </div>-->
+
              <div  class="tab-content">
 
-
-
+                     <#if faceRemoteControl.intelligentIdentification_tab>
 
 
                  <div class="tab-pane active" id="companies">
+<#--
 
-                     <div id="toolbar" class="btn-group" style="padding-top: 10px;padding-bottom: 10px">
+                 <img style="-webkit-user-select: none;" src="http://192.168.100.13:8081/" width="296" height="242">
 
-                         <button id="viewCapacityBtn" type="button" class="btn btn-success">
-                             <i class="">查看详情</i>
-                         </button>
-                         <button id="editBtn" type="button" class="btn btn-primary" >
-                             修改
+                 <object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc' events='false' width="720" height="410">
+                     <param name='mrl' value='rtsp://localhost:8554/' />
+                     <param name='volume' value='50' />
+                     <param name='autoplay' value='true' />
+                     <param name='loop' value='false' />
+                     <param name='fullscreen' value='false' />
+                     <param name='controls' value='false' />
+                 </object>
+-->
+
+                 <div class="row col-lg-12" style="padding-top: 10px;padding-bottom: 10px">
+
+                         <div class="panel panel-default"  >
+                             <div class="panel-heading">
+                                 <h4>进场车辆</h4>
+
+                             </div>
+                             <div class="panel-body">
+                                 <div id="toolbar" class="hidden" >
+
+                                     <button id="viewCapacityBtn" type="button" class="btn btn-success">
+                                         <i class="">查看详情</i>
+                                     </button>
+                                     <button id="editBtn" type="button" class="btn btn-primary" >
+                                         修改
+                                     </button>
+
+                                     <button id="addBtn" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addLocationModal">
+                                         添加
+                                     </button>
+
+                                     <script type="text/javascript">
+
+
+                                         function refresh() {
+                                             $('#location-table').bootstrapTable('refresh');
+                                         }
+
+                                         function selectedRow_() {
+                                             var row =  $('#location-table').bootstrapTable('getSelections');
+                                             return row;
+                                         }
+
+
+                                         $("#editBtn").click(function() {
+                                             var row = selectedRow_();
+
+                                             if (row != '') {
+                                                 $('#editLocationModal').modal();
+                                                 alert(JSON.stringify(row[0]));
+                                                 $('#editLocationModal .id').val(row[0].id);
+
+                                             }
+                                         });
+
+
+
+                                     </script>
+
+                                 </div>
+
+
+
+                             </div>
+
+                         </div>
+
+                     <table class=" table-striped" id="location-table" data-url="${entranceIntelligentUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                            data-query-params-type="unlimit"
+                            data-query-params="queryParams_company"
+                            data-response-handler="handleResponse"
+                            data-pagination="true"
+                            data-side-pagination="server"
+                            data-page-number="1"
+                            data-page-list="[10]"
+                            data-page-size="10"
+                            data-click-to-select="true"
+                            data-single-select="true">
+                         <thead>
+                         <tr>
+                             <th data-field="state" data-radio="true"></th>
+                             <th data-field="createDate">时间</th>
+                             <th data-field="modifyDate">时间</th>
+
+                             <th data-field="license">车牌</th>
+
+                             <th data-field="idNumber">身份证号</th>
+                             <th data-field="distributor">提货单位</th>
+                             <th data-field="product">产品</th>
+
+                             <th data-field="message">说明</th>
+
+                             <th data-field="status">状态</th>
+                             <th data-field="status" data-formatter="operationInfoFormatter">操作</th>
+
+                         </tr>
+                         </thead>
+                     </table>
+
+
+<hr>
+
+                         <div class="panel panel-default"  >
+                             <div class="panel-heading">
+                                 <h4>出场车辆</h4>
+                             </div>
+                             <div class="panel-body">
+
+                                 <div id="toolbar" class="hidden" >
+
+                                     <button id="viewCapacityBtn" type="button" class="btn btn-success">
+                                         <i class="">查看详情</i>
+                                     </button>
+                                     <button id="editBtn" type="button" class="btn btn-primary" >
+                                         修改
+                                     </button>
+
+                                     <button id="addBtn" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addLocationModal">
+                                         添加
+                                     </button>
+
+                                     <script type="text/javascript">
+
+
+                                         function refresh() {
+                                             $('#location-table').bootstrapTable('refresh');
+                                         }
+
+                                         function selectedRow_() {
+                                             var row =  $('#location-table').bootstrapTable('getSelections');
+                                             return row;
+                                         }
+
+
+                                         $("#editBtn").click(function() {
+                                             var row = selectedRow_();
+
+                                             if (row != '') {
+                                                 $('#editLocationModal').modal();
+                                                 alert(JSON.stringify(row[0]));
+                                                 $('#editLocationModal .id').val(row[0].id);
+
+                                             }
+                                         });
+
+
+
+                                     </script>
+
+                                 </div>
+
+
+                             </div>
+
+                         </div>
+
+                     <table class=" table-striped" id="location-table" data-url="${exitIntelligentUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                            data-query-params-type="unlimit"
+                            data-query-params="queryParams_company"
+                            data-response-handler="handleResponse"
+                            data-pagination="true"
+                            data-side-pagination="server"
+                            data-page-number="1"
+                            data-page-list="[10]"
+                            data-page-size="10"
+                            data-click-to-select="true"
+                            data-single-select="true">
+                         <thead>
+                         <tr>
+                             <th data-field="state" data-radio="true"></th>
+                             <th data-field="createDate">时间</th>
+                             <th data-field="modifyDate">时间</th>
+
+                             <th data-field="license" data-formatter="licinseInfoFormatter" >车牌号</th>
+
+
+                             <th data-field="idNumber">身份证号</th>
+                             <th data-field="distributor">提货单位</th>
+                             <th data-field="product">产品</th>
+
+                             <th data-field="message">说明</th>
+
+                             <th data-field="status">状态</th>
+                             <th data-field="status" data-formatter="operationInfoFormatter">操作</th>
+
+                         </tr>
+                         </thead>
+                     </table>
+
+
+
+
+
+                     </div>
+
+                 </div>
+
+</#if>
+                 <div class="tab-pane      <#if !faceRemoteControl.intelligentIdentification_tab>active</#if> " id="delivery-order"  >
+                     <div id="delivery_toolbar" class="" >
+
+                         <button id="inputTareWeightBtn" type="button" class="btn btn-primary" >
+                             输入皮重
                          </button>
 
-                         <button id="addBtn" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addLocationModal">
-                             添加
-                         </button>
 
                          <script type="text/javascript">
 
 
-                             function refresh() {
-                                 $('#location-table').bootstrapTable('refresh');
-                             }
-
-                             function selectedRow_() {
-                                 var row =  $('#location-table').bootstrapTable('getSelections');
-                                 return row;
-                             }
-
-
-                             $("#editBtn").click(function() {
-                                 var row = selectedRow_();
+                             $("#inputTareWeightBtn").click(function() {
+                                 var row =  $('#delivery-table').bootstrapTable('getSelections');
 
                                  if (row != '') {
-                                     $('#editLocationModal').modal();
-                                     alert(JSON.stringify(row[0]));
-                                     $('#editLocationModal .id').val(row[0].id);
+                                    // $('#inpurtTareweightModal').modal();
+                                  //  alert(JSON.stringify(row[0]));
+                                     $('#inpurtTareweightModal .no').val(row[0].no);
+                                     $('#reportDiv').load('${fragmentDeliveryReportInfoUrl}'+'?uuid='+row[0].uuid,function(result, textStatus, XMLHttpRequest){
+                                        if(XMLHttpRequest.status == 200){
+                                            $('#inpurtTareweightModal').modal({show:true});
+
+                                            $('.selectpicker').selectpicker();
+
+
+                                        }
+                                         if(XMLHttpRequest.status == 401){
+
+                                             $('#empModal .modal-body').load('${fragmentUrl}',function(result){
+                                                 $('#empModal').modal({show:true});
+                                             });
+                                            // alert(JSON.stringify(XMLHttpRequest));
+
+                                         }
+
+                                       //  httpObj.status==401
+
+                                     });
+/*
+                                     var content = row[0].no + " "+
+                                             row[0].productNo + " "+
+                                             row[0].distributorNo + " "+
+                                             row[0].storageNo + " "+
+                                             row[0].companyName + " "+
+                                             row[0].operatorName + " "+
+                                             row[0].operatorNo + " "+
+                                             row[0].productName + " "+
+                                             row[0].lisence + " ";
+
+                                             $('#inpurtTareweightModal .name').val(content);*/
+                                   //  GetAllOrders("fee",row[0].no);
+
 
                                  }
                              });
@@ -488,43 +386,45 @@ LISTINGS
 
                          </script>
 
+                         <script>
+                             function statisticShippingDistributorFormatter(value, row, index) {
+                                 return '<div class="  "><a  href="'+row.distributorUrl+'">'+ row.distributor + ' / '+ row.distributorNo + '</a></div>';
+                             }
+
+
+                             //获得全部订单信息(订单ID,订单名称)
+                             function GetAllOrders(obj,no) {
+                                 $.ajax({
+                                     type: 'Get',
+                                     url: '${feeUrl}',
+                                     dataType: "Json",
+                                     data: "no="+ no,
+                                     success: function (data) {
+                                        // alert(JSON.stringify(data));
+                                         if (!data.flag) {
+                                             $.each(data, function (i, n) {
+                                                 $("#" + obj).append(" <option value=\"" + n.no + "\">" + n.no + "</option>");
+                                             })
+                                             $("#" + obj).selectpicker('refresh');
+
+                                         }
+                                     }
+                                 })
+
+                             }
+                         </script>
+
+                         <select class="selectpicker" data-max-options="2"  id="deliveryReportDistributorId" class="form-control" placeholder="特征">
+                             <option value="" >全部</option>
+                         <#if collaborators??>
+                             <#list collaborators as feature>
+                                 <option value="${feature.id}" >${feature.companyNo!''}--${feature.name!''}</option>
+
+                             </#list>
+                         </#if>
+
+                         </select>
                      </div>
-
-
-                     <table class=" table-striped" id="location-table" data-url="${locationsUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
-                               data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
-                               data-query-params-type="unlimit"
-                               data-query-params="queryParams_company"
-                               data-response-handler="handleResponse"
-                               data-pagination="true"
-                               data-side-pagination="server"
-                               data-page-number="1"
-                               data-page-list="[10]"
-                               data-page-size="10"
-                               data-click-to-select="true"
-                               data-single-select="true">
-                            <thead>
-                            <tr>
-                                <th data-field="state" data-radio="true"></th>
-                                <th data-field="createDate">时间</th>
-
-                                <th data-field="license">车牌</th>
-
-                                <th data-field="idNumber">身份证号</th>
-                                <th data-field="deliveryOrder_CompanyName">提货单位</th>
-                                <th data-field="product">产品</th>
-
-                                <th data-field="status">状态</th>
-                                <th data-field="status" data-formatter="operationInfoFormatter">操作</th>
-
-                            </tr>
-                            </thead>
-                        </table>
-
-                 </div>
-
-
-                 <div class="tab-pane " id="search" style="padding-top: 10px;padding-bottom: 10px" >
 
 
                      <table class=" table-striped" id="delivery-table" data-url="${deliveryOrderUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
@@ -540,26 +440,39 @@ LISTINGS
                             data-click-to-select="true"
                             data-single-select="true"
                             data-search="true"
-                            data-show-refresh="true" >
+                            data-show-refresh="true"
+                            data-toolbar="#delivery_toolbar"
+                             >
                          <thead>
                          <tr>
+               <#--              <th data-field="uuid">uuid</th>-->
                              <th data-field="state" data-radio="true"></th>
                              <th data-field="createDate">时间</th>
-                             <th data-field="no">编号</th>
 
-                             <th data-field="plateNumber">车牌号</th>
+                             <th data-field="license" data-formatter="licinseInfoFormatter" >车牌号</th>
 
-                             <th data-field="idNumber">身份证号</th>
-
-                             <th data-field="productName">产品</th>
-
-
-
+                             <th data-field="deliveryOrderNo"  data-formatter="deliveryNoInfoFormatter">提煤单编号</th>
+                             <th data-field="inventoryNo">产品编号</th>
+                             <th data-field="granularity" data-formatter="productInfoFormatter" >煤种/粒度      </th>
 
                              <th data-field="companyName" data-formatter="distributorFormatter">批发商</th>
+
+
+                             <th data-field="consigneeName">提煤司机</th>
+                             <th data-field="consigneePhone">提煤电话</th>
+
+                             <th data-field="operatorNo" >发货员编号</th>
+                             <th data-field="operatorName" >姓名</th>
+                             <th data-field="operatorPhone" >手机号</th>
+
                              <th data-field="status">状态</th>
 
+<#--
                              <th data-field="status" data-formatter="operationInfoFormatter">操作</th>
+-->
+                             <th data-field="storageNo">堆场编号</th>
+                             <th data-field="idNumber">提煤司机身份证号</th>
+
 
                          </tr>
                          </thead>
@@ -568,206 +481,130 @@ LISTINGS
                  </div>
 
 
-                 <div class="tab-pane " id="instanceTransport" style="padding-top: 10px;padding-bottom: 10px" >
+                 <div class="tab-pane " id="instanceTransport"  >
+                     <div id="transport_toolbar" class="" >
 
 
-                     <table class=" table-striped" id="instance-table" data-url="${instanceTransportUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
-                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
-                            data-query-params-type="unlimit"
-                            data-query-params="queryParams_company"
-                            data-response-handler="handleResponse"
-                            data-pagination="true"
-                            data-side-pagination="server"
-                            data-page-number="1"
-                            data-page-list="[10]"
-                            data-page-size="10"
-                            data-click-to-select="true"
-                            data-single-select="true"
-                            data-search="true"
-                            data-show-refresh="true">
-                         <thead>
-                         <tr>
-                             <th data-field="state" data-checkbox="true"></th>
+                         <button id="inputNetWeightBtn" type="button" class="btn btn-primary" >
+                             输入净重
+                         </button>
 
 
-                             <th data-field="outboundTime">出库时间</th>
-                             <th data-field="boundTime">装车时间</th>
+                         <script type="text/javascript">
 
-                             <th data-field="plateNumber">车牌号</th>
-                             <th data-field="distributor" data-formatter="companyInfoFormatter">分销商</th>
+                             $("#inputTareWeightBtn").click(function() {
+                                 var row =  $('#delivery-table').bootstrapTable('getSelections');
 
-                             <th data-field="tareWeight">皮重</th>
-                             <th data-field="grossWeight" >毛重</th>
-                             <th data-field="netWeight" >净重</th>
-                             <th data-field="status" >状态</th>
-                             <th data-field="description"   data-formatter="instanceOperationFormatter">描述</th>
+                                 if (row != '') {
+                                     // $('#inpurtTareweightModal').modal();
+                                     //  alert(JSON.stringify(row[0]));
+                                     $('#inpurtTareweightModal .no').val(row[0].no);
+                                     $('#reportDiv').load('${fragmentDeliveryReportInfoUrl}'+'?uuid='+row[0].uuid,function(result, textStatus, XMLHttpRequest){
+                                         if(XMLHttpRequest.status == 200){
+                                             $('#inpurtTareweightModal').modal({show:true});
 
-                         </tr>
-                         </thead>
-                     </table>
-
-                 </div>
-                 <div class="tab-pane " id="instanceTransport_loaded" style="padding-top: 10px;padding-bottom: 10px" >
+                                             $('.selectpicker').selectpicker();
 
 
-                     <table class=" table-striped" id="instance_loaded_table" data-url="${instanceTransport_loaded_Url}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
-                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
-                            data-query-params-type="unlimit"
-                            data-query-params="queryParams_company"
-                            data-response-handler="handleResponse"
-                            data-pagination="true"
-                            data-side-pagination="server"
-                            data-page-number="1"
-                            data-page-list="[10]"
-                            data-page-size="10"
-                            data-click-to-select="true"
-                            data-single-select="true"
-                            data-search="true"
-                            data-show-refresh="true">
-                         <thead>
-                         <tr>
-                             <th data-field="state" data-checkbox="true"></th>
+                                         }
+                                         if(XMLHttpRequest.status == 401){
+
+                                             $('#empModal .modal-body').load('${fragmentUrl}',function(result){
+                                                 $('#empModal').modal({show:true});
+                                             });
+                                             // alert(JSON.stringify(XMLHttpRequest));
+
+                                         }
+
+                                         //  httpObj.status==401
+
+                                     });
+                                     /*
+                                                                          var content = row[0].no + " "+
+                                                                                  row[0].productNo + " "+
+                                                                                  row[0].distributorNo + " "+
+                                                                                  row[0].storageNo + " "+
+                                                                                  row[0].companyName + " "+
+                                                                                  row[0].operatorName + " "+
+                                                                                  row[0].operatorNo + " "+
+                                                                                  row[0].productName + " "+
+                                                                                  row[0].lisence + " ";
+
+                                                                                  $('#inpurtTareweightModal .name').val(content);*/
+                                     //  GetAllOrders("fee",row[0].no);
 
 
-                             <th data-field="outboundTime">出库时间</th>
-
-                             <th data-field="plateNumber">车牌号</th>
-                             <th data-field="distributor" data-formatter="companyInfoFormatter">分销商</th>
-
-                             <th data-field="tareWeight">皮重</th>
-                             <th data-field="grossWeight" >毛重</th>
-                             <th data-field="netWeight" >净重</th>
-                             <th data-field="status" >状态</th>
-                             <th data-field="description"   data-formatter="instanceOperationFormatter">描述</th>
-
-                         </tr>
-                         </thead>
-                     </table>
-
-                 </div>
+                                 }
+                             });
 
 
 
-                 <div class="tab-pane " id="statistic" style="padding-top: 10px;padding-bottom: 10px" >
+                             $("#inputNetWeightBtn").click(function() {
+                                 var row =  $('#instance-table').bootstrapTable('getSelections');
+
+                                 if (row != '') {
+
+                                     $('#inpurtNetweightModal .no').val(row[0].no);
+                                     $('#inpurtNetweightModalDiv').load('${fragmentDeliveryReportInfoNetweightUrl}'+'?uuid='+row[0].uuid,function(result, textStatus, XMLHttpRequest){
+                                         if(XMLHttpRequest.status == 200){
+                                             $('#inpurtNetweightModal').modal({show:true});
+
+                                             $('.selectpicker').selectpicker();
+
+
+                                         }
+                                         if(XMLHttpRequest.status == 401){
+
+                                             $('#empModal .modal-body').load('${fragmentUrl}',function(result){
+                                                 $('#empModal').modal({show:true});
+                                             });
+                                             // alert(JSON.stringify(XMLHttpRequest));
+
+                                         }
+
+                                         //  httpObj.status==401
+
+                                     });
+
+   /*
+                                     $('#inpurtNetweightModal').modal();
+                                     //alert(JSON.stringify(row[0]));
+                                     $('#inpurtNetweightModal .id').val(row[0].id);
+
+                                     var content = row[0].no + " "+
+                                             row[0].productNo + " "+
+                                             row[0].distributorNo + " "+
+                                             row[0].storageNo + " "+
+                                             row[0].companyName + " "+
+                                             row[0].operatorName + " "+
+                                             row[0].operatorNo + " "+
+                                             row[0].productName + " "+
+                                             row[0].lisence + " ";
+
+                                     $('#inpurtNetweightModal .name').val(content);
+                                     GetAllOrders("fee",row[0].no);*/
+
+
+                                 }
+                             });
 
 
 
-                     <div class="col-lg-12">
-                         <table class="table" data-show-header="false">
-                             <thead>
-                             <tr>
-                                 <th colspan="4">基本信息</th>
-                             </tr>
-                             </thead>
-                             <tbody>
+                         </script>
 
-
-                             <tr>
-                                 <td class="active">库存数量</td>
-                                 <td colspan="3">
-
-
-                                     ${statistic.inventoryNumber!''}
-                                 </td>
-                             </tr>
-
-
-
-
-                             <tr>
-                                 <td class="active">贸易商数量</td>
-                                 <td colspan="3">${statistic.distributorNumber!''}</td>
-                             </tr>
-
-
-
-                             </tbody>
-                         </table>
-
-
-                     </div>
-
-
-
-                     <div class="col-lg-6">
-                         <table class="table" data-show-header="false">
-                             <thead>
-                             <tr>
-                                 <th >名称 <a href="${statistic.distributors_management_url}" class="btn btn-primary pull-right" >管理</a></th>
-                                 <th >余额</th>
-                             </tr>
-                             </thead>
-                             <tbody>
-
-                                 <#list statistic.distributors as distributor>
-                                     <tr>
-
-                                         <td >
-                                        <a href="${distributor.url}"> ${distributor.name}</a>
-                                         </td>
-
-                                         <td >
-                                         ${distributor.advancedPaymentAmount!''}
-                                         </td>
-                                     </tr>
-
-                                 </#list>
-
-
-
-
-
-                             </tbody>
-                         </table>
-
-
-                     </div>
-
-
-                     <div class="col-lg-6">
-                         <table class="table" data-show-header="false">
-                             <thead>
-                             <tr>
-                                 <th >名称<a href="${statistic.inventories_management_url}" class="btn btn-primary pull-right" >管理</a></th>
-                                 <th >价格</th>
-                                 <th >库存</th>
-                             </tr>
-                             </thead>
-                             <tbody>
-
-
-
-                             <#list statistic.inventories as distributor>
-                             <tr>
-
-                                 <td >
-                                     <a href="${distributor.url}">${distributor.coalType!''}  ${distributor.granularity!''}</a>
-
-                                 </td>
-
-                                 <td >
-                                 ${distributor.quote!''}
-                                 </td>
-
-                                 <td class="active">${distributor.quantityOnHand!''}</td>
-                             </tr>
+                         <select class="selectpicker" data-max-options="2"  id="transportDistributorId" class="form-control" placeholder="特征">
+                             <option value="" >全部</option>
+                         <#if collaborators??>
+                             <#list collaborators as feature>
+                                 <option value="${feature.id}" >${feature.companyNo!''}--${feature.name!''}</option>
 
                              </#list>
+                         </#if>
 
-
-
-
-
-                             </tbody>
-                         </table>
-
-
+                         </select>
                      </div>
 
-
-<#--
-
-                     <table class=" table-striped" id="instance-table" data-url="${instanceTransportUrl}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                     <table class=" table-striped" id="instance-table" data-url="${instanceTransportUrl!''}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
                             data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
                             data-query-params-type="unlimit"
                             data-query-params="queryParams_company"
@@ -780,28 +617,124 @@ LISTINGS
                             data-click-to-select="true"
                             data-single-select="true"
                             data-search="true"
-                            data-show-refresh="true">
+                            data-show-refresh="true"
+                            data-toolbar="#transport_toolbar"
+
+                             >
                          <thead>
                          <tr>
-                             <th data-field="state" data-checkbox="true"></th>
+        <#--                     <th data-field="uuid" >uuid</th>-->
+                             <th data-field="state" data-radio="true"></th>
+                             <th data-field="boundTime">入库时间</th>
+                             <th data-field="plateNumber" data-formatter="licinseInfoFormatter">车牌号</th>
 
+                             <th data-field="no"  data-formatter="instanceDeliveryNoInfoFormatter">提煤单编号</th>
+                             <th data-field="inventoryNo">库存编号</th>
+                             <th data-field="granularity" data-formatter="productInfoFormatter" >煤种/粒度      </th>
 
-                             <th data-field="outboundTime">出库时间</th>
-                             <th data-field="boundTime">装车时间</th>
-
-                             <th data-field="plateNumber">车牌号</th>
                              <th data-field="distributor" data-formatter="companyInfoFormatter">分销商</th>
 
+
                              <th data-field="tareWeight">皮重</th>
-                             <th data-field="grossWeight" >毛重</th>
-                             <th data-field="netWeight" >净重</th>
+                             <th data-field="unitPrice">单价</th>
+
+                         <#--                             <th data-field="grossWeight" >毛重</th>
+                                                      <th data-field="netWeight" >净重</th>-->
                              <th data-field="status" >状态</th>
                              <th data-field="description"   data-formatter="instanceOperationFormatter">描述</th>
 
                          </tr>
                          </thead>
                      </table>
--->
+
+                 </div>
+                 <div class="tab-pane " id="instanceTransport_loaded"  >
+                     <div id="transfer_toolbar" class="" >
+
+                         <button id="correctBtn" type="button" class="btn btn-default" >
+                             更正
+                         </button>
+
+
+                         <script type="text/javascript">
+
+
+                             $("#correctBtn").click(function() {
+                                 var row =  $('#transfer_no_reconciliation_table').bootstrapTable('getSelections');
+
+                                 if (row != '') {
+                                     $('#correctModalDiv').load('${inventory_transfer_correctUrl}'+'?uuid='+row[0].uuid,function(result, textStatus, XMLHttpRequest){
+                                         if(XMLHttpRequest.status == 200){
+                                             $('#correctModal').modal({show:true});
+                                             $('.selectpicker').selectpicker();
+                                         }
+                                         if(XMLHttpRequest.status == 401){
+
+                                             $('#empModal .modal-body').load('${fragmentUrl}',function(result){
+                                                 $('#empModal').modal({show:true});
+                                             });
+                                         }
+                                     });
+                                 }
+                             });
+
+
+
+                         </script>
+                     </div>
+
+
+                     <table class=" table-striped" id="transfer_no_reconciliation_table" data-url="${transfer_no_reconciliation_Url}" data-toggle="table" data-classes="table table-hover"   data-method="GET"
+                            data-content-type="application/x-www-form-urlencoded; charset=UTF-8"
+                            data-query-params-type="unlimit"
+                            data-query-params="queryParams_company"
+                            data-response-handler="handleResponse"
+                            data-pagination="true"
+                            data-side-pagination="server"
+                            data-page-number="1"
+                            data-page-list="[10]"
+                            data-page-size="10"
+                            data-click-to-select="true"
+                            data-single-select="true"
+                            data-search="true"
+                            data-show-refresh="true"
+                            data-toolbar="#transfer_toolbar"
+
+
+                     >
+                         <thead>
+                         <tr>
+                  <#--           <th data-field="uuid">uuid</th>-->
+
+                             <th data-field="state" data-radio="true"></th>
+                             <th data-field="no" data-formatter="inventoryTransferNoInfoFormatter">出库编号</th>
+                             <th data-field="deliveryOrderNo">提煤单编号</th>
+
+                             <th data-field="createDate">出库时间</th>
+                             <th data-field="license" data-formatter="licinseInfoFormatter" >车牌号</th>
+
+
+
+                         <#--                             <th data-field="tareWeight">皮重</th>
+                                                      <th data-field="grossWeight" >毛重</th>-->
+                             <th data-field="netWeight" >净重</th>
+
+                             <th data-field="inventoryNo">库存编号</th>
+                             <th data-field="distributor" data-formatter="companyInfoFormatter">分销商</th>
+                      <th data-field="tax" >税</th>
+                             <th data-field="unitPrice" >单价</th>
+                             <th data-field="amount" >总额</th>
+                             <th data-field="taxAmount" >开票金额</th>
+
+                             <th data-field="status" >状态</th>
+                             <th data-field="duration">装车耗时</th>
+
+                             <th data-field="reconcileStatus" >对账状态</th>
+                             <th data-field="description"   data-formatter="instanceOperationFormatter">描述</th>
+
+                         </tr>
+                         </thead>
+                     </table>
 
                  </div>
 
@@ -829,7 +762,7 @@ LISTINGS
                     <div class="col-xs-12">
                         <div class="well">
 
-                            <form id="addLocationModalForm"   novalidate="novalidate" action="${command_create_url}">
+                            <form id="addLocationModalForm_"   novalidate="novalidate" action="{command_create_url}">
                                 <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId hidden" name="companyId" value=""  >
 
                                 <div class="form-group">
@@ -857,7 +790,7 @@ LISTINGS
                                 <div class="form-group">
                                     <label for="username" class="control-label">特征</label>
 
-                                    <select class="selectpicker" data-max-options="2"  id="feature" name="feature" class="form-control" placeholder="特征">
+                                    <select class="selectpicker" data-max-options="2"  id="feature_" name="feature" class="form-control" placeholder="特征">
                                     <#-- <select class="form-control select2" id="userType" name="userType"  placeholder="公司类型"  multiple="multiple">-->
 
                                      <#if featuresEnum??>
@@ -891,7 +824,9 @@ LISTINGS
                                     req.done(function (data) {
                                         if (data.status) {
                                             alert("成功:"+data.message);
-                                            window.location.reload(true);
+                                            $('#transfer_no_reconciliation_table').bootstrapTable('refresh');
+
+                                           // window.location.reload(true);
                                         } else {
                                             alert(data.message);
                                         }
@@ -912,48 +847,56 @@ LISTINGS
     </div>
 </div>
 
-<div id="editLocationModal" class="modal fade" role="dialog">
+<div id="inpurtTareweightModal" class="modal fade" role="dialog">
     <div id="login-overlay" class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">添加区域</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="well">
+        <div class="modal-content" id="reportDiv">
 
-                            <form id="addLocationModalForm"   novalidate="novalidate" action="${command_edit_url}">
-                                <input style="margin-bottom: 15px;" type="" placeholder="Username" class="id hidden" name="id" value=""  >
+        </div>
 
-                                <div class="form-group">
-                                    <label for="username" class="control-label">名称</label>
-                                    <input style="margin-bottom: 15px;" type="" placeholder="Username" class="name form-control" name="name" value=""  >
+    </div>
+</div>
+    <div id="editLocationModal" class="modal fade" role="dialog">
+        <div id="login-overlay" class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加区域</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="well">
 
+                                <form id="addLocationModalForm"   novalidate="novalidate" action="${command_edit_url}">
+                                    <input style="margin-bottom: 15px;" type="" placeholder="Username" class="id hidden" name="id" value=""  >
 
-                                    <span class="help-block"></span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="username" class="control-label">邮编</label>
-                                    <input style="margin-bottom: 15px;" type="" placeholder="Username" class="postalCode form-control" name="postalCode" value=""  >
-                                    <span class="help-block"></span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="username" class="control-label">描述</label>
-                                    <input style="margin-bottom: 15px;" type="" placeholder="Username" class="description form-control" name="description" value=""  >
-                                    <span class="help-block"></span>
-                                </div>
+                                    <div class="form-group">
+                                        <label for="username" class="control-label">名称</label>
+                                        <input style="margin-bottom: 15px;" type="" placeholder="Username" class="name form-control" name="name" value=""  >
 
 
+                                        <span class="help-block"></span>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="username" class="control-label">特征</label>
+                                    <div class="form-group">
+                                        <label for="username" class="control-label">邮编</label>
+                                        <input style="margin-bottom: 15px;" type="" placeholder="Username" class="postalCode form-control" name="postalCode" value=""  >
+                                        <span class="help-block"></span>
+                                    </div>
 
-                                    <select class="selectpicker" data-max-options="2"  id="feature" name="feature" class="form-control" placeholder="特征">
-                                    <#-- <select class="form-control select2" id="userType" name="userType"  placeholder="公司类型"  multiple="multiple">-->
+                                    <div class="form-group">
+                                        <label for="username" class="control-label">描述</label>
+                                        <input style="margin-bottom: 15px;" type="" placeholder="Username" class="description form-control" name="description" value=""  >
+                                        <span class="help-block"></span>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label for="username" class="control-label">特征</label>
+
+                                        <select class="selectpicker" data-max-options="2"  id="feature" name="feature" class="form-control" placeholder="特征">
+                                        <#-- <select class="form-control select2" id="userType" name="userType"  placeholder="公司类型"  multiple="multiple">-->
 
                                     <#if featuresEnum??>
                                         <#list featuresEnum as feature>
@@ -962,57 +905,87 @@ LISTINGS
                                         </#list>
                                     </#if>
 
-                                    </select>
+                                        </select>
 
 
-
-                                    </select>
-                                    <span class="help-block"></span>
-                                </div>
+                                        <span class="help-block"></span>
+                                    </div>
 
 
-                                <button id="addLocationModalFormBtn"  type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
-                            </form>
-                            <script  type="text/javascript">
+                                    <button id="addLocationModalFormBtn_"  type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
+                                </form>
+                                <script  type="text/javascript">
 
-                                $("#addLocationModalFormBtn").click(function() {
-                                    alert($('#addLocationModalForm').serialize());
+                                    $("#addLocationModalFormBtn_").click(function() {
+                                        alert($('#addLocationModalForm').serialize());
 
-                                    var req = $.ajax({
-                                        url:  $('#addLocationModalForm').attr('action'),
-                                        type: 'put',
-                                        data:  $('#addLocationModalForm').serialize(),
+                                        var req = $.ajax({
+                                            url:  $('#addLocationModalForm').attr('action'),
+                                            type: 'put',
+                                            data:  $('#addLocationModalForm').serialize(),
+                                        });
+                                        req.done(function (data) {
+                                            if (data.status) {
+                                                alert("成功:"+data.message);
+                                                window.location.reload(true);
+                                            } else {
+                                                alert(data.message);
+                                            }
+                                        });
                                     });
-                                    req.done(function (data) {
-                                        if (data.status) {
-                                            alert("成功:"+data.message);
-                                            window.location.reload(true);
-                                        } else {
-                                            alert(data.message);
-                                        }
-                                    });
-                                });
-                            </script>
+                                </script>
+                            </div>
+
+
                         </div>
-
-
                     </div>
+
+
+
+
                 </div>
+            </div>
+        </div>
+    </div>
 
-
-
+    <div id="inpurtNetweightModal" class="modal fade" role="dialog">
+        <div id="login-overlay" class="modal-dialog">
+            <div class="modal-content" id="inpurtNetweightModalDiv">
 
             </div>
         </div>
     </div>
-</div>
+
+    <div id="correctModal" class="modal fade" role="dialog">
+        <div id="login-overlay" class="modal-dialog">
+            <div class="modal-content" id="correctModalDiv">
+
+            </div>
 
 
-<#include "./common/page_foot_section.ftl">
 
-<#include "./common/hotline_section.ftl">
+        </div>
+    </div>
 
 
+    <div class="modal fade" id="empModal" role="dialog">
+        <div class="modal-dialog">
+
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">登录</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 <script type="text/javascript" src="${rc.contextPath}/components/bootstrap_table/bootstrap-table.min.js"></script>
@@ -1020,13 +993,13 @@ LISTINGS
 <script type="text/javascript" src="${rc.contextPath}/components/bootstrap-select/js/bootstrap-select.min.js"></script>
 
 <script>
-    $(document).ready(function(){
+/*    $(document).ready(function(){
     });
 
     $(document).on('click', '[data-toggle="lightbox"]', function(event) {
         event.preventDefault();
         $(this).ekkoLightbox();
-    });
+    });*/
 </script>
 <script type="text/javascript">
 function originToDestinationInfoFormatter(value, row, index) {
@@ -1039,15 +1012,27 @@ function originToDestinationInfoFormatter(value, row, index) {
 }
 function operationInfoFormatter(value, row, index) {
 
-/*    return '<a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox">'+
-           // '<img src="https://unsplash.it/600.jpg?image=251" class="img-fluid">'+
-            '查看'+
-           '</a>'*/
-
 
     return  '<div class="">'  +'<a class="" href="' + row.url+ '">查看</a></div>';
 
 }
+function deliveryNoInfoFormatter(value, row, index) {
+
+
+    return  '<div class="">'  +'<a class="" href="' + row.url+ '">'+row.no+'</a></div>';
+
+}
+function instanceDeliveryNoInfoFormatter(value, row, index) {
+
+
+    return  '<div class="">'  +'<a class="" href="' + row.url+ '">'+row.deliveryOrderNo+'</a></div>';
+
+}
+
+function distributorFormatter(value, row, index) {
+    return  '<div class="">'  +'<a class="" href="' + row.url+ '">'+row.distributorName+'/'+row.distributorNo+'</a></div>';
+}
+
 function instanceOperationFormatter(value, row, index) {
 
     /*    return '<a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox">'+
@@ -1060,19 +1045,12 @@ function instanceOperationFormatter(value, row, index) {
 
 }
 
+function inventoryTransferNoInfoFormatter(value, row, index) {
 
-    function queryParams_company(params) {
-        params.page = params.pageNumber - 1;
-        params.size = params.pageSize;
+    return  '<div class="">'  +'<a class="" href="' + row.url+ '">'+row.no+'</a></div>';
 
-        var sender = $.trim($("#search_param").val());
+}
 
-        if (sender) {
-            params.q = sender;
-        }
-     //   alert(JSON.stringify(sender))
-        return params;
-    }
 
     function queryParams(params) {
         params.page = params.pageNumber - 1;
@@ -1083,7 +1061,13 @@ function instanceOperationFormatter(value, row, index) {
         if (sender) {
             params.q = sender;
         }
-    //    alert(JSON.stringify(sender))
+
+        var deliveryReportDistributorId = $.trim($("#deliveryReportDistributorId").val());
+
+        if (deliveryReportDistributorId) {
+            params.distributorId = deliveryReportDistributorId;
+        }
+
         return params;
     }
     $('#supplies-table').bootstrapTable({
@@ -1109,137 +1093,26 @@ function instanceOperationFormatter(value, row, index) {
 
     }
 
-/*
-    function companyInfoFormatter(value, row, index) {
+
+function companyInfoFormatter(value, row, index) {
 
 
 
-        var inventories = "";
-        $.each(row.inventories, function (n, value) {
-            //  alert(n + ' ' + value);
-            var trs = "";
-            trs += "<a href='"+value.storageUrl+"'>" + value.storageName + "</a> 存 " + value.quantityOnHand + " 吨 ";
-            inventories += trs;
-        });
+    return  "   <div class=''>"+
+    "<strong><a href='"+ row.distributorUrl + "'> "+ row.distributor+"<a></strong> </div>";
 
-        var indicators = "";
-        $.each(row.indicators, function (n, value) {
-            //  alert(n + ' ' + value);
-            var trs = "";
-            trs += "" + value.symbol + " " + value.value + "  "+value.unit;
-            indicators += trs;
-        });
+}
+function productInfoFormatter(value, row, index) {
+    return "<span>"+ row.coalType+row.granularity+"</span>";
+}
 
-        return "    <div class='col-sm-3 no-padding photobox'>"+
-        '                <div class=" carousel-row">'+
-                ' <div class=" slide-row">'+
-                ' <div id="carousel-1" class="carousel slide slide-carousel" data-ride="carousel">'+
-                '  <!-- Indicators -->'+
-        '  <ol class="carousel-indicators">'+
-        '  <li data-target="#carousel-1" data-slide-to="0" class="active"></li>'+
-        '  <li data-target="#carousel-1" data-slide-to="1"></li>'+
-        '  <li data-target="#carousel-1" data-slide-to="2"></li>'+
-        '  </ol>'+
-
-        '      <!-- Wrapper for slides -->'+
-        '   <div class="carousel-inner">'+
-        '          <div class="item active">'+
-        '           <img src="'+row.companyLogoUrl+'" alt="Image">'+
-        '             </div>'+
-
-        '  </div>'+
-        '   </div>'+
-        '    <div class="slide-content">'+
-        '          <h4><a href=" '+ row.companyUrl + '">'+ row.companyName+'<a></h4>'+
-
-        '  </div>'+
-        '  </div>'+
-
-        '    </div>'+
-        '    </div>'+
-
-        '    </div>'+
-
-            //row.companyDesc+
-
-
-    '<div class="col-sm-7 add-desc-box">'+
-               ' <div class="add-details">'+
-               ' <h4 class="add-title"> <a href="'+row.url+'"> '+ row.granularity+' </a> <small>'+  row.companyAddress+'</small> </h4>'+
-    ' <span class="info-row"> <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="Business Ads"> </span> <span class="date"><i class=" icon-clock"> </i> '+row.updateTime+' </span>  <span class="category"> </span> <span class="item-location"><i class="fa fa-map-marker"> '+   row.companyAddress+'</i>  </span> </span> </div>'+
-       '<hr>'+
-        inventories+'<br>'+indicators+'<br>'+
-
-
-       ' </div>'+
-        '  <div class="slide-footer hidden">'+
-        '        <span class="pull-right buttons">'+
-        '         <button class="btn btn-sm btn-default"><i class="fa fa-fw fa-eye"></i> Show</button>'+
-        '    <button class="btn btn-sm btn-primary"><i class="fa fa-fw fa-shopping-cart"></i> Buy</button>'+
-        '    </span>'+
-        '    </div>';
-
-    }
-*/
-
-
-    function supplyCompanyInfoFormatter(value, row, index) {
-
-
-        var warehouseInfo = ""
-
-        warehouseInfo = "堆场名称：" + row.warehouseStatistic.name +"\n" +
-                "当前正在装车： " +row.warehouseStatistic.countShipmentsLoading + "\n" +
-                "当前等待装车：" + row.warehouseStatistic.countShipmentsCreated+ "\n" ;
+function licinseInfoFormatter(value, row, index) {
+    return  "   <div class=''>"+
+            "<strong>"+ row.license+"</strong> </div>";
+}
 
 
 
-        return  '                <div class=" carousel-row" data-trigger="hover" title="'+row.companyDesc+ '" data-content="'+ warehouseInfo+'" >'+
-                ' <div class=" slide-row">'+
-                ' <div id="carousel-1" class="carousel slide slide-carousel" data-ride="carousel">'+
-                '  <!-- Indicators -->'+
-        '      <!-- Wrapper for slides -->'+
-
-        '          <div class="item active">'+
-        '           <img src="../logo.png" alt="Image">'+
-        '          </div>'+
-
-        '   </div>'+
-        '    <div class="slide-content">'+
-        '          <h4><a href=" '+ row.companyUrl + '"> '+ row.companyName+'<a></h4>'+
-        '    <p>'+
-
-        '    </p>'+
-        '  </div>'+
-
-        '    </div>';
-
-    }
-
-
-    function supplyInfoFormatter(value, row, index) {
-
-
-
-
-        var List = row.qualityItems;
-        var personString = "";
-        for(var student in List){ //第二层循环取list中的对象
-            personString += "<strong>"+List[student].qualityItemName +" "+List[student].exp+ " "+List[student].value+"</strong> |";
-        }
-
-
-        return  " <h3><a class='' href='"+row.url+"'>"+row.coalCategory+" - "+row.granularity+"- <strong>￥"+row.price+"</strong></a></h3>" +
-         "       <p class='muted'>地址：<strong>"+row.deliveryPlace+"</strong></p>"+
-        "<p class='muted'>发布时间："+row.createdDateString+"<a href='#' class='underline'>Cars, Vans &amp; Motorbikes</a></p>"+
-        "<p>"+row.qualityContent+"</p>"+
-
-                "  <p class='ad-description'>"+
-                personString +
-
-                " </p>";
-
-    }
 
     function refresh() {
       //  $('#role-table').bootstrapTable('refresh');
@@ -1253,7 +1126,7 @@ function instanceOperationFormatter(value, row, index) {
         var res = {};
         res.rows = original.content;
         res.total = original.totalElements;
-       // alert(JSON.stringify(original));
+        //alert(JSON.stringify(original));
         return res;
     }
 
@@ -1269,6 +1142,11 @@ $(function(){
     });
 
 
+    $('.selectpicker').on('change', function(){
+        $('#delivery-table').bootstrapTable('refresh');
+
+    });
+
 
 
 
@@ -1279,7 +1157,7 @@ $(function(){
 
 
 <script src="${rc.contextPath}/js/bootstrap-notify.min.js" type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+<script src="${rc.contextPath}/js/sockjs.min.js"></script>
 <script src="${rc.contextPath}/js/stomp.js" type="text/javascript"></script>
 <script type="text/javascript">
     var stompClient = null;
@@ -1304,31 +1182,34 @@ $(function(){
         stompClient.connect({}, function (frame) {
             setConnected(true);
             console.log('Connected: ' + frame);
-
-          stompClient.subscribe('${websocket_topic}', function (greeting) {
+            stompClient.subscribe('${websocket_topic}', function (greeting) {
                 //    stompClient.subscribe('/topic/COALPIT_DELIVERY_workbench/1', function (greeting) {
-              $('#delivery-table').bootstrapTable('refresh');
+                $('#delivery-table').bootstrapTable('refresh');
 
                 console.log("------"+JSON.parse(greeting.body))
                 console.log("------"+JSON.stringify(greeting.body));
                 //  alert(JSON.stringify(greeting.body));
                 var map = JSON.parse(greeting.body);
-                $.notify({
-                    title: map.distributor,
-                    message:map.plateNumber +" "+ map.productName,
-                    delay: 0
-                },{
-                    // type: 'minimalist',
-                    delay: 0
+                if(map.type=="Delivery_order_auth_scan"){
+                    Delivery_order_auth_scan(map)
 
-                });
-                //    label1.setContent(JSON.parse(greeting.body).plateNumber + Math.random())
+                }else{
+                    event_follower(map)
 
+                }
 
-                // showGreeting(JSON.parse(greeting.body));
             });
 
 
+
+            stompClient.subscribe('${websocket_topic_status}', function (greeting) {
+                /*
+                                console.log("------"+JSON.parse(greeting.body))
+                                console.log("------ event-table ");*/
+                //  alert(JSON.stringify(greeting.body));
+                var map = JSON.parse(greeting.body);
+                status_decision(map);
+            });
         });
     }
 
@@ -1349,9 +1230,9 @@ $(function(){
     }
 
     $(function () {
-        $("form").on('submit', function (e) {
+/*        $("form").on('submit', function (e) {
             e.preventDefault();
-        });
+        });*/
         $( "#connect" ).click(function() { connect(); });
         connect();
 
@@ -1363,10 +1244,55 @@ $(function(){
 
 
 
+    function Delivery_order_auth_scan(map) {
+
+        $.notify({
+            title: map.distributor,
+            message:map.plateNumber +" "+ map.productName,
+            delay: 0
+        },{
+            // type: 'minimalist',
+            delay: 0,
+            placement: {
+                from: 'bottom',
+                align: 'left'
+            }
+
+        });
+        //    label1.setContent(JSON.parse(greeting.body).plateNumber + Math.random())
+
+
+        // showGreeting(JSON.parse(greeting.body));
+
+    }
+
+
+    function event_follower(map) {
+
+        $.notify({
+            title: map.distributor,
+            message:map.plateNumber +" "+ map.productName,
+            delay: 0
+        },{
+            type: 'success',
+
+            // type: 'minimalist',
+            delay: 0
+        });
+        //    label1.setContent(JSON.parse(greeting.body).plateNumber + Math.random())
+
+
+        // showGreeting(JSON.parse(greeting.body));
+
+    }
 
 
 
-
+   var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
 </script>
 
 

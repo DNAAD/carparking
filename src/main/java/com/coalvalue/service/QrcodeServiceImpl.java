@@ -3,22 +3,20 @@ package com.coalvalue.service;
 
 import com.alibaba.fastjson.JSON;
 import com.coalvalue.configuration.Constants;
-import com.coalvalue.domain.Distributor;
-import com.coalvalue.domain.TemporaryQrcode;
-import com.coalvalue.domain.entity.Behavioural;
+import com.coalvalue.configuration.ReactorEventConfig;
+import com.coalvalue.domain.entity.Distributor;
+
+import com.coalvalue.domain.entity.*;
 import com.coalvalue.enumType.DataSynchronizationTypeEnum;
 import com.coalvalue.enumType.ResourceType;
 import com.coalvalue.notification.NotificationData;
+import com.coalvalue.notification.NotificationData_qrcode;
 import com.coalvalue.repository.BehaviouralRepository;
-import com.coalvalue.repository.PlateRecognitionRepository;
+import com.coalvalue.repository.StorageSpaceRepository;
 import com.coalvalue.repository.TemporaryQrcodeRepository;
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamPanel;
-import com.github.sarxos.webcam.WebcamResolution;
-import com.google.zxing.*;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.common.HybridBinarizer;
-import com.service.BaseServiceImpl;
+import com.coalvalue.repository.WxPermanentQrcodeRepository;
+
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,10 +24,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.bus.Event;
+import reactor.bus.EventBus;
 
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,12 +51,20 @@ public class QrcodeServiceImpl extends BaseServiceImpl implements QrcodeService 
     private TemporaryQrcodeRepository temporaryQrcodeRepository;
 
     @Autowired
+    private WxPermanentQrcodeRepository wxPermanentQrcodeRepository;
+
+
+
+    @Autowired
     private ConfigurationService configurationService;
 
     @Autowired
     private MqttService mqttService;
 
-
+    @Autowired
+    private EventBus eventBus;
+    @Autowired
+    private StorageSpaceRepository storageSpaceRepository;
 
     @Override
     @Transactional
@@ -115,9 +120,7 @@ public class QrcodeServiceImpl extends BaseServiceImpl implements QrcodeService 
 
         map.put("uniqueId",temporaryQrcode.getUniqueId());
         map.put("type", DataSynchronizationTypeEnum.Qrcode.getText());
-        map.put("appId", configurationService.getAppId());
 
-        map.put("appSecret",configurationService.getAppSecret());
         String msg = JSON.toJSONString(map);
 
 
@@ -159,28 +162,79 @@ public class QrcodeServiceImpl extends BaseServiceImpl implements QrcodeService 
 
     }
 
+    @Override
+    public WxPermanentQrcode createQrcode(StorageSpace storageSpace) {
 
 
+     //   Configuration configuration = configurationService.getConfiguration();
 
 
+        WxPermanentQrcode wxQrcode = wxPermanentQrcodeRepository.findByItemIdAndItemTypeAndTypeAndAppId(storageSpace.getId(), ResourceType.STORAGE.getText(),Constants.WX_QRCODE_TYPE_STORAGESPACE, Constants.APP_ID);
+        if(wxQrcode== null){
 
 
+            NotificationData_qrcode notificationData_canvassing = new NotificationData_qrcode();
+
+           notificationData_canvassing.setStorageNo(storageSpace.getNo());
+           notificationData_canvassing.setType(Constants.WX_QRCODE_TYPE_STORAGESPACE);
+            eventBus.notify(ReactorEventConfig.notificationConsumer_qrcode_create_event, Event.wrap(notificationData_canvassing));
 
 
+            wxQrcode = new WxPermanentQrcode();
+          //  wxQrcode.setItemId(company.getId());
+            wxQrcode.setContent("ddddddddddddd");
+        }
 
 
+        return wxQrcode;
+    }
+
+    @Override
+    @Transactional
+    public void saveStorageQrocde(String storageNo, String content) {
+        StorageSpace storageSpace = storageSpaceRepository.findByNo(storageNo);
+        WxPermanentQrcode wxQrcode = wxPermanentQrcodeRepository.findByItemIdAndItemTypeAndTypeAndAppId(storageSpace.getId(), ResourceType.STORAGE.getText(),Constants.WX_QRCODE_TYPE_STORAGESPACE, Constants.APP_ID);
+
+        if(wxQrcode== null){
+            wxQrcode= new WxPermanentQrcode();
+            wxQrcode.setAppId(Constants.APP_ID);
+            wxQrcode.setItemId(storageSpace.getId());
+            wxQrcode.setItemType(ResourceType.STORAGE.getText());
+            wxQrcode.setType(Constants.WX_QRCODE_TYPE_STORAGESPACE);
+            wxQrcode.setContent(content);
+            wxPermanentQrcodeRepository.save(wxQrcode);
+
+        }
+
+    }
+
+    @Override
+    public WxPermanentQrcode getCompany() {
+        WxPermanentQrcode w  = new WxPermanentQrcode();
+
+        Configuration configuration  = configurationService.getConfiguration(ConfigurationServiceImpl.PRODUCER_CONFIGURATION_KEY_qrcodeContent);
+        if(configuration!= null){
+
+            w.setContent(configuration.getStringValue());
+        }
+
+        return w;
+    }
 
 
     private static final long serialVersionUID = 6441489157408381878L;
 
     private Executor executor = Executors.newSingleThreadExecutor();
 
+/*
     private Webcam webcam = null;
     private WebcamPanel panel = null;
    // private JTextArea textarea = null;
+*/
 /*    static {
         Webcam.setDriver(new IpCamDriver());
-    }*/
+    }*//*
+
 
   //  @PostConstruct
     public void WebcamQRCodeExample() {
@@ -235,6 +289,7 @@ public class QrcodeServiceImpl extends BaseServiceImpl implements QrcodeService 
                     } while (true);
                 }
             });
+*/
 
   /*      public static void main(String[] args) throws MalformedURLException {
             JFrame f = new JFrame("Live Views From Lignano Beach");
@@ -269,8 +324,8 @@ public class QrcodeServiceImpl extends BaseServiceImpl implements QrcodeService 
         pack();
         setVisible(true);
 
-        executor.execute(this);*/
-    }
+        executor.execute(this);
+    }*/
 
 
 

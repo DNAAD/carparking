@@ -1,18 +1,17 @@
 package com.coalvalue.web;
 
-import com.coalvalue.domain.Distributor;
-import com.coalvalue.domain.OperationResult;
-import com.coalvalue.domain.TemporaryQrcode;
+import com.coalvalue.domain.entity.Distributor;
+import com.coalvalue.domain.entity.TemporaryQrcode;
 import com.coalvalue.domain.entity.*;
-import com.coalvalue.enumType.ResourceType;
+import com.coalvalue.repository.DistributorRepository;
+import com.coalvalue.repository.OpeningAccountRequestRepository;
 import com.coalvalue.service.*;
+import com.coalvalue.service.other.GeneralServiceImpl;
 import com.coalvalue.web.valid.DistributorCreateForm;
 import com.coalvalue.web.valid.LineCreateForm;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,11 +20,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.time.ZoneOffset;
 import java.util.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -40,21 +41,26 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
  */
 
 @Controller
-@RequestMapping(value= {"/distributor"})
+@RequestMapping(value= {"/usercenter/distributor"})
 public class MobileDistributorController {
     private static final Logger logger = LoggerFactory.getLogger(MobileDistributorController.class);
 
 
-
+    @Autowired
+    private DistributorRepository distributorRepository;
 
 
     @Autowired
     private QrcodeService qrcodeService;
     @Autowired
-    private LineService lineService;
+    private ReconciliationService reconciliationService;
     @Autowired
     private GeneralServiceImpl generalService;
+    @Autowired
+    private FeeService feeService;
 
+    @Autowired
+    private OpeningAccountRequestRepository openingAccountRequestRepository;
 
 
     @Autowired
@@ -63,10 +69,14 @@ public class MobileDistributorController {
     private DeliveryOrderService deliveryOrderService;
 
 
-    @RequestMapping(value = "index", method = RequestMethod.GET)
-    public ModelAndView index(@RequestParam(value = "q", required = false) String searchTerm){//,Authentication authentication)  {
 
-        ModelAndView modelAndView = new ModelAndView("/templates/distributor_index");
+    @Autowired
+    RestTemplate restTemplate;
+
+    @RequestMapping(value = "index", method = RequestMethod.GET)
+    public ModelAndView index(@RequestParam(value = "q", required = false) String searchTerm,Authentication authentication)throws Exception   {
+
+        ModelAndView modelAndView = new ModelAndView("/distributor_index");
         modelAndView.addObject("q",searchTerm);
 
         String companiesUrl = linkTo(methodOn(MobileDistributorController.class).stations("", null)).withSelfRel().getHref();
@@ -78,17 +88,22 @@ public class MobileDistributorController {
         String command_create_url = linkTo(methodOn(MobileDistributorController.class).create(null, null)).withSelfRel().getHref();
         modelAndView.addObject("command_create_url",command_create_url);
 
-
         String command_edit_url = linkTo(methodOn(MobileInventoryController.class).edit(null, null,null)).withSelfRel().getHref();
         modelAndView.addObject("command_edit_url",command_edit_url);
-
-
 
         String synchronize_url = linkTo(methodOn(MobileInventoryController.class).synchronize(null, null,null)).withSelfRel().getHref();
         modelAndView.addObject("synchronize_url",synchronize_url);
 
+        generalService.setGeneral(modelAndView, "", authentication);
 
-        generalService.setGeneral(modelAndView);
+        String distributorOpenAccountUrl =   linkTo(methodOn(MobileDistributorController.class).distributorOpenAccountRequest(null, null)).withSelfRel().getHref();
+
+        modelAndView.addObject("distributorOpenAccountUrl",distributorOpenAccountUrl );
+
+        String agreeOpenAccountUrl =   linkTo(methodOn(MobileDistributorController.class).agreeOpenAccount(null, null, null)).toUri().toString();
+
+        modelAndView.addObject("agreeOpenAccountUrl",agreeOpenAccountUrl);
+
         return modelAndView;
     }
 
@@ -100,12 +115,17 @@ public class MobileDistributorController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public Page<Map> stations(@RequestParam(value = "q", required = false) String searchTerm, @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC)  Pageable pageable)  {
-
-
-
         return distributorService.query(null, pageable);
     }
+    @RequestMapping(value = "/employee", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Map> employee(@RequestParam(value = "distributorId", required = false) Integer distributorId, @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC)  Pageable pageable)  {
 
+
+        Distributor distributor = distributorService.getById(distributorId);
+
+        return distributorService.queryEmployee(distributor, pageable);
+    }
 
 
     @RequestMapping(value = "/InventoryTransfer_list", method = RequestMethod.GET)
@@ -123,12 +143,12 @@ public class MobileDistributorController {
     }
 
 
-    @RequestMapping( value = "/{id}", method = RequestMethod.GET)
-    public ModelAndView detail(@PathVariable(value = "id", required = false) Integer index, Authentication authentication) {
+    @RequestMapping( value = "/{no}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable(value = "no", required = false) String no, Authentication authentication) {
 
-        ModelAndView modelAndView = new ModelAndView("/templates/distributor_detail");
+        ModelAndView modelAndView = new ModelAndView("/distributor_detail");
 
-        Distributor distributor = distributorService.getById(index);
+        Distributor distributor = distributorService.getByNo(no);
 
         modelAndView.addObject("deliveryOrderMap",distributorService.get(distributor));
 
@@ -144,6 +164,8 @@ public class MobileDistributorController {
         String companiesUrl = linkTo(methodOn(MobileDistributorController.class).InventoryTransfer(distributor.getId(), null)).withSelfRel().getHref();
         modelAndView.addObject("transferUrl", companiesUrl);
 
+        String employeeUrl = linkTo(methodOn(MobileDistributorController.class).employee(distributor.getId(), null)).withSelfRel().getHref();
+        modelAndView.addObject("employeeUrl",employeeUrl);
 
 
         String getRequestTradeCountTrend =   linkTo(methodOn(MobileDistributorController.class).getRequestTradeCountTrend(distributor.getId())).withSelfRel().getHref();
@@ -155,21 +177,55 @@ public class MobileDistributorController {
 
 
 
-        String advancedPaymentTransferUrl = linkTo(methodOn(MobileDistributorController.class).advancedPaymentTransfer(distributor.getId(), null)).withSelfRel().getHref();
+        String advancedPaymentTransferUrl = linkTo(methodOn(MobileDistributorController.class).advancedPaymentTransfer(distributor.getNo(), null)).withSelfRel().getHref();
         modelAndView.addObject("advancedPaymentTransferUrl",advancedPaymentTransferUrl);
 
 
         String addInventoryUrl = linkTo(methodOn(MobileDistributorController.class).addInventory(distributor.getId(), null,null)).toUri().toASCIIString();
         modelAndView.addObject("addInventoryUrl",addInventoryUrl);
 
+        String orderDeliveryUrl = linkTo(methodOn(MobileDistributorController.class).orderDelivery(distributor.getId(), null,null)).toUri().toASCIIString();
+        modelAndView.addObject("orderDeliveryUrl",orderDeliveryUrl);
+
 
         String getBindQrcodeUrl = linkTo(methodOn(MobileDistributorController.class).getBindQrcode(distributor.getId(), null)).toUri().toASCIIString();
         modelAndView.addObject("getBindQrcodeUrl",getBindQrcodeUrl);
+
+
+        String reconciliationUrl = linkTo(methodOn(MobileDistributorController.class).reconciliation(distributor.getNo(), null)).withSelfRel().getHref();
+        modelAndView.addObject("reconciliationUrl",reconciliationUrl);
+
+
+
+        String feeUrl = linkTo(methodOn(MobileDistributorController.class).free(distributor.getNo(),null,null)).toUri().toASCIIString();
+        modelAndView.addObject("feeUrl",feeUrl);
         return modelAndView;
 
     }
+    @RequestMapping(value = "/{no}/fee", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Map> free(@PathVariable("no") String no, @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable,Authentication authentication) {
 
 
+
+        User user = (User)authentication.getPrincipal();
+        Distributor coalOrder = distributorRepository.findByNo(no);
+
+
+        return feeService.queryFess(coalOrder, pageable);
+
+
+    }
+    @RequestMapping(value = "/reconciliation_list", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Map> reconciliation(@RequestParam(value = "q", required = false) String searchTerm, @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable)  {
+
+        Distributor distributor = distributorService.getByNo(searchTerm);
+
+        return reconciliationService.findAll(distributor,pageable);
+
+
+    }
 
 
 
@@ -200,9 +256,9 @@ public class MobileDistributorController {
 
 
 
-        Line line = lineService.create(lineCreateForm);
 
-        return line;
+
+        return null;
     }
 
 
@@ -255,12 +311,6 @@ public class MobileDistributorController {
         }
 
 
-        Line location = lineService.edit(locationCreateForm);
-        if(location != null){
-
-
-            ret.put("status", true);
-        }
 
 
         return ret;
@@ -292,7 +342,7 @@ public class MobileDistributorController {
 
         for(InventoryTransfer timeStatisticRecord :records){
             Map<String,Object> element = new HashMap<>();
-            element.put("x",timeStatisticRecord.getCreateDate().getTime() );
+            element.put("x",timeStatisticRecord.getCreateDate().toInstant(ZoneOffset.of("+8")).toEpochMilli()  );
 
             element.put("y",timeStatisticRecord.getAmount() );
             averages.add(element);
@@ -306,9 +356,9 @@ public class MobileDistributorController {
 
     @RequestMapping(value = "/advancedPaymentTransfer", method = RequestMethod.GET)
     @ResponseBody
-    public Page<Map> advancedPaymentTransfer(@RequestParam(value = "distributorId", required = false) Integer distributorId, @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC)  Pageable pageable)  {
+    public Page<Map> advancedPaymentTransfer(@RequestParam(value = "distributorNo", required = false) String distributorId, @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC)  Pageable pageable)  {
 
-        Distributor distributor = distributorService.getById(distributorId);
+        Distributor distributor = distributorService.getByNo(distributorId);
         Page<Map>  pages = distributorService.queryAdvancedPaymentTransferr(distributor, pageable);
         return pages;
     }
@@ -338,6 +388,30 @@ public class MobileDistributorController {
         return ret;
 
     }
+    @RequestMapping(value = "/{id}/orderDelivery", method = RequestMethod.GET)
+    @ResponseBody
+
+    public Page<Map> orderDelivery(@RequestParam(value = "id", required = false) Integer id,
+                                   @PageableDefault(sort = "createDate", direction = Sort.Direction.DESC)  Pageable pageable,
+                            Authentication authentication) {
+
+
+        Map ret = new HashMap<String, String>();
+        ret.put("status", false);
+
+
+        Distributor inventory = distributorService.getById(id);
+
+
+        Page<Map> location = deliveryOrderService.getDeliveryOrderForDistributor(inventory, pageable);
+        if(location != null){
+
+
+            ret.put("status", true);
+        }
+        return location;
+
+    }
 
 
 
@@ -365,7 +439,7 @@ public class MobileDistributorController {
 
         for(AdvancedPaymentTransfer timeStatisticRecord :records){
             Map<String,Object> element = new HashMap<>();
-            element.put("x",timeStatisticRecord.getCreateDate().getTime() );
+            element.put("x",timeStatisticRecord.getCreateDate().toInstant(ZoneOffset.of("+8")).toEpochMilli()  );
 
             element.put("y",timeStatisticRecord.getAmount() );
             averages.add(element);
@@ -552,4 +626,51 @@ public class MobileDistributorController {
     }
 
 
+    @RequestMapping(value = "/application/distributorOpenAccountRequest", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<OpeningAccountRequest> distributorOpenAccountRequest(/*CooperativeApplicationDto cooperativeApplicationDto,*/
+                                                   @PageableDefault(sort="createDate",direction= Sort.Direction.DESC) Pageable pageable,
+                                                   Authentication authentication) {
+
+
+        User user = (User)authentication.getPrincipal();logger.debug("we are in application :param is{} ", user.toString());
+
+/*        if(user.getUserRoles().contains(CommonConstant.USER_ROLE_COALPIT)){
+            cooperativeApplicationDto.setCompanyId(user.getCompanyId());
+        }else if(user.getUserRoles().contains(CommonConstant.USER_ROLE_BROKER)){
+            cooperativeApplicationDto.setCompanyId(user.getCompanyId());
+        }else{
+            return null;
+        }*/
+
+        ///cooperativeApplicationDto.setProducerNo(user.get().getCompanyNo());
+        Page<OpeningAccountRequest> openingAccountRequests = openingAccountRequestRepository.findAll(pageable);
+        return openingAccountRequests;//cooperativeApplicationService.distributorOpenAccountRequest(cooperativeApplicationDto, pageable, user);
+    }
+
+    @RequestMapping(value = "/application/agreeOpenAccount", method = RequestMethod.POST)
+    @ResponseBody
+    public Map agreeOpenAccount(@RequestParam(value = "uuid",required = false) String uuid,
+                                @RequestParam(value = "comment",required = false) String comment, Authentication authentication) {
+        User user  = (User)authentication.getPrincipal();
+
+        logger.debug("param is:{}", uuid);
+        Map data = new HashMap();
+        data.put("status", true);
+
+        OpeningAccountRequest openingAccountRequest = openingAccountRequestRepository.findByUuid(uuid);
+        restTemplate.put("http://localhost:1080/coalpit/api/v1/openAcountRest/agree/"+openingAccountRequest.getUuid(),null);
+
+
+            data.put("status", false);
+            data.put("message", "");
+
+       // return data;
+
+
+
+
+        return data;
+
+    }
 }

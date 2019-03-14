@@ -1,15 +1,14 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by yuan zhao  on 08/10/2015.
@@ -17,11 +16,20 @@ import java.util.Date;
 
 @Entity
 
-@Table(name = "instance_transport")
+@Table(name = "instance_transport",catalog="storage")
 
 public class InstanceTransport extends BaseDomain {
 
+    @NotNull
+    private String distributorNo;
 
+    public String getDistributorNo() {
+        return distributorNo;
+    }
+
+    public void setDistributorNo(String distributorNo) {
+        this.distributorNo = distributorNo;
+    }
 
     @Column(name = "transport_id")
     private Integer transportId;
@@ -29,10 +37,33 @@ public class InstanceTransport extends BaseDomain {
     @Column(name = "manufacturer_id")
     private Integer manufacturerId;
     private BigDecimal grossWeight;
-    private Integer inventoryId;
 
-    private Integer deliveryOrderId;
 
+
+
+    @NotNull
+    private String inventoryNo;
+
+    @NotNull
+    private String deliveryOrderNo;
+    @NotNull
+    @Column(name = "plate_number")
+    private String license;
+
+
+
+
+
+
+
+
+    public String getInventoryNo() {
+        return inventoryNo;
+    }
+
+    public void setInventoryNo(String inventoryNo) {
+        this.inventoryNo = inventoryNo;
+    }
 
     public Integer getManufacturerId() {
         return manufacturerId;
@@ -90,42 +121,42 @@ public class InstanceTransport extends BaseDomain {
     @Column(name = "granularity")
     private String granularity;
 
-    @Column(name = "plate_number")
-    private String plateNumber;
+
+
 
 
     @Column(name = "bound_time")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date boundTime;
+    private LocalDateTime boundTime;
 
     @Column(name = "outbound_time")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date outboundTime;
+    private LocalDateTime outboundTime;
 
-    public Date getBoundTime() {
+    public LocalDateTime getBoundTime() {
         return boundTime;
     }
 
-    public void setBoundTime(Date boundTime) {
+    public void setBoundTime(LocalDateTime boundTime) {
         this.boundTime = boundTime;
     }
 
-    public Date getOutboundTime() {
+    public LocalDateTime getOutboundTime() {
         return outboundTime;
     }
 
-    public void setOutboundTime(Date outboundTime) {
+    public void setOutboundTime(LocalDateTime outboundTime) {
         this.outboundTime = outboundTime;
     }
 
-    public String getPlateNumber() {
-        return plateNumber;
+    public String getLicense() {
+        return license;
     }
 
-    public void setPlateNumber(String plateNumber) {
-        this.plateNumber = plateNumber;
+    public void setLicense(String license) {
+        this.license = license;
     }
 
     public BigDecimal getTotalAmount() {
@@ -157,28 +188,22 @@ public class InstanceTransport extends BaseDomain {
 
     private String note;
     private String type;
-    private Integer companyId;
-    private Integer collaboratorId;
-    private Integer storageId;
 
-    public Integer getStorageId() {
-        return storageId;
+
+    private String storageNo;
+
+    public String getStorageNo() {
+        return storageNo;
     }
 
-    public void setStorageId(Integer storageId) {
-        this.storageId = storageId;
+    public void setStorageNo(String storageNo) {
+        this.storageNo = storageNo;
     }
 
     public InstanceTransport() {
     }
 
-    public Integer getTransportId() {
-        return transportId;
-    }
 
-    public void setTransportId(Integer transportId) {
-        this.transportId = transportId;
-    }
 
     public Integer getTimeIntervalId() {
         return timeIntervalId;
@@ -204,13 +229,6 @@ public class InstanceTransport extends BaseDomain {
         this.type = type;
     }
 
-    public Integer getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
-    }
 
     @Override
     public String toString() {
@@ -218,13 +236,6 @@ public class InstanceTransport extends BaseDomain {
     }
 
 
-    public void setCollaboratorId(Integer collaboratorId) {
-        this.collaboratorId = collaboratorId;
-    }
-
-    public Integer getDistibutorId() {
-        return collaboratorId;
-    }
 
     public void setQueuingId(Integer queuingId) {
         this.queuingId = queuingId;
@@ -258,19 +269,13 @@ public class InstanceTransport extends BaseDomain {
         this.grossWeight = grossWeight;
     }
 
-    public Integer getInventoryId() {
-        return inventoryId;
+
+
+    public String getDeliveryOrderNo() {
+        return deliveryOrderNo;
     }
 
-    public void setInventoryId(Integer inventoryId) {
-        this.inventoryId = inventoryId;
-    }
-
-    public void setDeliveryOrderId(Integer deliveryOrderId) {
-        this.deliveryOrderId = deliveryOrderId;
-    }
-
-    public Integer getDeliveryOrderId() {
-        return deliveryOrderId;
+    public void setDeliveryOrderNo(String deliveryOrderNo) {
+        this.deliveryOrderNo = deliveryOrderNo;
     }
 }

@@ -1,13 +1,12 @@
 package com.coalvalue.service;
 
 
-import com.coalvalue.domain.entity.InstanceTransport;
-import com.coalvalue.domain.entity.ReportDeliveryOrder;
-import com.coalvalue.domain.entity.TransportOperation;
-import com.coalvalue.domain.entity.WxTemporaryQrcode;
+import com.coalvalue.domain.entity.Distributor;
+import com.coalvalue.domain.entity.*;
+import com.coalvalue.dto.DeliveryOrderDto;
 import com.coalvalue.enumType.ResourceType;
-import com.domain.entity.User;
-import com.service.BaseService;
+
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,17 +23,16 @@ public interface DeliveryOrderService extends BaseService {
 
     ReportDeliveryOrder getDeliveryOrderByTicket(String index);
 
-
-    ReportDeliveryOrder createDeliveryOrder_(TransportOperation transportOperation);
+/*
 
     ReportDeliveryOrder createDeliveryOrder(ResourceType canvassing, Integer id);
 
+*/
 
 
     void generateQrcodeAccessCode(WxTemporaryQrcode wxeneral, ReportDeliveryOrder deliveryOrder);
 
 
-    ReportDeliveryOrder getValid(ResourceType canvassing, String content);
 
     Page<ReportDeliveryOrder> getValidPage(ResourceType transportOperation, String verificationCode, User user, Pageable pageable);
 
@@ -42,7 +40,7 @@ public interface DeliveryOrderService extends BaseService {
 
     Page<Map> query(String o, Pageable pageable);
 
-    Page<Map> query_synthesized(String o, Pageable pageable);
+    Page<Map> query_report_delivery(DeliveryOrderDto o, Pageable pageable);
 
     ReportDeliveryOrder findByPlateNumber(String license);
 
@@ -59,4 +57,10 @@ public interface DeliveryOrderService extends BaseService {
     ReportDeliveryOrder getById(Integer index);
 
     Map getMapById(Integer index);
+
+    Page<Map> getDeliveryOrderForDistributor(Distributor inventory, Pageable amount);
+
+    ReportDeliveryOrder getValidByLicense(String license);
+
+    ReportDeliveryOrder getByNo(String no);
 }

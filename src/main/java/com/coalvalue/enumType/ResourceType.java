@@ -1,7 +1,6 @@
 package com.coalvalue.enumType;
 
 import com.coalvalue.configuration.CommonConstant;
-import com.coalvalue.domain.Distributor;
 
 //import com.mchange.v2.c3p0.impl.C3P0ImplUtils;
 
@@ -39,6 +38,7 @@ public enum ResourceType {
     COOP_APPLICATION(CommonConstant.RESOURCCE_TYPE_COOP_APPLICATION, 1), Product_type(CommonConstant.RESOURCCE_TYPE_Product_type,1 ),
     ROUTE(CommonConstant.RESOURCCE_TYPE_ROUTE, 1),
     ROUTE_POINT(CommonConstant.RESOURCCE_TYPE_ROUTE_POINT, 1),
+    FEE(CommonConstant.RESOURCCE_TYPE_FEE, 1),
 
 
 
@@ -68,7 +68,23 @@ public enum ResourceType {
     DISTRICT(CommonConstant.RESOURCCE_TYPE_district, 1),
 
     Distributor(CommonConstant.RESOURCCE_TYPE_Distributor, 1),
-    ATTRIBUTE(CommonConstant.RESOURCCE_TYPE_attribute, 1);
+    ATTRIBUTE(CommonConstant.RESOURCCE_TYPE_attribute, 1),
+    INVENTORY_TRANSFER(CommonConstant.RESOURCCE_TYPE_INVENTORY_TRANSFER, 1) ,
+    Advanced_Payment_Transfer(CommonConstant.RESOURCCE_TYPE_Advanced_Payment_Transfer, 1) ,
+    Posting (CommonConstant.RESOURCCE_TYPE_Posting, 1),
+    Employee (CommonConstant.RESOURCCE_TYPE_Employee, 1),
+    QUOTATION_PLAN(CommonConstant.RESOURCCE_TYPE_QUOTATION_PLAN, 1),
+
+    Equipment(CommonConstant.RESOURCCE_TYPE_Equipment, 1),
+
+    Opening_Account_Request(CommonConstant.RESOURCCE_TYPE_OpeningAccountRequest, 1),
+    DELIVERY_ORDER(CommonConstant.RESOURCCE_TYPE_DELIVERY_ORDER, 1),
+    INVENTORY(CommonConstant.RESOURCCE_TYPE_INVENTORY, 1),
+    CONFIGURATION_RESPONSE(CommonConstant.RESOURCCE_TYPE_ConfigurationResponse, 1),
+
+    PriceTendency(CommonConstant.RESOURCCE_TYPE_PriceTendency, 1),
+
+    ;
 
 
 

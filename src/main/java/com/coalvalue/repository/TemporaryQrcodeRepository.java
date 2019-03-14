@@ -1,24 +1,22 @@
 package com.coalvalue.repository;
 
 
-import com.coalvalue.domain.TemporaryQrcode;
+import com.coalvalue.domain.entity.QualityInspectionReport;
+import com.coalvalue.domain.entity.TemporaryQrcode;
+import com.coalvalue.domain.entity.TransportOperation;
 import com.coalvalue.domain.entity.WxTemporaryQrcode;
-import com.coalvalue.repository.base.BaseJpaRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
+
 
 /**
  * Created by zhao yuan on 01/10/2015.
  */
-public interface TemporaryQrcodeRepository extends BaseJpaRepository<TemporaryQrcode, Integer> {
+public interface TemporaryQrcodeRepository extends JpaRepository<TemporaryQrcode, Integer> {
 
 
-
-    WxTemporaryQrcode findById(Integer id);
+    Optional<TemporaryQrcode> findById(Integer fromTransport);
 
 
 

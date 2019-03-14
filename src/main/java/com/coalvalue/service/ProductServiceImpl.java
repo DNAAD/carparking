@@ -1,17 +1,14 @@
 package com.coalvalue.service;
 
 import com.coalvalue.domain.OperationResult;
-import com.coalvalue.domain.entity.Company;
-import com.coalvalue.domain.entity.PriceCategory;
-import com.coalvalue.domain.entity.Product;
-import com.coalvalue.domain.entity.QualityInspectionReport;
+import com.coalvalue.domain.entity.*;
 import com.coalvalue.enumType.*;
 import com.coalvalue.repository.InventoryRepository;
 import com.coalvalue.repository.InventoryTransferRepository;
 import com.coalvalue.repository.PriceCategoryRepository;
 import com.coalvalue.repository.ProductRepository;
-import com.domain.entity.User;
-import com.service.BaseServiceImpl;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +52,7 @@ public class ProductServiceImpl extends BaseServiceImpl implements ProductServic
 
     @Override
     public Product getById(Integer productId) {
-        Product product = productRepository.findById(productId);
+        Product product = productRepository.findById(productId).get();
 
 
         return product;
@@ -81,44 +78,16 @@ public class ProductServiceImpl extends BaseServiceImpl implements ProductServic
 
 
 
-    @Override
-    public void sendMessage(EventEnum changePricePromotion, Product product, User user, Object o) {
-
-    }
-
-
-
-    @Override
-    @Transactional
-    public PriceCategory getDefaultPriceCategory(Product product) {
-
-       // PriceCategory priceCategory = priceCategoryRepository.findTop1ByItemIdAndItemTypeAndMajor(coalSupply.getId(),ResourceType.COAL_PRODUCT.getText(),true);
-
-        logger.debug("---------------------------------------------- product {}",product.getId());
-        PriceCategory priceCategory = priceCategoryRepository.findByNameAndItemIdAndItemTypeAndMajor(PriceCategoryTypeEnum.MINE_MOUTH_PRICE.getText(), product.getId(), ResourceType.COAL_PRODUCT.getText(),true);
-
-        if(priceCategory == null){
-            priceCategory = new PriceCategory();
-            priceCategory.setItemId(product.getId());
-            priceCategory.setItemType(ResourceType.COAL_PRODUCT.getText());
-            priceCategory.setSeq(PriceCategoryTypeEnum.MINE_MOUTH_PRICE.getId());
-            priceCategory.setName(PriceCategoryTypeEnum.MINE_MOUTH_PRICE.getText());
-
-            priceCategory.setMajor(true);
-            priceCategory = priceCategoryRepository.save(priceCategory);
-        }
-        return  priceCategory;
-    }
 
 
     @Override
     @Transactional
     public PriceCategory createPriceCategory(PriceCategoryTypeEnum priceCategoryTypeEnum, Product product) {
 
-        PriceCategory priceCategory = priceCategoryRepository.findByNameAndItemIdAndItemTypeAndMajor(priceCategoryTypeEnum.getText(), product.getId(), ResourceType.COAL_PRODUCT.getText(), true);
+        PriceCategory priceCategory = priceCategoryRepository.findByNameAndObjectUuidAndMajor(priceCategoryTypeEnum.getText(), product.getUuid(),true);
         if(priceCategory == null){
             priceCategory = new PriceCategory();
-            priceCategory.setItemId(product.getId());
+
             priceCategory.setItemType(ResourceType.COAL_PRODUCT.getText());
 
             priceCategory.setName(priceCategoryTypeEnum.getText());
@@ -139,19 +108,10 @@ public class ProductServiceImpl extends BaseServiceImpl implements ProductServic
 
 
 
-    @Override
-    public Company getCompanyForProduct(Integer productId) {
-        Product product = productRepository.findById(productId);
-
-        Company company = companyService.getCompanyById(product.getCompanyId());
-        return company;
-    }
-
-
 
     @Override
     public List<PriceCategory> getPriceCategory(Product product) {
-        List<PriceCategory> priceCategories=  priceCategoryRepository.findByItemIdAndItemType(product.getId(), ResourceType.COAL_PRODUCT.getText());
+        List<PriceCategory> priceCategories=  priceCategoryRepository.findByObjectUuid(product.getUuid());
 
 
 
@@ -161,20 +121,13 @@ public class ProductServiceImpl extends BaseServiceImpl implements ProductServic
 
     @Override
     public PriceCategory getPriceCategoryById(Integer productId) {
-        return priceCategoryRepository.findById(productId);
+        return priceCategoryRepository.findById(productId).get();
     }
 
 
 
 
 
-    @Override
-    public List<PriceCategory> getPriceCategory(Product product, PriceCategoryStatusEnum open) {
-        List<PriceCategory> priceCategories=  priceCategoryRepository.findByItemIdAndItemTypeAndStatusOrderBySeqAsc(product.getId(), ResourceType.COAL_PRODUCT.getText(),open.getText());
-
-
-        return priceCategories;
-    }
 
     @Override
     public List<Map<String, Object>> getPriceCategoryMap(Product product) {
@@ -184,7 +137,7 @@ public class ProductServiceImpl extends BaseServiceImpl implements ProductServic
         for(PriceCategory priceCategory : getPriceCategory(product)){
             Map<String,Object> map = new HashMap<>();
             map.put("name",PriceCategoryTypeEnum.fromString(priceCategory.getName()).getDisplayText());
-            map.put("trend",priceCategory.getTrend());
+
             map.put("lastChangeTime",priceCategory.getLastChangeTime());
             map.put("status",priceCategory.getStatus());
             map.put("value",priceCategory.getValue());
@@ -223,18 +176,7 @@ public class ProductServiceImpl extends BaseServiceImpl implements ProductServic
         return coalPromotion;
     }
 
-    @Override
-    public List<PriceCategory> getPriceCategoryByProductId(Integer productId, PriceCategoryStatusEnum open) {
-        List<PriceCategory> priceCategories=  priceCategoryRepository.findByItemIdAndItemTypeAndStatus(productId, ResourceType.COAL_PRODUCT.getText(),open.getText());
 
-        for(PriceCategory priceCategory : priceCategories){
-
-
-
-        }
-
-        return priceCategories;
-    }
 
     @Override
     @Transactional
@@ -271,7 +213,7 @@ public class ProductServiceImpl extends BaseServiceImpl implements ProductServic
     @Override
     public PriceCategory getPriceCategory(Product product, PriceCategoryTypeEnum exMinePrice) {
 
-        PriceCategory priceCategories=  priceCategoryRepository.findByItemIdAndItemTypeAndName(product.getId(), ResourceType.COAL_PRODUCT.getText(),exMinePrice.getText());
+        PriceCategory priceCategories=  priceCategoryRepository.findByObjectUuidAndName(product.getUuid(),exMinePrice.getText());
 
         return priceCategories;
     }

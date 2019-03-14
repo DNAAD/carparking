@@ -5,6 +5,8 @@ package com.coalvalue.configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class JpaAuditorConfiguration implements AuditorAware<Integer> {
 
     @Override
-    public Integer getCurrentAuditor() {
+    public Optional<Integer> getCurrentAuditor() {
 
 
         System.out.println("----------------current auditor id is 0 ----------------------------------------------------------");
@@ -33,7 +35,7 @@ public class JpaAuditorConfiguration implements AuditorAware<Integer> {
             return 0;
         }*/
 
-        return 0;
+        return  Optional.of(0);
     }
 
 }

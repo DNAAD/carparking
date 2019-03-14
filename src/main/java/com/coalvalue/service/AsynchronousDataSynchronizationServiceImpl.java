@@ -2,33 +2,20 @@ package com.coalvalue.service;
 
 
 import com.alibaba.fastjson.JSON;
-import com.coalvalue.configuration.CommonConstant;
-import com.coalvalue.configuration.Constants;
-import com.coalvalue.domain.Distributor;
+import com.coalvalue.domain.entity.Distributor;
 import com.coalvalue.domain.OperationResult;
 import com.coalvalue.domain.entity.*;
 import com.coalvalue.enumType.DataSynchronizationTypeEnum;
-import com.coalvalue.enumType.PlateDirectionEnum;
 import com.coalvalue.notification.NotificationData;
-import com.coalvalue.repository.BehaviouralRepository;
-import com.coalvalue.repository.IDIdentificationRepository;
-import com.coalvalue.repository.PlateRecognitionRepository;
-import com.service.BaseServiceImpl;
+import com.coalvalue.repository.*;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.hateoas.Resource;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -55,6 +42,8 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
 
     @Autowired
     private InventoryService inventoryService;
+    @Autowired
+    private InventoryRepository inventoryRepository;
 
     @Autowired
     private DistributorService distributorService;
@@ -62,8 +51,6 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
     private MqttService mqttService;
 
 
-    @Autowired
-    private RestTemplate restTemplate;
 
 
     @Autowired
@@ -71,6 +58,9 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
 
     @Autowired
     private QrcodeService qrcodeService;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
 
@@ -146,7 +136,7 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
         Integer count = 1;
 
 
-        IDIentification idIentification = idIdentificationRepository.findById(idIentificationId);
+        IDIentification idIentification = idIdentificationRepository.findById(idIentificationId).get();
         map.put("idNumber",idIentification.getId());
 
 
@@ -159,7 +149,7 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
             count++;
             map.put("deliveryOrder_CompanyName",deliveryOrder.getCompanyName());
             map.put("product",deliveryOrder.getProductName());
-            plateRecognition = plateRecognitionRepository.findByLicense(deliveryOrder.getPlateNumber());
+            plateRecognition = plateRecognitionRepository.findByLicense(deliveryOrder.getLicense());
         }else{
             map.put("deliveryOrder_CompanyName","--");
         }
@@ -187,7 +177,7 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
         Map map = new HashMap<>();
         Integer count = 1;
 
-        ReportDeliveryOrder  deliveryOrder_from = notificationData.getObject();
+        ReportDeliveryOrder  deliveryOrder_from = (ReportDeliveryOrder)notificationData.getObject();
 
         logger.debug("================={} ",deliveryOrder_from.toString());
         System.out.println("================={} "+deliveryOrder_from.toString());
@@ -204,7 +194,7 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
 
 
 
-        PlateRecognition plateRecognition = plateRecognitionRepository.findByLicense(deliveryOrder.getPlateNumber());
+        PlateRecognition plateRecognition = plateRecognitionRepository.findByLicense(deliveryOrder.getLicense());
 
 
 
@@ -257,11 +247,11 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
 
         if(deliveryOrder != null){
             idIentification = idIdentificationRepository.findByIdNumber(deliveryOrder.getIdNumber());
-            plateRecognition = plateRecognitionRepository.findByLicense(deliveryOrder.getPlateNumber());
+            plateRecognition = plateRecognitionRepository.findByLicense(deliveryOrder.getLicense());
             count++;
             map.put("deliveryOrder_CompanyName",deliveryOrder.getCompanyName());
             map.put("idNumber",deliveryOrder.getIdNumber());
-            map.put("license",deliveryOrder.getPlateNumber());
+            map.put("license",deliveryOrder.getLicense());
             map.put("product",deliveryOrder.getProductName());
         }else{
             map.put("deliveryOrder_CompanyName","--");
@@ -281,7 +271,7 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
 
         if(plateRecognition!= null){
             count++;
-            if(plateRecognition.getLicense().equals(deliveryOrder.getPlateNumber())){
+            if(plateRecognition.getLicense().equals(deliveryOrder.getLicense())){
                 map.put("license_verified",true);
             }else{
                 map.put("license_verified",false);
@@ -300,42 +290,44 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
 
         if(DataSynchronizationTypeEnum.Inventory.getText().equals(type)){
 
+            List<Inventory> inventories = null;//inventoryService.getInventory(product.getNo());
 
-            List<Inventory> inventories =inventoryService.getInventory();
-
-            Map<String, Inventory> map_inventory = new HashMap<>();
+            Map<String, Inventory> map_inventory_local = new HashMap<>();
             for(Inventory inventory:inventories){
-                map_inventory.put(inventory.getNo(),inventory);
-
+                map_inventory_local.put(inventory.getNo(), inventory);
             }
-            List<Map> inventory_new =(List) map.get("inventories");
-            for(Map inventory_ :inventory_new){
 
-             //   Date date = new Date((Long)inventory_.get("date"));
-                String no = (String)inventory_.get("no");
-                Inventory inventory = map_inventory.get(no);
+            List<Map> inventory_news =(List) map.get("inventories");
+            for(Map inventory_new :inventory_news){
+
+                // Date date = new Date((Long)inventory_.get("date"));
+                String no = (String)inventory_new.get("no");
+                Inventory inventory_local = map_inventory_local.get(no);
  /*               if(inventory.getModifyDate().before(date)){*/
-                    if(inventory!= null){
 
+                if(inventory_local!= null){ // 找到了 库存
 
+                    Date lastSyncTimestamp_remote = new Date((Long)inventory_new.get("lastSyncTimestamp"));
+                    if(inventory_local.getLastSyncTimestamp().before(lastSyncTimestamp_remote)){ //旧有版本
 
-                        List<Map> priceCategories = (List)map_inventory.get("priceCategories");
+                        List<Map> priceCategories = (List)map_inventory_local.get("priceCategories");
 
                         if(priceCategories!= null){
                             for(Map price : priceCategories){
-                                inventory.setQuote((BigDecimal)price.get("value"));
+                                inventory_local.setQuote((BigDecimal) price.get("value"));
                             }
                         }
 
-                        inventory.setQuantityOnHand((BigDecimal) (inventory_.get("quantityOnHand")));
+                        inventory_local.setQuantityOnHand((BigDecimal) (inventory_new.get("quantityOnHand")));
+                        inventory_local.setLastSyncTimestamp(lastSyncTimestamp_remote);
+
+                    }
 
 
 
-                    inventoryService.update(inventory);
 
-                }else{
+                }else{// 新的库存
 
-                    inventoryService.createInventoryFromMap(inventory_);
 
                 }
 
@@ -353,7 +345,7 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
                 Map<String, Distributor> map_inventory = new HashMap<>();
                 for (Distributor inventory : inventories) {
 
-                    map_inventory.put(inventory.getCompanyNo(), inventory);
+                    map_inventory.put(inventory.getNo(), inventory);
 
                 }
                 List<Map> inventory_new = (List) map.get("distributors");
@@ -410,57 +402,21 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
     public OperationResult synchronize() {
 
 
-/*        String url = "http://localhost:8085/synchronize";
-
-        Map<String, Object> uriParams = new HashMap<String, Object>();
-        // uriParams.put("id",storageSpace.getId());
-
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
-
-            .queryParam("appId", Constants.APP_ID);
-           *//*      .queryParam("page", pageable.getPageNumber())
-                .queryParam("size", pageable.getPageSize());*//*
-
-        ResponseEntity<Map> empResource = restTemplate.exchange(builder.buildAndExpand(uriParams).toUri(), HttpMethod.GET,null,  new ParameterizedTypeReference<Map>() {});
-        if (empResource.getStatusCode() == HttpStatus.OK) {
-
-
-            Map resources = empResource.getBody();
-            List<Map> result = new ArrayList<Map>();
-
-
-        }*/
-
 
 
 
         Map map = new HashMap<>();
-      /*          map.put("type", DataSynchronizationTypeEnum.Distributor.getText());
-                map.put("plateNumber", reportDeliveryOrder.getPlateNumbers());
-                map.put("product", transportOperation.getProductId());
-
-                map.put("product", transportOperation.getProductId());
-                map.put("deliveryOrderId", reportDeliveryOrder.getId());
-
-
-                map.put("deliveryOrderNo", reportDeliveryOrder.getNo());
-                Company company = companyService.getCompanyById(transportOperation.getCompanyId());
-*/
 
         List<Distributor> collaborators = distributorService.get();;
 
 
-        List<Map> distributors = new ArrayList<>();
-
+        List distributors = new ArrayList<>();
         for(Distributor collaborator: collaborators){
             Map distributor = new HashMap<>();
-
             distributor.put("name", collaborator.getName());
-            distributor.put("no", collaborator.getCompanyNo());
-
+            distributor.put("no", collaborator.getNo());
            if(collaborator.getUniqueId() == null){
                collaborator.setUniqueId( RandomStringUtils.randomAlphanumeric(30).toUpperCase());
-
                collaborator = distributorService.update(collaborator);
            }
             distributor.put("uniqueId", collaborator.getUniqueId());
@@ -469,19 +425,10 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
         }
         map.put("distributors",distributors);
 
-        map.put("appId",configurationService.getAppId());
+
         map.put("type",DataSynchronizationTypeEnum.Distributor.getText());
         String msg = JSON.toJSONString(map);
-
         mqttService.publishToHost(msg);
-
-
-
-
-
-
-
-
 
 
 
@@ -493,14 +440,96 @@ public class AsynchronousDataSynchronizationServiceImpl extends BaseServiceImpl 
 
     }
 
+    @Override
+    @Transactional
+    public void syncImmediately(SyncProperties synchronized_, Map map) {
+
+        String type = (String)map.get("type");
+      //  synchronizedRepository.save(synchronized_);
+        if(DataSynchronizationTypeEnum.Employee.getText().equals(type)){
+
+            logger.debug("=============== 建立 员工 employee");
+            String employeeName = (String)map.get("employeeName");
+            String employeePassword = (String)map.get("employeePassword");
+
+            User user = userRepository.findByUserName(employeeName);
+            if(user== null){
+                user= new User();
+                user.setUserName(employeeName);
+                user.setPassword(employeePassword);
+              //  user.set
+                userRepository.save(user);
+            }
+
+
+        }
+
+        if(DataSynchronizationTypeEnum.Inventory.getText().equals(type)){
+
+            logger.debug("=============== 同步 Inventory ");
+            Map inventoryMap = (Map)map.get("content");
+
+            List<Map> inventoris = (List<Map>)inventoryMap.get("inventories");
+            for(Map inventory_map : inventoris){
+                BigDecimal quote = (BigDecimal)inventory_map.get("price");
+                String no = (String)inventory_map.get("no");
+                Inventory inventory = inventoryRepository.findByNo(no);
+                inventory.setQuote(quote);
+            }
+
+
+        }
+
+    }
 
 
 
+    //   public void syncImmediately(Context context) {
+/*        Bundle bundle = new Bundle();
+
+        //将此同步放在同步请求队列前面，立即进行同步而不延迟
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        //忽略当前设置强制发起同步
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.requestSync(getSyncAccount(context),
+                context.getString(R.string.content_authority), bundle);*/
+  //  }
+
+  /*  public static Account getSyncAccount(Context context) {
+        // Get an instance of the Android account manager
+        AccountManager accountManager =
+                (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
+
+        // Create the account type and default account
+        Account newAccount = new Account(
+                context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
+
+        // If the password doesn't exist, the account doesn't exist
+        if ( null == accountManager.getPassword(newAccount) ) {
+
+*/
+    /*
+     * Add the account and account type, no password or user data
+     * If successful, return the Account object, otherwise report an error.
+
+            if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
+                return null;
+            }
+        /*
+         * If you don't set android:syncable="true" in
+         * in your <provider> element in the manifest,
+         * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
+         * here.
 
 
-
-
-
+        }
+        return newAccount;
+    }
+*/
+/*    作者：Artyhacker
+    链接：https://www.jianshu.com/p/dc9a2693478e
+    來源：简书
+    著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。*/
 
 
 

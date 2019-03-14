@@ -7,6 +7,7 @@ import com.coalvalue.domain.entity.Equipment;
 import com.coalvalue.domain.entity.PlateRecognition;
 
 
+import com.coalvalue.repository.EquipmentRepository;
 import com.coalvalue.service.EquipmentService;
 import com.coalvalue.service.PlateRecognitionService;
 
@@ -49,6 +50,8 @@ public class V2PlateRecognitionController extends BaseController {
     private EquipmentService equipmentService;
 
 
+    @Autowired
+    private EquipmentRepository equipmentRepository;
 
 
 
@@ -58,7 +61,7 @@ public class V2PlateRecognitionController extends BaseController {
         logger.debug("param is: {}", canvassingCreateForm_.toString());
 
 
-        Equipment equipment = equipmentService.getById(capacityId);
+        Equipment equipment = equipmentRepository.findById(capacityId).get();
 
 
 

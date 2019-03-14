@@ -28,301 +28,157 @@
 </ol>
 
 <div class="row">
-<#--<div class="col-lg-6">
-<div id="toolbar" class="btn-group" style="padding-top: 10px;padding-bottom: 10px">
-
-&lt;#&ndash;
-    <button id="viewCapacityBtn" type="button" class="btn btn-success">
-        <i class="">查看详情</i>
-    </button>
-    <button id="deleteBtn_" type="button" class="btn btn-primary" >
-        添加
-    </button>
-&ndash;&gt;
-
-
-&lt;#&ndash;    <button id="editBtn" type="button" class="btn btn-primary" >
-        录入毛重
-    </button>&ndash;&gt;
+    <div class="col-lg-6 ">
 
 
 
+        <table class="table" data-show-header="false">
+            <thead>
+            <tr>
+                <th colspan="4">提煤单信息</th>
+            </tr>
+            </thead>
+            <tbody>
 
-</div>
+            <tr>
+                <td class="active">状态：</td>
+                <td colspan="3">
+                ${deliveryOrderMap.status}
 
-</div>-->
+                </td>
+            </tr>
+            <tr>
+                <td class="active">提货单编号：</td>
+                <td colspan="3">
+
+                ${deliveryOrderMap.no}
+                </td>
+            </tr>
+
+            <tr>
+                <td class="active">下单时间：</td>
+                <td colspan="3">
+
+                ${deliveryOrderMap.createDate}
+                </td>
+            </tr>
+
+                <#if deliveryOrderMap.status?? && deliveryOrderMap.status =="Valid">
+                <tr>
+                    <td class="active">提货密码：</td>
+                    <td colspan="3"><strong>${deliveryOrderMap.accessCode!''}</strong></td>
+                </tr>
+                </#if>
+            <tr>
+                <td class="active">生产商：</td>
+                <td colspan="3">${deliveryOrderMap.producerNo!''}</td>
+            </tr>
+            <tr>
+                <td class="active">分销商：</td>
+                <td colspan="3"><a href="${deliveryOrderMap.distributorUrl!''}">${deliveryOrderMap.distributorNo!}</a></td>
+            </tr>
+
+            <tr>
+                <td class="active">货物：</td>
+                <td><a href="${deliveryOrderMap.productUrl!''}" > ${deliveryOrderMap.productName!''}  ${deliveryOrderMap.productNo}</a></td>
+            </tr>
+
+            <tr>
+                <td class="active">堆场</td>
+                <td colspan="3">${deliveryOrderMap.storageNo!''}</td>
+            </tr>
+
+
+
+
+
+            <tr>
+                <th>车辆信息</th>
+                <th></th>
+            </tr>
+
+
+
+
+            <tr id="tr-id-1" class="tr-class-1">
+                <td id="td-id-1" class="td-class-1 success">
+                    车牌号
+                </td>
+                <td>${deliveryOrderMap.license!''}</td>
+            </tr>
+            <#--        <tr id="tr-id-1" class="tr-class-1">
+                        <td id="td-id-1" class="td-class-1">
+                            载重
+                        </td>
+                        <td>${transferMap.carryingCapacity!''}</td>
+                    </tr>-->
+
+            <#--        <tr id="tr-id-1" class="tr-class-1">
+                        <td id="td-id-1" class="td-class-1 success">
+                            类型
+                        </td>
+                        <td>${transferMap.vehicleType!'未定义'}</td>
+                    </tr>-->
+
+
+
+
+
+            <tr>
+                <th>司机信息</th>
+                <th></th>
+            </tr>
+
+
+
+
+            <tr id="tr-id-1" class="tr-class-1">
+                <td id="td-id-1" class="td-class-1 success">
+                    名字
+                </td>
+                <td><a href=""> ${deliveryOrderMap.consigneeName!'---'}</a></td>
+            </tr>
+
+            <tr id="tr-id-1" class="tr-class-1">
+                <td id="td-id-1" class="td-class-1 success">
+                    电话
+                </td>
+                <td><a href="tel:${deliveryOrderMap.consigneePhone!''}">${deliveryOrderMap.consigneePhone!''}</a>
+                </td>
+            </tr>
+
+            <tr>
+                <th>操作员</th>
+                <th></th>
+            </tr>
+
+
+
+
+            <tr id="tr-id-1" class="tr-class-1">
+                <td id="td-id-1" class="td-class-1 success">
+                    名字
+                </td>
+                <td><a href=""> ${deliveryOrderMap.operatorName!'---'}</a></td>
+            </tr>
+
+            <tr id="tr-id-1" class="tr-class-1">
+                <td id="td-id-1" class="td-class-1 success">
+                    电话
+                </td>
+                <td><a href="tel:${deliveryOrderMap.operatorPhone!''}">${deliveryOrderMap.operatorPhone!''}</a>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
+
+
+    </div>
 
 <#if deliveryOrderMap??>
-<div class="col-lg-6">
 
-
-
-<div class="">
-
-
-
-    <table class="table" data-show-header="false">
-        <thead>
-        <tr>
-            <th colspan="4">基本信息</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        <tr>
-            <td class="active">状态：</td>
-            <td colspan="3">
-
-                <#if deliveryOrderMap.status =="Valid">
-
-                    有效
-                <#else>
-                    无效
-                </#if>
-            </td>
-        </tr>
-
-            <#if deliveryOrderMap.status =="Valid">
-            <tr>
-                <td class="active">提货密码</td>
-                <td colspan="3"><strong>${deliveryOrderMap.accessCode!''}</strong></td>
-            </tr>
-            </#if>
-        <tr>
-            <td class="active">贸易商</td>
-            <td colspan="3"><a href="${deliveryOrderMap.distributorUrl!''}">${deliveryOrderMap.companyName!''}</a></td>
-        </tr>
-
-
-        <tr>
-            <td class="active">库存</td>
-            <td colspan="3"><a href="${deliveryOrderMap.distributorUrl!''}">${deliveryOrderMap.inventory!''}</a></td>
-        </tr>
-
-
-        <tr>
-            <td class="active">可用余额</td>
-            <td colspan="3"><a href="${deliveryOrderMap.inventoryUrl!''}">${deliveryOrderMap.advancedPaymentAmount!''}</a></td>
-        </tr>
-
-        <tr>
-            <td class="active">货物：</td>
-            <td><a href="${deliveryOrderMap.productUrl!''}" > ${deliveryOrderMap.productName!''}</a></td>
-        </tr>
-
-
-
-
-<#--
-
-        <tr>
-            <th>堆场情况</th>
-            <th></th>
-        </tr>
-
-
-            <#if deliveryOrderMap.storage??>
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1">
-                    对场地
-                </td>
-                <td><a href="${deliveryOrderMap.storage.url}">${deliveryOrderMap.storage.name!''}</a></td>
-            </tr>
-            <tr id="tr-id-1" class="tr-class-1">
-                <td id="td-id-1" class="td-class-1">
-                    地点
-                </td>
-
-                <td>${deliveryOrderMap.storage.province!'---'}${deliveryOrderMap.storage.city!'---'}${deliveryOrderMap.storage.district!'---'}${deliveryOrderMap.storage.street!'---'} </td>
-            </tr>
-            </#if>
-
-
-        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1 success">
-                堆场负责人
-            </td>
-            <td>${deliveryOrderMap.shipperPrincipalName!'---'}</td>
-
-        </tr>
-        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1 success">
-                堆场负责人电话
-            </td>
-            <td><a href="tel:${deliveryOrderMap.shipperPrincipalName!'---'}">${deliveryOrderMap.shipperPrincipalPhone!'---'}</a></td>
-        </tr>
-        -->
-
-        <tr>
-            <th>车辆信息</th>
-            <th></th>
-        </tr>
-
-
-
-
-        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1 success">
-                车牌号
-            </td>
-            <td>${deliveryOrderMap.plateNumber!''}</td>
-        </tr>
-<#--        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1">
-                载重
-            </td>
-            <td>${deliveryOrderMap.carryingCapacity!''}</td>
-        </tr>-->
-
-        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1 success">
-                类型
-            </td>
-            <td>${deliveryOrderMap.vehicleType!'未定义'}</td>
-        </tr>
-
-
-
-
-
-        <tr>
-            <th>司机信息</th>
-            <th></th>
-        </tr>
-
-
-
-
-        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1 success">
-                名字
-            </td>
-            <td><a href=""> ${deliveryOrderMap.carrierName!'---'}</a></td>
-        </tr>
-
-        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1 success">
-                电话
-            </td>
-            <td><a href="tel:${deliveryOrderMap.carrierPhone!''}">${deliveryOrderMap.carrierPhone!''}</a>
-            </td>
-        </tr>
-
-
-        <tr>
-            <th>装货情况</th>
-            <th></th>
-        </tr>
-
-        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1 success">
-                状态
-            </td>
-            <td> ${deliveryOrderMap.operationStatus!'---'}</td>
-        </tr>
-
-        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1 success">
-                入场时间
-            </td>
-            <td>${deliveryOrderMap.boundTime!'--'}
-            </td>
-        </tr>
-
-        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1 success">
-                离场时间
-            </td>
-            <td>${deliveryOrderMap.outboundTime!'--'}
-            </td>
-        </tr>
-
-        <tr id="tr-id-1" class="tr-class-1">
-            <td id="td-id-1" class="td-class-1 success">
-                皮重/净重
-            </td>
-            <td>${deliveryOrderMap.tareWeight!'--'}/${deliveryOrderMap.netWeight!'--'}
-            </td>
-        </tr>
-
-        </tbody>
-    </table>
-
-
-
-</div>
-
-
-<label>扫一扫微信获得信息 </label>
-
-<div class="thumbnail">
-    <img src="${qrcodeUrl!'/logo.png'}">
-</div>
-
-    <#if verification??>
-
-    <table  class="table table-condensed">
-        <thead>
-        <tr>
-            <th>验证信息</th>
-            <th></th>
-
-
-        </tr>
-        </thead>
-        <tbody>
-        <tr  >
-            <td class="active">揽货验证密码：</td>
-            <td >    <input type="text" id="demandNum" name="demandNum"  placeholder="测试-揽货密码" value="${verification.code}"/></td>
-        </tr>
-        <tr>
-            <td class="active">验证二维码</td>
-            <td>
-
-
-                <script type="text/javascript" src="/qrcode.js"></script>
-                <input id="text" type="text" value="${qrcodeContent!''}" style="width:80%" />
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <g id="qrcode_div"/>
-                </svg>
-                <script type="text/javascript">
-                    var qrcode = new QRCode(document.getElementById("qrcode_div"), {
-                        width : 100,
-                        height : 100,
-                        useSVG: true
-                    });
-
-                    function makeCode () {
-                        var elText = document.getElementById("text");
-
-                        /*                           if (!elText.value) {
-                                                       alert("Input a text");
-                                                       elText.focus();
-                                                       return;
-                                                   }*/
-
-                        qrcode.makeCode(elText.value);
-                    }
-
-                    makeCode();
-
-                    $("#text").
-                            on("blur", function () {
-                                makeCode();
-                            }).
-                            on("keydown", function (e) {
-                                if (e.keyCode == 13) {
-                                    makeCode();
-                                }
-                            });
-                </script>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    </#if>
-
-</div>
 <#else>
 <div class="col-lg-12">
     <form id="longitudeLatitudeForm" class="navbar-form" role="search" action="${getUrl}">
@@ -347,7 +203,6 @@
                 data:  $('#longitudeLatitudeForm').serialize(),
             });
             req.done(function (data) {
-                alert("成功:"+data.message);
 
                 if (data.status) {
                     alert("成功:"+data.message);
@@ -364,6 +219,27 @@
 
 </#if>
 <div class="col-lg-6">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">面板标题</h3>
+        </div>
+        <div class="panel-body">
+            <tr>
+                <th>分销商账户信息</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td class="active">可用余额</td>
+                <td colspan="3"><a href="${deliveryOrderMap.inventoryUrl!''}">${deliveryOrderMap.advancedPaymentAmount!''}</a></td>
+            </tr>
+            <tr>
+                <td class="active">库存</td>
+                <td colspan="3"><a href="${deliveryOrderMap.distributorUrl!''}">${deliveryOrderMap.inventory!''}</a></td>
+            </tr>
+        </div>
+    </div>
+
+
     <button id="addBtn" type="button" class="btn btn-primary btn-lg hidden"  data-toggle="modal" data-target="#addLineModal">
         录入皮重
     </button>
@@ -397,6 +273,7 @@
     </script>
     <form id="addLineModalForm"   novalidate="novalidate" action="${createUrl}">
         <input style="margin-bottom: 15px;" type="" placeholder="" class="companyId hidden" name="id" value="${deliveryOrderMap.id}"  >
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
         <div class="form-group">
             <label for="username" class="control-label">基本信息</label>
@@ -418,43 +295,13 @@
         </div>
 
 
-    <#--                          <div class="form-group">
-                                  <label for="username" class="control-label">净重</label>
-                                  <input style="margin-bottom: 15px;" type="" placeholder="Username" class="companyId form-control" name="description" value=""  >
-                                  <span class="help-block"></span>
-                              </div>
--->
-
-    <#--
-                                    <div class="form-group">
-                                        <label for="username" class="control-label">位置</label>
-
-                                        <select class="selectpicker" &lt;#&ndash;data-max-options="2" &ndash;&gt; id="departureStation" name="departureStation" class="form-control" placeholder="特征">
-                                        &lt;#&ndash; <select class="form-control select2" id="userType" name="userType"  placeholder="公司类型"  multiple="multiple">&ndash;&gt;
-
-                                        <#if stations??>
-                                            <#list stations as feature>
-                                                <option value="${feature.id}" >${feature.id!''}--${feature.name!''}--${feature.description!''}</option>
-
-                                            </#list>
-                                        </#if>
-
-                                        </select>
-
-
-
-                                        </select>
-                                        <span class="help-block"></span>
-                                    </div>
-
-        -->
 
         <button id="addLineModalFormBtn"  type="buttom" data-dismiss="modal"   class="btn btn-primary ">确定</button>
     </form>
     <script  type="text/javascript">
 
         $("#addLineModalFormBtn").click(function() {
-            alert($('#addLineModalForm').serialize());
+         //   alert($('#addLineModalForm').serialize());
 
             var req = $.ajax({
                 url:  $('#addLineModalForm').attr('action'),
@@ -463,7 +310,7 @@
             });
             req.done(function (data) {
                 if (data.status) {
-                    alert("成功:"+data.message);
+                    //alert("成功:"+data.message);
                     window.location.reload(true);
                 } else {
                     alert(data.message);

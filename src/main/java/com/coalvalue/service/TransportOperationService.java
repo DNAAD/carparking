@@ -1,19 +1,17 @@
 package com.coalvalue.service;
 
 
-import com.coalvalue.domain.Distributor;
+import com.coalvalue.domain.entity.Distributor;
 import com.coalvalue.domain.OperationResult;
 
 import com.coalvalue.domain.entity.*;
-import com.coalvalue.enumType.EventEnum;
+import com.coalvalue.domain.pojo.ReportDeliveryOrder_remote;
 import com.coalvalue.enumType.TransportOperationStatusEnum;
 
-import com.domain.entity.User;
-import com.service.BaseService;
+
+
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -57,10 +55,5 @@ public interface TransportOperationService extends BaseService {
     Map<String, Object> queryListByVerificationCodeCoalpit(String verificationCode, User user, Pageable pageable);
 
 
-
-    ReportDeliveryOrder createDeliveryOrder_(TransportOperation transportOperation);
-
-
-    ReportDeliveryOrder createDeliveryOrder(Distributor distributor, Map map);
 
 }

@@ -37,7 +37,7 @@ public class QualityInspectionServiceImpl implements QualityInspectionService {
 
     @Override
     public QualityInspectionReport queryQualityInpectionReportById(Integer id) {
-        return qualityInspectionReportRepository.findById(id);
+        return qualityInspectionReportRepository.findById(id).get();
     }
 
 

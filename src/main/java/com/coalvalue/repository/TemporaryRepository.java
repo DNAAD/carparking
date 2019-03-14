@@ -1,17 +1,12 @@
 package com.coalvalue.repository;
 
 
-import com.coalvalue.domain.TemporaryQrcode;
-import com.coalvalue.domain.entity.AdvancedPaymentTransfer;
-import com.coalvalue.repository.base.BaseJpaRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.List;
+import com.coalvalue.domain.entity.TemporaryQrcode;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Created by zhao yuan on 01/10/2015.
  */
-public interface TemporaryRepository extends BaseJpaRepository<TemporaryQrcode, Integer> {
+public interface TemporaryRepository extends JpaRepository<TemporaryQrcode, Integer> {
 
 }

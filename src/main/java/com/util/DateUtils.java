@@ -53,6 +53,31 @@ public class DateUtils {
 
         return day + "天" + hour + "小时" + min + "分" + sec + "秒";
     }
+    public static String getDistanceTime(LocalDateTime one_local,LocalDateTime two_local) {
+
+        Date one =  Date.from(one_local.atZone(ZoneId.systemDefault()).toInstant());
+        Date two =  Date.from(two_local.atZone(ZoneId.systemDefault()).toInstant());
+        long day = 0;
+        long hour = 0;
+        long min = 0;
+        long sec = 0;
+
+
+        long time1 = one.getTime();
+        long time2 = two.getTime();
+        long diff ;
+        if(time1<time2) {
+            diff = time2 - time1;
+        } else {
+            diff = time1 - time2;
+        }
+        day = diff / (24 * 60 * 60 * 1000);
+        hour = (diff / (60 * 60 * 1000) - day * 24);
+        min = ((diff / (60 * 1000)) - day * 24 * 60 - hour * 60);
+        sec = (diff/1000-day*24*60*60-hour*60*60-min*60);
+
+        return day + "天" + hour + "小时" + min + "分" + sec + "秒";
+    }
 
     /**
      * @return yyyy-mm-dd

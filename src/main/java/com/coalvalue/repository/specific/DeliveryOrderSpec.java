@@ -3,7 +3,6 @@ package com.coalvalue.repository.specific;
 
 import com.coalvalue.domain.entity.ReportDeliveryOrder;
 import com.coalvalue.dto.DeliveryOrderDto;
-import com.coalvalue.enumType.InstanceTransportStatusEnum;
 import com.util.StringUtil;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -16,10 +15,10 @@ import java.util.List;
  */
 public class DeliveryOrderSpec {
 
-    private DeliveryOrderDto bankCardDto;
+    private DeliveryOrderDto deliveryOrderDto;
 
     public DeliveryOrderSpec(DeliveryOrderDto bankCardDto) {
-        this.bankCardDto = bankCardDto;
+        this.deliveryOrderDto = bankCardDto;
     }
 
     public Specification<ReportDeliveryOrder> queryMessagesSpec() {
@@ -34,10 +33,10 @@ public class DeliveryOrderSpec {
 
 
 
-            if (!StringUtil.isEmpty(bankCardDto.getSearchText())) {
+            if (!StringUtil.isEmpty(deliveryOrderDto.getSearchText())) {
               //  Predicate predicate = cb.like(root.<String>get("plateNumber"), "%"+bankCardDto.getSearchText().trim()+"%");
               //  predicateList.add(cb.or(predicate));
-                Predicate predicate_pro = cb.like(root.<String>get("productName"), "%"+ bankCardDto.getSearchText().trim()+"%");
+                Predicate predicate_pro = cb.like(root.<String>get("productName"), "%"+ deliveryOrderDto.getSearchText().trim()+"%");
                 predicateList.add(cb.or(predicate_pro));
 
                 return cb.or(predicateList.toArray(new Predicate[0]));
@@ -65,26 +64,33 @@ public class DeliveryOrderSpec {
 
             List<Predicate> predicateList = new ArrayList<>();
 
-
-
-            if (!StringUtil.isEmpty(bankCardDto.getStatus())) {
+            if (deliveryOrderDto.getStorageNo()!= null) {
                 //  Predicate predicate = cb.like(root.<String>get("plateNumber"), "%"+bankCardDto.getSearchText().trim()+"%");
                 //  predicateList.add(cb.or(predicate));
-                Predicate predicate_pro = cb.equal(root.<String>get("status"), bankCardDto.getStatus());
+                Predicate predicate_pro = cb.equal(root.<String>get("storageNo"), deliveryOrderDto.getStorageNo());
+                predicateList.add(cb.or(predicate_pro));
+
+
+            }
+
+            if (!StringUtil.isEmpty(deliveryOrderDto.getStatus())) {
+                //  Predicate predicate = cb.like(root.<String>get("plateNumber"), "%"+bankCardDto.getSearchText().trim()+"%");
+                //  predicateList.add(cb.or(predicate));
+                Predicate predicate_pro = cb.equal(root.<String>get("status"), deliveryOrderDto.getStatus());
                 predicateList.add(cb.or(predicate_pro));
 
 
             }
 
 
-            if (!StringUtil.isEmpty(bankCardDto.getSearchText())) {
+            if (!StringUtil.isEmpty(deliveryOrderDto.getSearchText())) {
                 List<Predicate> predicateList_OR = new ArrayList<Predicate>();
 
                 //  Predicate predicate = cb.like(root.<String>get("plateNumber"), "%"+bankCardDto.getSearchText().trim()+"%");
                 //  predicateList.add(cb.or(predicate));
-                Predicate predicate_pro = cb.like(root.<String>get("productName"), "%"+ bankCardDto.getSearchText().trim()+"%");
-                Predicate predicate_idNumber = cb.like(root.<String>get("idNumber"), "%"+ bankCardDto.getSearchText().trim()+"%");
-                Predicate predicate_plateNumber = cb.like(root.<String>get("plateNumber"), "%"+ bankCardDto.getSearchText().trim()+"%");
+                Predicate predicate_pro = cb.like(root.<String>get("productName"), "%"+ deliveryOrderDto.getSearchText().trim()+"%");
+                Predicate predicate_idNumber = cb.like(root.<String>get("idNumber"), "%"+ deliveryOrderDto.getSearchText().trim()+"%");
+                Predicate predicate_plateNumber = cb.like(root.<String>get("license"), "%"+ deliveryOrderDto.getSearchText().trim()+"%");
                 predicateList_OR.add(cb.or(predicate_idNumber));
                 predicateList_OR.add(cb.or(predicate_plateNumber));
                 predicateList_OR.add(cb.or(predicate_pro));
@@ -93,14 +99,6 @@ public class DeliveryOrderSpec {
             }
 
 
-/*            if(bankCardDto.getAccountName() != null) {
-                Predicate  predicate = cb.equal(root.<Integer>get("accountName"), bankCardDto.getAccountName());
-                predicateList.add(predicate);
-            }
-            if(bankCardDto.getAccountType() != null) {
-                Predicate  predicate = cb.equal(root.<Integer>get("accountType"), bankCardDto.getAccountType());
-                predicateList.add(predicate);
-            }*/
             return cb.and(predicateList.toArray(new Predicate[0]));
         };
         return specification;

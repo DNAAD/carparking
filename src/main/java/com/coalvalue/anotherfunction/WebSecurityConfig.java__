@@ -1,0 +1,143 @@
+package com.coalvalue.configuration;
+
+
+import com.coalvalue.service.CustomUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
+
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+/*    @Bean
+    public static NoOpPasswordEncoder passwordEncoder() {
+        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+    }*/
+
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        // return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return new BCryptPasswordEncoder();
+    }
+
+
+    //本文来自 FantasticPan 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/SWPU_Lipan/article/details/80586054?utm_source=copy
+    @Bean
+    UserDetailsService customUserService() {
+        return new CustomUserService();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(customUserService()).passwordEncoder(passwordEncoder());
+
+
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/plateServlet*/**",
+                        "/plate/register",
+                        "/info",
+                        "/webapp.zip",
+                        "/j_spring_security_check",
+
+
+                        "/plateServlet/register",
+                        "/home/**",
+                        "/report/**",
+                        "/favicon.ico",
+                        "/amchart/**",
+                        "/error",
+                        "/front/**",
+                        "/ws/**",
+                        "/bootstrap/**",
+                        "/build/**",
+                        "/css/**",
+                        "/dist/**",
+                        "/documentation/**",
+                        "/fonts/**",
+                        "/js/**",
+                        "/pages/**",
+                        "/plugins/**","/usercenter/dashboard","/components/**","/logo_header", "/qrcode (2).png"
+              ,"/mobile/register/**", "/login**","/report/inventories/**","/report/index/**","/mobile*/**","/companies/**","/usercenter/order/**"
+                ).permitAll() //默认不拦截静态资源的url pattern （2）
+
+
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin().loginPage("/mobile/register/login").loginProcessingUrl("/login").failureUrl("/mobile/register/login?error").defaultSuccessUrl("/").permitAll().and()
+                .logout()
+                .logoutUrl("/appLogout")
+                .permitAll()
+
+        .and()
+                .rememberMe()
+                .rememberMeParameter("remember-me").userDetailsService(customUserService())
+ /*               .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(60)*/
+                .and()      .csrf().disable();
+                //.ignoringAntMatchers("/ws/**","/ignore/startswith/**","/plateServlet","/plate/register","/plateServlet/register","/j_spring_security_check");//disable();
+    }
+
+/*    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }*/
+/*
+@Autowired
+private DataSource dataSource;
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
+    }
+*/
+
+
+}
+
+
+
+
+
+
+/*
+
+http
+        .authorizeRequests()
+        .antMatchers("/home").permitAll()//访问：/home 无需登录认证权限
+        .anyRequest().authenticated() //其他所有资源都需要认证，登陆后访问
+        .antMatchers("/hello").hasAuthority("ADMIN") //登陆后之后拥有“ADMIN”权限才可以访问/hello方法，否则系统会出现“403”权限不足的提示
+        .and()
+        .formLogin()
+        .loginPage("/login")//指定登录页是”/login”
+        .permitAll()
+        .successHandler(loginSuccessHandler()) //登录成功后可使用loginSuccessHandler()存储用户信息，可选。
+        .and()
+        .logout()
+        .logoutSuccessUrl("/home") //退出登录后的默认网址是”/home”
+        .permitAll()
+        .invalidateHttpSession(true)
+        .and()
+        .rememberMe()//登录后记住用户，下次自动登录,数据库中必须存在名为persistent_logins的表
+        .tokenValiditySeconds(1209600);  */

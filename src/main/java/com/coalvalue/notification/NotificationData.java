@@ -1,9 +1,10 @@
 package com.coalvalue.notification;
 
-import com.coalvalue.domain.entity.Inventory;
-import com.coalvalue.domain.entity.PlateRecognition;
-import com.coalvalue.domain.entity.ReportDeliveryOrder;
+import com.coalvalue.domain.entity.Distributor;
+import com.coalvalue.domain.entity.*;
 import org.springframework.security.core.Authentication;
+
+import java.util.List;
 
 public class NotificationData {
      
@@ -19,9 +20,20 @@ public class NotificationData {
     private String msgType;
     private String content;
     private Authentication authentication;
-    private ReportDeliveryOrder object;
+    private Object object;
     private Integer itemId;
     private Inventory inventory;
+    private String eventName;
+    private Distributor distributor;
+    private InstanceTransport instanceTransport;
+    private InventoryTransfer inventoryTransfer;
+    private AdvancedPaymentTransfer advancedPaymentTransfer;
+    private ReportDeliveryOrder deliveryOrder;
+    private String storageNo;
+    private String deliveryOrderNo;
+    private List<String> deliveryOrderNos;
+    private List<SyncProperties> syncProperties_sync_response;
+    private SyncProperties syncProperties_sync_responseOne;
 
     public long getId() {
         return id;
@@ -119,11 +131,11 @@ public class NotificationData {
         return authentication;
     }
 
-    public void setObject(ReportDeliveryOrder object) {
+    public void setObject(Object object) {
         this.object = object;
     }
 
-    public ReportDeliveryOrder getObject() {
+    public Object getObject() {
         return object;
     }
 
@@ -142,5 +154,77 @@ public class NotificationData {
     public Inventory getInventory() {
         return inventory;
     }
-    // getter and setter methods
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setDistributor(Distributor distributor) {
+        this.distributor = distributor;
+    }
+
+    public Distributor getDistributor() {
+        return distributor;
+    }
+
+    public void setInstanceTransport(InstanceTransport instanceTransport) {
+        this.instanceTransport = instanceTransport;
+    }
+
+    public InstanceTransport getInstanceTransport() {
+        return instanceTransport;
+    }
+
+    public void setInventoryTransfer(InventoryTransfer inventoryTransfer) {
+        this.inventoryTransfer = inventoryTransfer;
+    }
+
+    public InventoryTransfer getInventoryTransfer() {
+        return inventoryTransfer;
+    }
+
+    public void setAdvancedPaymentTransfer(AdvancedPaymentTransfer advancedPaymentTransfer) {
+        this.advancedPaymentTransfer = advancedPaymentTransfer;
+    }
+
+    public AdvancedPaymentTransfer getAdvancedPaymentTransfer() {
+        return advancedPaymentTransfer;
+    }
+
+    public void setDeliveryOrder(ReportDeliveryOrder deliveryOrder) {
+        this.deliveryOrder = deliveryOrder;
+    }
+
+    public ReportDeliveryOrder getDeliveryOrder() {
+        return deliveryOrder;
+    }
+
+    public void setStorageNo(String storageNo) {
+        this.storageNo = storageNo;
+    }
+
+    public String getStorageNo() {
+        return storageNo;
+    }
+
+    public void setDeliveryOrderNo(String deliveryOrderNo) {
+        this.deliveryOrderNo = deliveryOrderNo;
+    }
+
+    public String getDeliveryOrderNo() {
+        return deliveryOrderNo;
+    }
+
+
+    public List<String> getDeliveryOrderNos() {
+        return deliveryOrderNos;
+    }
+
+
+
+
 }

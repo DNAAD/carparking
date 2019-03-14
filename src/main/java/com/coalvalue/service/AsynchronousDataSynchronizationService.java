@@ -2,8 +2,9 @@ package com.coalvalue.service;
 
 import com.coalvalue.domain.OperationResult;
 import com.coalvalue.domain.entity.PlateRecognition;
+import com.coalvalue.domain.entity.SyncProperties;
 import com.coalvalue.notification.NotificationData;
-import com.service.BaseService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -33,7 +34,14 @@ public interface AsynchronousDataSynchronizationService extends BaseService {
 
     void synchroniz(String type, Map map);
 
-    OperationResult synchronize();
+    OperationResult synchronize() ;
+
+    void syncImmediately(SyncProperties synchronized_, Map map);
 
 
+
+
+
+/*    void onPerformSync();
+    void syncImmediately();*/
 }

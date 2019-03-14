@@ -1,10 +1,11 @@
 package com.coalvalue.web;
 
-import com.coalvalue.domain.Trip;
-import com.coalvalue.domain.entity.Line;
-import com.coalvalue.service.GeneralServiceImpl;
-import com.coalvalue.service.LineService;
-import com.coalvalue.service.TripService;
+
+
+import com.coalvalue.domain.entity.Product;
+import com.coalvalue.service.other.GeneralServiceImpl;
+import com.coalvalue.service.ReportService;
+
 import com.coalvalue.web.valid.TripCreateForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -45,11 +45,9 @@ public class MobileProductController {
 
 
 
-    @Autowired
-    private TripService tripService;
 
     @Autowired
-    private LineService lineService;
+    private ReportService lineService;
 
     @Autowired
     private GeneralServiceImpl generalService;
@@ -57,20 +55,21 @@ public class MobileProductController {
 
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
-    public ModelAndView searchCompanies(@RequestParam(value = "q", required = false) String searchTerm){//,Authentication authentication)  {
+    public ModelAndView searchCompanies(@RequestParam(value = "q", required = false) String searchTerm,Authentication authentication)  {
 
 
-        ModelAndView modelAndView = new ModelAndView("/templates/trip_index");
+        ModelAndView modelAndView = new ModelAndView("/trip_index");
         modelAndView.addObject("q",searchTerm);
 
         String companiesUrl = linkTo(methodOn(MobileProductController.class).stations("", null)).withSelfRel().getHref();
         modelAndView.addObject("stationsUrl",companiesUrl);
 
-        generalService.setGeneral(modelAndView);
+        try {
+            generalService.setGeneral(modelAndView, "", authentication);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        List<Line> locationList = lineService.getLines();
-
-        modelAndView.addObject("lines",locationList);
 
         String command_create_url = linkTo(methodOn(MobileProductController.class).create(null, null)).withSelfRel().getHref();
         modelAndView.addObject("command_create_url",command_create_url);
@@ -87,11 +86,11 @@ public class MobileProductController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public Page<Trip> stations(@RequestParam(value = "q", required = false) String searchTerm, @PageableDefault Pageable pageable)  {
+    public Page<Product> stations(@RequestParam(value = "q", required = false) String searchTerm, @PageableDefault Pageable pageable)  {
 
 
 
-        return tripService.queryStations(null,pageable);
+        return null;//tripService.queryStations(null,pageable);
     }
 
 
@@ -109,12 +108,6 @@ public class MobileProductController {
         Map ret = new HashMap<String, String>();
         ret.put("status", false);
 
-        Trip location = tripService.create(locationCreateForm);
-        if(location != null){
-
-
-            ret.put("status", true);
-        }
 
 
         return ret;
@@ -135,12 +128,6 @@ public class MobileProductController {
 
         if(bindingResult.hasErrors()){
             ret.put("message", bindingResult.getAllErrors().toString());
-        }
-        Trip location = tripService.edit(locationCreateForm);
-        if(location != null){
-
-
-            ret.put("status", true);
         }
 
 

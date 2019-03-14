@@ -3,8 +3,8 @@ package com.coalvalue.service;
 import com.coalvalue.domain.entity.NoGenerator;
 import com.coalvalue.enumType.NoTypeEnum;
 import com.coalvalue.repository.NoGeneratorRepository;
-import com.domain.entity.User;
-import com.service.BaseServiceImpl;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,12 +1,17 @@
 package com.coalvalue.web;
 
-import com.coalvalue.domain.Distributor;
 import com.coalvalue.domain.OperationResult;
-import com.coalvalue.domain.Trip;
+
 import com.coalvalue.domain.entity.Inventory;
 import com.coalvalue.domain.entity.InventoryTransfer;
-import com.coalvalue.domain.entity.Line;
+import com.coalvalue.domain.entity.PriceCategory;
+import com.coalvalue.domain.entity.Product;
+import com.coalvalue.repository.InventoryRepository;
+import com.coalvalue.repository.PriceCategoryRepository;
+import com.coalvalue.repository.ProductRepository;
 import com.coalvalue.service.*;
+import com.coalvalue.service.other.GeneralServiceImpl;
+import com.coalvalue.web.valid.ProductCreateForm;
 import com.coalvalue.web.valid.TripCreateForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +28,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneOffset;
+import java.util.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -40,20 +43,24 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
  */
 
 @Controller
-@RequestMapping(value= {"/inventory"})
+@RequestMapping(value= {"/usercenter/inventory"})
 public class MobileInventoryController {
     private static final Logger logger = LoggerFactory.getLogger(MobileInventoryController.class);
 
     @Autowired
     private InventoryService inventoryService;
 
+    @Autowired
+    private InventoryRepository inventoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private PriceCategoryRepository priceCategoryRepository;
 
 
     @Autowired
-    private TripService tripService;
-
-    @Autowired
-    private LineService lineService;
+    private StorageService storageService;
 
     @Autowired
     private GeneralServiceImpl generalService;
@@ -64,17 +71,26 @@ public class MobileInventoryController {
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
     public ModelAndView index
-            (@RequestParam(value = "q", required = false) String searchTerm){//,Authentication authentication)  {
+            (@RequestParam(value = "q", required = false) String searchTerm,Authentication authentication)  {
 
 
-        ModelAndView modelAndView = new ModelAndView("/templates/inventory_index");
+        ModelAndView modelAndView = new ModelAndView("/inventory_index");
         modelAndView.addObject("q",searchTerm);
 
         String companiesUrl = linkTo(methodOn(MobileInventoryController.class).stations("", null)).withSelfRel().getHref();
         modelAndView.addObject("stationsUrl",companiesUrl);
 
-        generalService.setGeneral(modelAndView);
+        String productUrl = linkTo(methodOn(MobileInventoryController.class).product("", null)).withSelfRel().getHref();
+        modelAndView.addObject("productUrl",productUrl);
 
+
+        String priceCategoryUrl = linkTo(methodOn(MobileInventoryController.class).priceCategory("", null)).withSelfRel().getHref();
+        modelAndView.addObject("priceCategoryUrl",priceCategoryUrl);
+        try {
+            generalService.setGeneral(modelAndView, "", authentication);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         String command_create_url = linkTo(methodOn(MobileInventoryController.class).create(null, null)).withSelfRel().getHref();
@@ -83,12 +99,13 @@ public class MobileInventoryController {
 
         String command_edit_url = linkTo(methodOn(MobileInventoryController.class).edit(null, null,null)).withSelfRel().getHref();
         modelAndView.addObject("command_edit_url",command_edit_url);
-
+        String commandProductEditUrl = linkTo(methodOn(MobileInventoryController.class).edit(null, null,null)).withSelfRel().getHref();
+        modelAndView.addObject("commandProductEditUrl",commandProductEditUrl);
 
 
         String synchronize_url = linkTo(methodOn(MobileInventoryController.class).synchronize(null, null,null)).withSelfRel().getHref();
         modelAndView.addObject("synchronize_url",synchronize_url);
-
+        modelAndView.addObject("storages", storageService.getAll());
         return modelAndView;
     }
 
@@ -105,7 +122,24 @@ public class MobileInventoryController {
     }
 
 
+    @RequestMapping(value = "/product", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Product> product(@RequestParam(value = "q", required = false) String searchTerm, @PageableDefault Pageable pageable)  {
 
+
+        Page<Product> products = productRepository.findAll(pageable);
+
+        return products;
+    }
+    @RequestMapping(value = "/priceCategory", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<PriceCategory> priceCategory(@RequestParam(value = "q", required = false) String searchTerm, @PageableDefault Pageable pageable)  {
+
+
+        Page<PriceCategory> products = priceCategoryRepository.findAll(pageable);
+
+        return products;
+    }
 
 
     @RequestMapping(value = "", method = RequestMethod.POST)
@@ -119,7 +153,37 @@ public class MobileInventoryController {
         Map ret = new HashMap<String, String>();
         ret.put("status", false);
 
+/*
         Trip location = tripService.create(locationCreateForm);
+        if(location != null){
+
+
+            ret.put("status", true);
+        }
+*/
+
+
+        return ret;
+
+    }
+
+
+
+    @RequestMapping(value = "/commandProductEdit", method = RequestMethod.PUT)
+    @ResponseBody
+
+    public Map commandProductEdit(@Valid ProductCreateForm locationCreateForm, BindingResult bindingResult,
+                                  Authentication authentication) {
+
+        logger.debug("----- param is  id : {},  price:{}, notificationToIds:{}, returnTo:{}，sendMessageToFollower is:{}", locationCreateForm.toString());
+
+        Map ret = new HashMap<String, String>();
+        ret.put("status", false);
+
+        if(bindingResult.hasErrors()){
+            ret.put("message", bindingResult.getAllErrors().toString());
+        }
+        Product location = inventoryService.commandProductEdit(locationCreateForm);
         if(location != null){
 
 
@@ -131,8 +195,7 @@ public class MobileInventoryController {
 
     }
 
-
-    @RequestMapping(value = "edit", method = RequestMethod.PUT)
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
     @ResponseBody
 
     public Map edit(@Valid TripCreateForm locationCreateForm, BindingResult bindingResult,
@@ -162,11 +225,11 @@ public class MobileInventoryController {
 
 
     @RequestMapping( value = "/{id}", method = RequestMethod.GET)
-    public ModelAndView detail(@PathVariable(value = "id", required = false) Integer index, Authentication authentication) {
+    public ModelAndView detail(@PathVariable(value = "id", required = false) String index, Authentication authentication) {
 
-        ModelAndView modelAndView = new ModelAndView("/templates/inventory_detail");
+        ModelAndView modelAndView = new ModelAndView("/inventory_detail");
 
-        Inventory deliveryOrder = inventoryService.getById(index);
+        Inventory deliveryOrder = inventoryRepository.findByNo(index);
 
 
         modelAndView.addObject("deliveryOrderMap",deliveryOrder);
@@ -267,7 +330,9 @@ public class MobileInventoryController {
 
         for(InventoryTransfer timeStatisticRecord :records){
             Map<String,Object> element = new HashMap<String,Object>();
-            element.put("x",timeStatisticRecord.getCreateDate().getTime() );
+            element.put("x",timeStatisticRecord.getCreateDate().toInstant(ZoneOffset.of("+8")).toEpochMilli() );
+
+
 
             element.put("y",timeStatisticRecord.getAmount() );
             averages.add(element);

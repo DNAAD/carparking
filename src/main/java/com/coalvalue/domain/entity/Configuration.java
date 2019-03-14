@@ -1,11 +1,12 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
+import java.sql.Blob;
 
 /**
  * Created by yuan zhao  on 08/10/2015.
@@ -13,8 +14,8 @@ import javax.persistence.Table;
 
 @Entity
 
-@Table(name = "configuration")
 
+@Table(name = "configuration",catalog="storage")
 public class Configuration extends BaseDomain {
 
     @Column(name = "user_Id")
@@ -40,6 +41,20 @@ public class Configuration extends BaseDomain {
     @Column(name = "boolean_value")
     private Boolean booleanValue;
     private String type;
+    @Lob
+    @Column(name = "blob__", columnDefinition="BLOB")
+    private byte[] blob;
+
+
+
+
+    public byte[] getBlob() {
+        return blob;
+    }
+
+    public void setBlob(byte[] blob) {
+        this.blob = blob;
+    }
 
     public Integer getUserId() {
         return userId;

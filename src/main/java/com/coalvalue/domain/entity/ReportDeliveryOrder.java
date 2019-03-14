@@ -1,12 +1,11 @@
 package com.coalvalue.domain.entity;
 
-import com.coalvalue.domain.BaseDomain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by yuan zhao  on 08/10/2015.
@@ -14,24 +13,46 @@ import javax.persistence.Transient;
 
 @Entity
 
-@Table(name = "Report_Delivery_Order")
+@Table(name = "Report_Delivery_Order",catalog="storage")
 
 public class ReportDeliveryOrder extends BaseDomain {
-    @Column(name = "item_type")
-    private String itemType;
 
-    @Column(name = "item_id")
-    private Integer itemId;
 
     private String idNumber;
 
+    @NotNull
+    @Column(name = "license")
+    private String license;
+    @NotNull
+    @Column(unique = true, name = "no",nullable = false)
+    private String no;
+    @NotNull
+    private String distributorNo;
+    @NotNull
+    private String productNo;
+    @NotNull
+    @Column(name = "storage_no")
+    private String storageNo;
+    @Column(name = "producer_no")
+    private String producerNo;
 
-    private String plateNumber;
+    @NotNull
+    @Column(name = "inventory_no")
+    private String inventoryNo;
+
+    @NotNull
+    @Column(name = "operator_no")
+    private String operatorNo;
+
+    @Column(name = "consignee_no")
+    private String consigneeNo;
+
+
 
 
     private String qrcode;
-    private String no;
-    private Integer synthesizedId;
+    private String transportOperationUuid;
+
 
     public String getQrcode() {
         return qrcode;
@@ -41,36 +62,49 @@ public class ReportDeliveryOrder extends BaseDomain {
         this.qrcode = qrcode;
     }
 
-    public String getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
-    }
-
-    public Integer getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(Integer itemId) {
-        this.itemId = itemId;
-    }
 
     @Column(name = "storage_name")
     private String storageName;
-    @Column(name = "storage_no")
-    private String storageNo;
+
+
     @Column(name = "company_name")
     private String companyName;
 
-    @Column(name = "company_no")
-    private String companyNo;
-    private Integer transportOperationId;
+
+
     private String accessCode;
 
-    @Column(name = "inventory_no")
-    private String inventoryNo;
+
+
+    @Column(name = "operator_name")
+    private String operatorName;
+
+    @Column(name = "operator_phone")
+    private String operatorPhone;
+
+    public String getOperatorNo() {
+        return operatorNo;
+    }
+
+    public void setOperatorNo(String operatorNo) {
+        this.operatorNo = operatorNo;
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
+    public String getOperatorPhone() {
+        return operatorPhone;
+    }
+
+    public void setOperatorPhone(String operatorPhone) {
+        this.operatorPhone = operatorPhone;
+    }
 
     public String getInventoryNo() {
         return inventoryNo;
@@ -80,12 +114,12 @@ public class ReportDeliveryOrder extends BaseDomain {
         this.inventoryNo = inventoryNo;
     }
 
-    public String getCompanyNo() {
-        return companyNo;
+    public String getProducerNo() {
+        return producerNo;
     }
 
-    public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo;
+    public void setProducerNo(String producerNo) {
+        this.producerNo = producerNo;
     }
 
     @Column(name = "product_name")
@@ -103,10 +137,8 @@ public class ReportDeliveryOrder extends BaseDomain {
     private String consigneePhone;
 
 
-    @Column(name = "consignee_no")
-    private String consigneeNo;
-    @Column(name = "consignee_id")
-    private String consigneeId;
+
+
 
 
 
@@ -120,8 +152,6 @@ public class ReportDeliveryOrder extends BaseDomain {
 
     private String ticket;
 
-    @Column(name = "count")
-    private Integer count;
 
     public String getTicket() {
         return ticket;
@@ -203,13 +233,6 @@ public class ReportDeliveryOrder extends BaseDomain {
         this.consigneeNo = consigneeNo;
     }
 
-    public String getConsigneeId() {
-        return consigneeId;
-    }
-
-    public void setConsigneeId(String consigneeId) {
-        this.consigneeId = consigneeId;
-    }
 
 
     public String getQrcodeUrl() {
@@ -228,26 +251,13 @@ public class ReportDeliveryOrder extends BaseDomain {
         this.status = status;
     }
 
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
 
     @Override
     public String toString() {
         return ReflectionToStringBuilder.toString(this);
     }
 
-    public void setTransportOperationId(Integer transportOperationId) {
-        this.transportOperationId = transportOperationId;
-    }
 
-    public Integer getTransportOperationId() {
-        return transportOperationId;
-    }
     public void setAccessCode(String accessCode) {
         this.accessCode = accessCode;
     }
@@ -264,12 +274,12 @@ public class ReportDeliveryOrder extends BaseDomain {
         this.idNumber = idNumber;
     }
 
-    public String getPlateNumber() {
-        return plateNumber;
+    public String getLicense() {
+        return license;
     }
 
-    public void setPlateNumber(String plateNumber) {
-        this.plateNumber = plateNumber;
+    public void setLicense(String plateNumber) {
+        this.license = plateNumber;
     }
 
     public void setNo(String no) {
@@ -281,11 +291,28 @@ public class ReportDeliveryOrder extends BaseDomain {
     }
 
 
-    public void setSynthesizedId(Integer synthesizedId) {
-        this.synthesizedId = synthesizedId;
+    public void setDistributorNo(String distributorNo) {
+        this.distributorNo = distributorNo;
     }
 
-    public Integer getSynthesizedId() {
-        return synthesizedId;
+    public String getDistributorNo() {
+        return distributorNo;
+    }
+
+    public void setProductNo(String productNo) {
+        this.productNo = productNo;
+    }
+
+    public String getProductNo() {
+        return productNo;
+    }
+
+    public void setTransportOperationUuid(String transportOperationUuid) {
+
+        this.transportOperationUuid = transportOperationUuid;
+    }
+
+    public String getTransportOperationUuid() {
+        return transportOperationUuid;
     }
 }
