@@ -139,6 +139,9 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
 
 
+
+
+
             logger.debug("未找到配置文件");
 
             alreadyConfigured="未配置设备";
