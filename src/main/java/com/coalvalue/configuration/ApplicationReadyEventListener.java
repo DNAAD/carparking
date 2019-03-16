@@ -146,8 +146,9 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
             if(IMEI!= null){
                 alreadyConfigured="配置设备,来自于 环境变量";
+                logger.info("找到了 环境配置信息");
                 mqttPublishSample.imei = IMEI;
-                isBind = false;
+                isBind = true;
             }else{
                 isBind = false;
             }
