@@ -88,7 +88,7 @@ public class MqttPublishSample {
             logger.debug("连接结束，等待结果 啊啊 ");
             if (token.isComplete()) {
 
-                logger.debug("成功连接，成功连接！！！！！ ");
+                logger.info("成功连接，成功连接！！！！！ ");
                 logger.debug("定义主体 {} ", PUBLIC_UUID_TOPIC);
                 logger.debug("定义主体 {} ", imei);
                 System.out.println("Completion roker: " + broker);
@@ -106,27 +106,28 @@ public class MqttPublishSample {
                     qos_UUID[0] = MqttPublishSample.qos_2;
                     qos_UUID[1] = MqttPublishSample.qos_2;
                     mqttClient.subscribe(topics_UUID, qos_UUID);
+                    logger.info("订阅成功！"+ topics_UUID.toString());
 
 
                     String online = "online/" + imei;
 
                     MqttTopic onlinetopic = mqttClient.getTopic(online);
                     //setWill方法，如果项目中需要知道客户端是否掉线可以调用该方法。设置最终端口的通知消息
-
                     String onlineContent = imei + "online";
                     onlinetopic.publish(onlineContent.getBytes(), 1, true);
 
+
+                    logger.info("通知上线！"+onlineContent);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("e==== :" + e.getMessage() + "  " + e.getClass().toString());
-
+                    logger.error("订阅，或上线通知失败！"+e.getMessage() + "  " + e.getClass().toString());
                 }
 
 
             } else {
                 logger.error(" 连接 "+mqttConnectOptions.getServerURIs() + " 异常失败");
                 System.out.println("Completion ERROR roker: " + broker);
-                //
+
             }
         } catch (MqttException e) {
             e.printStackTrace();

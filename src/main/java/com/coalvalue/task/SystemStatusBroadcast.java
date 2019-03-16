@@ -206,20 +206,10 @@ public class SystemStatusBroadcast implements EnvironmentAware {
         objectMap.put("url",mqttClient.isConnected());
         maps.add(objectMap);
 
-        objectMap = new HashMap<>();
-        objectMap.put("name","BrokerHost");
-        objectMap.put("url",mqttClient.getServerURI());
-        maps.add(objectMap);
 
         objectMap = new HashMap<>();
         objectMap.put("name","BrokerHost");
         objectMap.put("url",mqttClient.getCurrentServerURI());
-        maps.add(objectMap);
-
-
-        objectMap = new HashMap<>();
-        objectMap.put("name","ClientId");
-        objectMap.put("url",mqttClient.getClientId());
         maps.add(objectMap);
 
 
@@ -289,8 +279,8 @@ public class SystemStatusBroadcast implements EnvironmentAware {
 
         objectMap = new HashMap<>();
         objectMap.put("name","本地命令中心");
-        objectMap.put("url","");
-        objectMap.put("status",mqttClientLocal.isConnected());
+        objectMap.put("url",mqttClientLocal.isConnected());
+
         maps.add(objectMap);
 
         return maps;//new PageImpl<Map>(maps, pageable, maps.size());

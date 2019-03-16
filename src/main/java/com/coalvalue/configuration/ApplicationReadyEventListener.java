@@ -118,7 +118,7 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        logger.debug("系统启动完成，准备建立通道");
+        logger.info("系统启动完成，准备建立通道");
 
         logger.debug("begin ------------------------------------"+mqttPublishSample.imei);
     //    logger.debug("begin ------------------------------------"+desDecode(Key));
@@ -137,7 +137,7 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 */
 
         //InitTasks.init_configuration();
-        logger.debug("查找配置文件");
+        logger.info("查找配置文件");
         String property = (String)getParamChanges().get("imei");
         if(StringUtils.isBlank(property)){
 
@@ -163,8 +163,7 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
                 @Override
                 public void run() {
 
-                    logger.debug("开始连接");
-               //   mqttPublishSample.start();
+                    logger.info("开始连接");
                     try {
                         mqttPublishSample.reconnect();
                     } catch (MqttException e) {

@@ -50,7 +50,7 @@ public class MqttConfiguration {
 
 
 
-            logger.info("初始化 yulinmei mqtt 链接  broker url:{}",broker);
+            logger.info("配置 MQTT 连接： {}",broker);
             String[] brokerList = new String[1];
             brokerList[0] = broker;
             DisconnectedBufferOptions bufferOpts = new DisconnectedBufferOptions();
