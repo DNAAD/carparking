@@ -3,6 +3,7 @@ package com.coalvalue.task;
 import com.coalvalue.configuration.MqttPublishSample;
 import com.coalvalue.domain.entity.Configuration;
 
+import com.coalvalue.domain.pojo.IMEIconfig;
 import com.coalvalue.enumType.EchoSessionTypeEnum;
 import com.coalvalue.enumType.ProjectStatusEnum;
 import com.coalvalue.protobuf.Hub;
@@ -84,6 +85,9 @@ public class InitTasks  {
 
 
     public void identity(String echo_session) throws MqttException {
+        logger.info("开始识别身份---- " + ":");
+
+        logger.info("获取硬件信息---- " + ":");
         systemStatusBroadcast.reportFualtInfo(count++);
         HardwareUtil.getOs();
         if(HardwareUtil.isPiUnix){
@@ -93,38 +97,36 @@ public class InitTasks  {
 
         }
 
-
-        System.out.println("============================= identity");
-
-        if(identity!= null){
-
-
-            String UUID_TOPIC_default = mqttPublishSample.getUUID_TOPIC_default();
-            String imei = mqttPublishSample.getImei();
-
-
-
-            Hub.RequestIdentity requestIdentity = Hub.RequestIdentity.newBuilder()
-                    .setIdentity(identity)
-                    .setImei(imei)
-                    .setTimestamp(Timestamp.valueOf(LocalDateTime.now()).getTime())
-                    .build();
-
-            Hub.Message message = Hub.Message.newBuilder()
-                    .setSeq(echo_session)
-                    .setRequestIdentity(requestIdentity)
-                    .build();
-            mqttClient.publish(UUID_TOPIC_default, message.toByteArray(),2,false);
-
-
-
-
-
-
-
-
-
+        if(identity == null){
+            return;
+        }else{
+            logger.info("成功获取了硬件信息---- " + ":"+identity);
         }
+
+
+
+        String UUID_TOPIC_default = mqttPublishSample.getUUID_TOPIC_default();
+        IMEIconfig imei = mqttPublishSample.getImei();
+
+
+
+        Hub.RequestIdentity requestIdentity = Hub.RequestIdentity.newBuilder()
+                .setIdentity(identity)
+                .setImei(imei.getImei())
+                .setTimestamp(Timestamp.valueOf(LocalDateTime.now()).getTime())
+                .build();
+
+        Hub.Message message = Hub.Message.newBuilder()
+                .setSeq(echo_session)
+                .setRequestIdentity(requestIdentity)
+                .build();
+        mqttClient.publish(UUID_TOPIC_default, message.toByteArray(),2,false);
+        logger.info("成功发送注册信息----identity{}, imei{} ",identity,imei);
+
+
+
+
+
 
 
     }

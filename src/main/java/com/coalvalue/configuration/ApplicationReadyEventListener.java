@@ -2,6 +2,7 @@ package com.coalvalue.configuration;
 
 
 
+import com.coalvalue.domain.pojo.IMEIconfig;
 import com.coalvalue.service.ConfigurationService;
 import com.coalvalue.service.assistant.ModuleMqttClientConfig;
 import com.coalvalue.task.SystemStatusBroadcast;
@@ -118,7 +119,7 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         logger.info("系统启动完成，准备建立通道");
 
-        logger.debug("begin ------------------------------------"+mqttPublishSample.imei);
+       // logger.debug("begin ------------------------------------"+mqttPublishSample.getImei().getImei());
     //    logger.debug("begin ------------------------------------"+desDecode(Key));
 
 /*
@@ -146,9 +147,10 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
             if(IMEI!= null){
                 alreadyConfigured="配置设备,来自于 环境变量";
-                logger.info("找到了 环境配置 imei");
-                mqttPublishSample.imei = IMEI;
+                logger.info("找到了 环境配置 imei",alreadyConfigured);
+
                 isBind = true;
+                mqttPublishSample.setImei(new IMEIconfig(IMEI,alreadyConfigured));
             }else{
                 logger.info("没有找到环境 配置imei，");
                 isBind = false;
@@ -158,14 +160,14 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
             alreadyConfigured="找到配置文件";
             isBind = true;
-            mqttPublishSample.imei = property;// "868784021789953";
+            mqttPublishSample.setImei(new IMEIconfig(property,alreadyConfigured));
 
         }
 
 
 
         if(isBind){
-            //stateMachine.start();
+
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -197,6 +199,10 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
                             System.out.println("-qException");
                             e.printStackTrace();
                         }
+
+
+
+                        moduleMqttClientConfig.chrome();
                     }else{
                         logger.debug("不开启本地mqtt连接");
                     }

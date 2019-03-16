@@ -7,6 +7,7 @@ import com.coalvalue.configuration.ApplicationReadyEventListener;
 import com.coalvalue.configuration.MqttPublishSample;
 import com.coalvalue.domain.entity.Configuration;
 import com.coalvalue.domain.entity.StorageSpace;
+import com.coalvalue.domain.pojo.IMEIconfig;
 import com.coalvalue.repository.StorageSpaceRepository;
 import com.coalvalue.service.*;
 import com.coalvalue.service.assistant.BonjourService;
@@ -394,12 +395,11 @@ public class MobileIndexController {
 
     @PostMapping("/newQuery")
     @ResponseBody
-    public Map newQuery(@RequestParam(value = "imei",required = false) String imei)  {
+    public Map newQuery(@RequestParam(value = "imei",required = false) String imei_)  {
 
         String fileName = "QueryMap.json";
 
-
-        mqttPublishSample.imei = imei;// "868784021789953";
+        IMEIconfig imeIconfig = mqttPublishSample.setImei(new IMEIconfig(imei_,"aaaaa"));
 
         mqttPublishSample.end();
 
@@ -409,7 +409,7 @@ public class MobileIndexController {
 
         System.getProperty("user.home");
         //File file = new File(classLoader.getResource(".").getFile() + "/test.xml");
-        saveParamChanges(imei);
+        saveParamChanges(imeIconfig.getImei());
 
         String property = (String)getParamChanges().get("imei");
 

@@ -214,10 +214,6 @@ public class SystemStatusBroadcast implements EnvironmentAware {
 
 
 
-        objectMap = new HashMap<>();
-        objectMap.put("name","brokerIp");
-        objectMap.put("url",mqttPublishSample.broker);
-        maps.add(objectMap);
 
 
         objectMap = new HashMap<>();
@@ -232,7 +228,7 @@ public class SystemStatusBroadcast implements EnvironmentAware {
         maps.add(objectMap);
         objectMap = new HashMap<>();
         objectMap.put("name","imei");
-        objectMap.put("url",mqttPublishSample.imei);
+        objectMap.put("url",mqttPublishSample.getImei().getImei());
         maps.add(objectMap);
 
         objectMap = new HashMap<>();

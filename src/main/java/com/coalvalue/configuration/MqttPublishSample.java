@@ -1,7 +1,7 @@
 package com.coalvalue.configuration;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.coalvalue.domain.pojo.IMEIconfig;
 import com.coalvalue.protobuf.Hub;
 import org.eclipse.paho.client.mqttv3.*;
 import org.slf4j.Logger;
@@ -33,14 +33,9 @@ public class MqttPublishSample {
 
     public static int qos             = 1;
     public static int qos_2             = 1;
-    @Value("${own.configuration.mqtt.broker.url}")
-    public String broker;
-
-  //  @Value("${imei}")
-    @Value("868784021789953")
 
 
-    public String imei;
+    private IMEIconfig imei;
 
 
     @Value("${own.configuration.mqtt.public_uuid_topic}")
@@ -86,7 +81,7 @@ public class MqttPublishSample {
             logger.debug("等待连接结果...");
             if (token.isComplete()) {
 
-                logger.info("成功连接！ "+broker);
+
                 logger.debug("定义主体 {} ", PUBLIC_UUID_TOPIC);
                 logger.debug("定义主体 {} ", imei);
 
@@ -94,7 +89,7 @@ public class MqttPublishSample {
 
                     String[] topics_UUID = new String[2];
                     //topics_UUID[0]= UUID_TOPIC;
-                    topics_UUID[0] = imei;
+                    topics_UUID[0] = imei.getImei();
                     topics_UUID[1] = PUBLIC_UUID_TOPIC;
 
                     int[] qos_UUID = new int[2];
@@ -121,13 +116,13 @@ public class MqttPublishSample {
 
 
             } else {
-                logger.error(" 连接 "+mqttConnectOptions.getServerURIs() + " 异常失败{}",broker);
+                logger.error(" 连接 "+mqttConnectOptions.getServerURIs() + " 异常失败{}",mqttConnectOptions.getServerURIs());
 
             }
         } catch (MqttException e) {
             e.printStackTrace();
 
-            logger.debug(broker+"捕获MqttException mqtt 连接 依次 end --------------------------------------------- register service, to master");
+            logger.debug(mqttConnectOptions.getServerURIs()+"捕获MqttException mqtt 连接 依次 end --------------------------------------------- register service, to master");
             logger.debug(LocalDateTime.now()+"");
             throw  e;
 
@@ -176,12 +171,13 @@ public class MqttPublishSample {
         this.UUID_TOPIC_default = UUID_TOPIC_default;
     }
 
-    public String getImei() {
+    public IMEIconfig getImei() {
         return imei;
     }
 
-    public void setImei(String imei) {
+    public IMEIconfig setImei(IMEIconfig imei) {
         this.imei = imei;
+        return this.imei;
     }
 
     public String getChannal_topic() {
@@ -285,4 +281,6 @@ public class MqttPublishSample {
 
 
     }
+
+
 }

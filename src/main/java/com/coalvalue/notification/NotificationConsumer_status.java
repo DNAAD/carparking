@@ -37,15 +37,11 @@ public class NotificationConsumer_status implements Consumer<Event<NotificationD
     public void accept(Event<NotificationData> notificationDataEvent) {
 
 
-        NotificationData notificationData = notificationDataEvent.getData();
-        System.out.println("notificationDataEvent---- " + ":"+notificationDataEvent.getKey() );
+
         if(notificationDataEvent.getKey().equals(ReactorEventConfig.notificationConsumer_status_online_event)){
+            logger.info("连接完成事件---- " + ":"+notificationDataEvent.getKey() );
 
-            System.out.print("上线了， "+"notificationConsumer_status_online_event");
 
-  /*          stateMachine.sendEvent(RegEventEnum.CONNECT);
-            stateMachine.sendEvent(RegEventEnum.IDENTITY);
-*/
             try {
                 initTasks.identity(EchoSessionTypeEnum.Identity_bootup.getText());
             } catch (MqttException e) {
@@ -56,10 +52,9 @@ public class NotificationConsumer_status implements Consumer<Event<NotificationD
         }
 
         if(notificationDataEvent.getKey().equals(ReactorEventConfig.notificationConsumer_status_offline_event)){
-
+            logger.info("与MQTT 连接断开，发送 "+"notificationConsumer_status_offline_event");
 
             systemStatusBroadcast.reportFualtInfo(1);
-            logger.info("与MQTT 连接断开，发送 "+"notificationConsumer_status_offline_event");
 
 
 

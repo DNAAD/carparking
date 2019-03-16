@@ -10,11 +10,13 @@ import com.coalvalue.publicCommand.PrivateNotify;
 import com.coalvalue.publicCommand.PublicNotify;
 import com.coalvalue.repository.EventRepository;
 import com.coalvalue.service.*;
+import com.coalvalue.service.assistant.LocalMqtt.CallBack;
 import com.coalvalue.service.sync.DifferentialSyncService;
 import com.coalvalue.task.InitTasks;
 import com.coalvalue.task.RegisterTasks;
 import com.coalvalue.task.SystemStatusBroadcast;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.sun.org.glassfish.external.amx.MBeanListener;
 import org.eclipse.paho.client.mqttv3.*;
 
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -33,6 +35,7 @@ import reactor.bus.Event;
 import reactor.bus.EventBus;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +52,6 @@ public class ModuleMqttClientConfig {
 
 
     @Value("${own.configuration.mqtt.local-broker.host}")
-
     public String HOST;
 
     public static final String TOPIC = "house/bulbs/bulb1";
@@ -96,10 +98,9 @@ public class ModuleMqttClientConfig {
         logger.info("SampleRetryService.recover");
         return "Error Class :: " + t.getClass().getName();
     }
-/*    public void callRetryService() throws  MqttException, {
-        retryWhenException();
 
-    }*/
+
+List<CallBack> callBacks = new ArrayList<>();
 
     MqttReceiver mqttReceiver = new MqttReceiver();
     @Retryable(
@@ -122,10 +123,20 @@ public class ModuleMqttClientConfig {
 
 
         client.connect(options);
+        logger.info("连接本地本地连接成功 "+ client.getCurrentServerURI());
+
+
+        String[] topics_UUID = new String[2];
+        topics_UUID[0] = "health";
+        topics_UUID[1] = "pong/host";
+
+        int[] qos_UUID = new int[2];
+        qos_UUID[0] = MqttPublishSample.qos_2;
+        qos_UUID[1] = MqttPublishSample.qos_2;
+
+        client.subscribe(topics_UUID,qos_UUID);
 
         client.subscribe("health",0);
-
-
         topic = client.getTopic(TOPIC);
 
 
@@ -134,14 +145,25 @@ public class ModuleMqttClientConfig {
 
     }
 
-    public void publish(MqttMessage message) throws MqttPersistenceException, MqttException {
+    public void ping(String dest,CallBack callBack) throws MqttException {
+
+        message.setPayload("host".getBytes());
+        callBacks.add(callBack);
+        client.publish("ping/dest"+dest,message);
+
+
+    }
+
+
+
+        public void publish(MqttMessage message) throws MqttPersistenceException, MqttException {
         MqttDeliveryToken token = topic.publish(message);
         token.waitForCompletion();
         System.out.println(token.isComplete() + "========");
     }
 
 
-    public static void main(String[] args) throws MqttException {
+    public void main(String[] args) throws MqttException {
         ModuleMqttClientConfig server = new ModuleMqttClientConfig();
         server.server();
         server.message = new MqttMessage();
@@ -150,11 +172,66 @@ public class ModuleMqttClientConfig {
         server.message.setPayload("eeeeeaaaaaawwwwww---".getBytes());
         server.publish(server.message);
         System.out.println(server.message.isRetained() + "------ratained状态");
+
+
+        class CallBackImpl implements CallBack {
+
+
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message)  {
+                // subscribe后得到的消息会执行到这里面
+                System.out.println("接收消息主题:" + topic);
+                System.out.println("接收消息Qos:" + message.getQos());
+                System.out.println("接收消息内容:" + new String(message.getPayload()));
+                String content = new String(message.getPayload());
+                String[] s = content.split("#");
+                String deviceId = s[0];
+                if(topic.startsWith("ping")){
+                    String dest = topic.split(":")[1];
+                    if(dest.equals("host")){
+
+                       // pong(new String(message.getPayload()));
+                    }
+                }
+
+                if(topic.startsWith("pong")){
+                    String dest = topic.split(":")[1];
+                    if(dest.equals("host")){
+                        //pong(new String(message.getPayload()));
+                    }
+                }
+
+
+
+            }
+
+
+        }
+
+
+
+
+
+        ping("outhost",new CallBackImpl());
     }
 
+    public void chrome() {
 
 
+        logger.info("启动本地 chrome 浏览器啊啊");
+        MqttMessage message = new MqttMessage();
+        message.setQos(1);
+        message.setRetained(false);
+        message.setPayload("chrome_up".getBytes());
+        try {
+            client.publish(TOPIC,message);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
 
+
+    }
 
 
     /**
@@ -191,8 +268,10 @@ public class ModuleMqttClientConfig {
             String content = new String(message.getPayload());
             String[] s = content.split("#");
             String deviceId = s[0];
-            systemStatusBroadcast.update(deviceId,"online");
 
+         //   systemStatusBroadcast.update(deviceId,"online");
+
+            callBacks.stream().forEach(e->e.messageArrived(topic,message));
 
         }
 
@@ -301,4 +380,13 @@ public class ModuleMqttClientConfig {
 
 
 
-    }
+
+
+
+
+
+
+
+
+
+}
