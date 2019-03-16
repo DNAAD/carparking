@@ -205,6 +205,25 @@ public class SystemStatusBroadcast implements EnvironmentAware {
         objectMap.put("name","与mqtt服务器连接");
         objectMap.put("url",mqttClient.isConnected());
         maps.add(objectMap);
+
+        objectMap = new HashMap<>();
+        objectMap.put("name","BrokerHost");
+        objectMap.put("url",mqttClient.getServerURI());
+        maps.add(objectMap);
+
+        objectMap = new HashMap<>();
+        objectMap.put("name","BrokerHost");
+        objectMap.put("url",mqttClient.getCurrentServerURI());
+        maps.add(objectMap);
+
+
+        objectMap = new HashMap<>();
+        objectMap.put("name","ClientId");
+        objectMap.put("url",mqttClient.getClientId());
+        maps.add(objectMap);
+
+
+
         objectMap = new HashMap<>();
         objectMap.put("name","brokerIp");
         objectMap.put("url",mqttPublishSample.broker);
