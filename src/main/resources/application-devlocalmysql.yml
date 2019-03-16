@@ -154,7 +154,7 @@ web:
 configuration:
   version: 0.0.1
 
-imei: ${IMEI:868784021789953}
+imei: ${IMEI}
 # MEI_IMEI:
 
 #SPRING_APPLICATION_JSON: ${SPRING_APPLICATION_JSON}

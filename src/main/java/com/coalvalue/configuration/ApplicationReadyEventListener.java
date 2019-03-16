@@ -66,7 +66,8 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
     @Value("${own.configuration.up_local_mqtt}")
     private Boolean up_local_mqtt;
-
+    @Value("${IMEI}")
+    private String IMEI;
 /*
     @Value("${serviceUrl}")
     private String serviceUrl;
@@ -79,15 +80,12 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 */
 
 
-
-
-
-
-
-
     //@Value("${Key}")
    // private String Key;//读取config文件中的key值
     //解密
+
+
+
     private Boolean desDecode(String str) {
         String t = "";
         //System.out.println("加密后：" + EncryUtil.encrypt(t));
@@ -143,14 +141,16 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
         //if(StringUtils.isBlank(mqttPublishSample.imei)){
 
-
-
-
-
-
             logger.debug("未找到配置文件");
+            logger.info("查找给环境变量");
 
-            alreadyConfigured="未配置设备";
+            if(IMEI!= null){
+                alreadyConfigured="配置设备,来自于 环境变量";
+                mqttPublishSample.imei = IMEI;
+                isBind = false;
+            }else{
+                isBind = false;
+            }
 
         }else{
 
@@ -158,6 +158,11 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
             isBind = true;
             mqttPublishSample.imei = property;// "868784021789953";
 
+        }
+
+
+
+        if(isBind){
             //stateMachine.start();
             executorService.execute(new Runnable() {
                 @Override
@@ -179,32 +184,28 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
                 }*/
 
 
-                if(up_local_mqtt){
-                    logger.debug("===============开始连接 本地 MqttClient");
-                    try {
-                        moduleMqttClientConfig.retryWhenException();
-                    } catch (MqttException e) {
-                        System.out.println("-建立 或 连retryWhenException接 异常个");
-                        e.printStackTrace();
-                    }catch (Exception e) {
-                        System.out.println("-qException");
-                        e.printStackTrace();
+                    if(up_local_mqtt){
+                        logger.debug("===============开始连接 本地 MqttClient");
+                        try {
+                            moduleMqttClientConfig.retryWhenException();
+                        } catch (MqttException e) {
+                            System.out.println("-建立 或 连retryWhenException接 异常个");
+                            e.printStackTrace();
+                        }catch (Exception e) {
+                            System.out.println("-qException");
+                            e.printStackTrace();
+                        }
+                    }else{
+                        logger.debug("不开启本地mqtt连接");
                     }
-                }else{
-                    logger.debug("不开启本地mqtt连接");
-                }
-
-
-
-
-
-
-
 
                 }
             });
-
         }
+
+
+
+
 
         logger.debug("导入 配置信息到 内存 MqttClient");
         configurationService.init();
