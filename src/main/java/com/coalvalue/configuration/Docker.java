@@ -71,7 +71,7 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
     }
 */
 
-    @Value("${DOCKER_HOST}")
+    @Value("${DOCKER_HOST:avc}")
     private String DOCKER_HOST;
 
 

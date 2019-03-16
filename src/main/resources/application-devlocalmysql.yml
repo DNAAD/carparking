@@ -136,7 +136,7 @@ own:
       local-broker:
         host: "tcp://localhost:1883"
 
-
+    up_local_mqtt: ${up_local_mqtt:false}
 
 
 
@@ -154,7 +154,7 @@ web:
 configuration:
   version: 0.0.1
 
-imei: ${868784021789953}
+imei: ${IMEI:868784021789953}
 # MEI_IMEI:
 
 #SPRING_APPLICATION_JSON: ${SPRING_APPLICATION_JSON}

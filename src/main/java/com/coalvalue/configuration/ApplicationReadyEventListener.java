@@ -12,6 +12,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
@@ -61,6 +62,11 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
             ;
     static public Boolean isBind =false;
     static public Boolean isStart =false;
+
+
+    @Value("${own.configuration.up_local_mqtt}")
+    private Boolean up_local_mqtt;
+
 /*
     @Value("${serviceUrl}")
     private String serviceUrl;
@@ -173,7 +179,9 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
                     e.printStackTrace();
                 }*/
 
-                    logger.debug("开始连接 本地 MqttClient");
+
+                if(up_local_mqtt){
+                    logger.debug("===============开始连接 本地 MqttClient");
                     try {
                         moduleMqttClientConfig.retryWhenException();
                     } catch (MqttException e) {
@@ -183,6 +191,11 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
                         System.out.println("-qException");
                         e.printStackTrace();
                     }
+                }else{
+                    logger.debug("不开启本地mqtt连接");
+                }
+
+
 
 
 

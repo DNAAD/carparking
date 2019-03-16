@@ -126,7 +126,16 @@ public class Application implements ApplicationListener<ContextRefreshedEvent>
         }
         Docker docker = (Docker) ctx.getBean("docker");
 
-        docker.all_together____("");
+ //       docker.all_together____("");
+
+
+
+
+
+
+
+
+
 
 /*        PlateRecognitionService cgb = (PlateRecognitionService) ctx.getBean("plateRecognitionService");
         LPRMain lprtest = new LPRMain(cgb);*/
