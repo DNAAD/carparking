@@ -146,10 +146,11 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
             if(IMEI!= null){
                 alreadyConfigured="配置设备,来自于 环境变量";
-                logger.info("找到了 环境配置信息");
+                logger.info("找到了 环境配置 imei");
                 mqttPublishSample.imei = IMEI;
                 isBind = true;
             }else{
+                logger.info("没有找到环境 配置imei，");
                 isBind = false;
             }
 

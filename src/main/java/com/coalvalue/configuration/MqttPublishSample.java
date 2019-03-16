@@ -77,24 +77,20 @@ public class MqttPublishSample {
         try {
 
 
-            logger.debug("开始正式连接.....");
-            logger.debug("开始 yulinmei  的连接了啊啊啊啊 ， end --------------------------------------------- register service, to master");
-            logger.debug(mqttConnectOptions.CONNECTION_TIMEOUT_DEFAULT+"开始 mqtt 连接了， end --------------------------------------------- register service, to master");
-            logger.debug(mqttConnectOptions.getConnectionTimeout()+"开始 mqtt 连接了， end --------------------------------------------- register service, to master");
+            logger.info("开始重连接，连接...");
+            logger.info(mqttConnectOptions.CONNECTION_TIMEOUT_DEFAULT+"");
+            logger.info(mqttConnectOptions.getConnectionTimeout()+"");
 
-            logger.debug(LocalDateTime.now()+"");
 
             IMqttToken token = mqttClient.connectWithResult(mqttConnectOptions);
-            logger.debug("连接结束，等待结果 啊啊 ");
+            logger.debug("等待连接结果...");
             if (token.isComplete()) {
 
-                logger.info("成功连接，成功连接！！！！！ ");
+                logger.info("成功连接！ "+broker);
                 logger.debug("定义主体 {} ", PUBLIC_UUID_TOPIC);
                 logger.debug("定义主体 {} ", imei);
-                System.out.println("Completion roker: " + broker);
-                try {
-                    System.out.println("Begin connect to roker: " + broker);
 
+                try {
 
                     String[] topics_UUID = new String[2];
                     //topics_UUID[0]= UUID_TOPIC;
@@ -125,17 +121,14 @@ public class MqttPublishSample {
 
 
             } else {
-                logger.error(" 连接 "+mqttConnectOptions.getServerURIs() + " 异常失败");
-                System.out.println("Completion ERROR roker: " + broker);
+                logger.error(" 连接 "+mqttConnectOptions.getServerURIs() + " 异常失败{}",broker);
 
             }
         } catch (MqttException e) {
             e.printStackTrace();
 
-
             logger.debug(broker+"捕获MqttException mqtt 连接 依次 end --------------------------------------------- register service, to master");
             logger.debug(LocalDateTime.now()+"");
-            //  reconnect();
             throw  e;
 
 
