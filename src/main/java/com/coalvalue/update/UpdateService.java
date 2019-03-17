@@ -9,6 +9,7 @@ import com.coalvalue.configuration.Docker;
 import com.coalvalue.domain.pojo.UpdateFX;
 import com.coalvalue.update.model.Application;
 import com.coalvalue.update.model.Release;
+import com.github.dockerjava.api.DockerClient;
 import javafx.concurrent.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,53 @@ public class UpdateService /*extends Service<Release> */{
 		);
 
 		return updateFX;
+	}
+
+	@Scheduled(fixedDelay = 1000*60*6,   initialDelay=1000*60*4)
+
+
+
+	public void update() throws IOException {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		UpdateFX localApplication = getPropertiesForApp(UpdateService.class);
+		String fooResourceUrl = localApplication.getUpdateXML().toString();
+
+
+		Application applicationRemote = null;
+		try {
+			applicationRemote
+					= restTemplate.getForObject(fooResourceUrl , Application.class);
+
+			System.out.println(applicationRemote.toString());
+			applicationRemote.getReleases().stream().forEach(e->System.out.print(e.toString()));
+			//System.out.println(applicationRemote.getReleases().toString());
+		} catch (HttpStatusCodeException exception) {
+			int statusCode = exception.getStatusCode().value();
+			//	logger.error("获取更新，网络错误" + exception.getCause().toString());
+
+		}
+
+		//	Release release = applicationRemote.getReleases().get(0);
+
+
+		//	System.out.println("----------- release" + release.getReleaseDate() + release.getLicenseVersion());
+
+		//TODO 判断是否更新，（决定是否下载 ，然后更新）
+
+
+
+
+
+
+		DockerClient dockerClient = docker.getDockerClient();
+		docker.isValid(dockerClient);
+
+
+		//docker.restart(); // TODO 重新启动docker
+
+
 	}
 
 

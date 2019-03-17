@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -83,8 +84,13 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
 
 
 
+    DockerClient dockerClient = null;
     public DockerClient  getDockerClient(){
 
+
+        if(dockerClient!= null){
+            return dockerClient;
+        }
 
         System.out.println("----------------我梦在docker中啊啊啊啊啊啊 ");
         Properties properties = new Properties();
@@ -101,7 +107,7 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
                 = DefaultDockerClientConfig.createDefaultConfigBuilder()
                 .withProperties(properties).build();
 
-        DockerClient dockerClient = null;
+
         if(DOCKER_HOST!= null){
             dockerClient = DockerClientBuilder.getInstance(config).build();
 
@@ -111,6 +117,8 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
         }
 
         return dockerClient;
+
+
 
     }
 
@@ -182,6 +190,77 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
 
         List<Container> containers = dockerClient.listContainersCmd().exec();
 
+        List<Image> images = dockerClient.listImagesCmd().exec();
+
+        Optional<Image> configImageOp = images.stream().filter(e-> e.getRepoTags()[0].equals("docker.yulinmei.cn/config:latest")).findFirst();
+
+        if (configImageOp.isPresent()){
+            Image image = configImageOp.get();
+
+
+            logger.info(" 存在Image 无需更新");
+            return;
+
+        }else{
+            logger.info(" 不存在 需要及时更新 config iamge");
+
+        }
+
+        try {
+
+            System.out.println("正在 下载 config image Network--------------------------------------------------");
+            dockerClient.pullImageCmd("docker.yulinmei.cn/config")
+                    .withTag("latest")
+                    .exec(new PullImageResultCallback(){
+                        @Override
+                        public void onNext(PullResponseItem item) {
+                            super.onNext(item);
+                            System.out.println("在 PullImageResultCallback" + item.getStatus());
+                        }
+                    })
+                    .awaitCompletion(60*30, TimeUnit.SECONDS);
+            System.out.println("下载完成 下载 config image Network--------------------------------------------------");
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        Container container = containers.stream().filter(e-> e.getImage().equals("docker.yulinmei.cn/carparking")).findFirst().get();
+        logger.info("getLabels {}",container.getLabels());
+
+        logger.info("getImage {}",container.getImage());
+        logger.info("getImageId {}",container.getImageId());
+
+        logger.info("getStatus {}",container.getStatus());
+        logger.info("getPorts {}",container.getPorts());
+        logger.info("getState {}",container.getState());
+
+
+        Image image = images.stream().filter(e-> e.getRepoTags()[0].equals("docker.yulinmei.cn/carparking:latest")).findFirst().get();
+
+        System.out.println("Image--------------------------------------------------"+ image.toString());
+
+        logger.info("getId {}",image.getId());
+
+        logger.info("getCreated {}",image.getCreated());
+        logger.info("getParentId {}",image.getParentId());
+
+        logger.info("getRepoTags {}",image.getRepoTags());
+        logger.info("getVirtualSize {}",image.getVirtualSize());
+        logger.info("getSize {}",image.getSize());
+
+
+    }
+
+
+    public void backup(DockerClient dockerClient) {
+
+        List<Container> containers = dockerClient.listContainersCmd().exec();
+
+/*
 
         containers.stream().forEach(e->{
             logger.info("getLabels {}",e.getLabels());
@@ -195,12 +274,37 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
 
             System.out.println("Container--------------------------------------------------"+ e.toString());
         });
+*/
 
 
+
+
+        Container container = containers.stream().filter(e-> e.getImage().equals("docker.yulinmei.cn/carparking")).findFirst().get();
+        logger.info("getLabels {}",container.getLabels());
+
+        logger.info("getImage {}",container.getImage());
+        logger.info("getImageId {}",container.getImageId());
+
+        logger.info("getStatus {}",container.getStatus());
+        logger.info("getPorts {}",container.getPorts());
+        logger.info("getState {}",container.getState());
 
 
         List<Image> images = dockerClient.listImagesCmd().exec();
+        Image image = images.stream().filter(e-> e.getRepoTags()[0].equals("docker.yulinmei.cn/carparking:latest")).findFirst().get();
 
+        System.out.println("Image--------------------------------------------------"+ image.toString());
+
+        logger.info("getId {}",image.getId());
+
+        logger.info("getCreated {}",image.getCreated());
+        logger.info("getParentId {}",image.getParentId());
+
+        logger.info("getRepoTags {}",image.getRepoTags());
+        logger.info("getVirtualSize {}",image.getVirtualSize());
+        logger.info("getSize {}",image.getSize());
+
+/*
         images.stream().forEach(e->{
             logger.info("getId {}",e.getId());
 
@@ -212,11 +316,11 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
             logger.info("getSize {}",e.getSize());
 
             System.out.println("Image--------------------------------------------------"+ e.toString());
-        });
+        });*/
 
 
 
-      //  dockerClient.createContainerCmd();
+        //  dockerClient.createContainerCmd();
 
 
         List<SearchItem> items = dockerClient.searchImagesCmd("Java").exec();
@@ -237,7 +341,6 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
             System.out.println("Network--------------------------------------------------"+ e.toString());
         });
     }
-
 
     private boolean isValid(Object r, String threshold) {
         Boolean valid = true;
