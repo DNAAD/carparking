@@ -105,6 +105,7 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
 
         }
 
+        return dockerClient;
 
     }
 
