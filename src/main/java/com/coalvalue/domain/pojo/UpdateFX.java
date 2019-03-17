@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  *
  */
 
-@Component
+
 public class UpdateFX {
 	Logger logger = LoggerFactory.getLogger(UpdateFX.class);
 

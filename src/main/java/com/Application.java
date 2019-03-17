@@ -4,6 +4,7 @@ package com;
 import com.coalvalue.configuration.Docker;
 import com.coalvalue.service.MqttService;
 
+import com.github.dockerjava.api.DockerClient;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -126,7 +127,9 @@ public class Application implements ApplicationListener<ContextRefreshedEvent>
         }
         Docker docker = (Docker) ctx.getBean("docker");
 
- //       docker.all_together____("");
+
+        DockerClient dockerClient = docker.getDockerClient();
+      docker.isValid(dockerClient);
 
 
 

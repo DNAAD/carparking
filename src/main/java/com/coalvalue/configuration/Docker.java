@@ -78,27 +78,19 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
 
 
 
-    private void all_together(){
-        // And all together now
-/*        download(someUrl).flatMap(this::install).subscribe(result -> {
-            logger.info("Installed? {}", result);
-        });*/
-    }
-    public void all_together____(Release message){
-
-
+    public DockerClient  getDockerClient(){
 
 
         System.out.println("----------------我梦在docker中啊啊啊啊啊啊 ");
         Properties properties = new Properties();
-       // properties.setProperty("registry.email", "info@baeldung.com");
-     //   properties.setProperty("registry.password", "baeldung");
-    //    properties.setProperty("registry.username", "baaldung");
-      //  properties.setProperty("DOCKER_CERT_PATH", "/home/baeldung/.docker/certs");
-     //   properties.setProperty("DOCKER_CONFIG", "/home/baeldung/.docker/");
-      //  properties.setProperty("DOCKER_TLS_VERIFY", "1");
-      properties.setProperty("DOCKER_HOST", DOCKER_HOST);//unix:///var/run/docker.sock");//
-     //   tcp://localhost:2375
+        // properties.setProperty("registry.email", "info@baeldung.com");
+        //   properties.setProperty("registry.password", "baeldung");
+        //    properties.setProperty("registry.username", "baaldung");
+        //  properties.setProperty("DOCKER_CERT_PATH", "/home/baeldung/.docker/certs");
+        //   properties.setProperty("DOCKER_CONFIG", "/home/baeldung/.docker/");
+        //  properties.setProperty("DOCKER_TLS_VERIFY", "1");
+        properties.setProperty("DOCKER_HOST", DOCKER_HOST);//unix:///var/run/docker.sock");//
+        //   tcp://localhost:2375
 
         DefaultDockerClientConfig config
                 = DefaultDockerClientConfig.createDefaultConfigBuilder()
@@ -114,6 +106,13 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
         }
 
 
+    }
+
+
+    public void all_together____(Release message){
+
+
+        DockerClient dockerClient = getDockerClient();
 
         try {
 
@@ -173,7 +172,7 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
     }
 
 
-    private void isValid(DockerClient dockerClient) {
+    public void isValid(DockerClient dockerClient) {
 
         List<Container> containers = dockerClient.listContainersCmd().exec();
 
