@@ -23,6 +23,8 @@
  */
 package com.coalvalue.update.model;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import java.net.URL;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -71,4 +73,10 @@ public class Binary {
 	public void setVerification(Verification verification) {
 		this.verification = verification;
 	}
+
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this);
+	}
+
 }

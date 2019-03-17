@@ -39,8 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static com.coalvalue.configuration.WebSocketConfig.topic__COALPIT_DELIVERY_report;
@@ -215,23 +214,55 @@ List<CallBack> callBacks = new ArrayList<>();
 
         ping("outhost",new CallBackImpl());
     }
+    private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
     public void chrome() {
 
 
-        logger.info("启动本地 chrome 浏览器啊啊");
-        MqttMessage message = new MqttMessage();
-        message.setQos(1);
-        message.setRetained(false);
-        message.setPayload("chrome_up".getBytes());
-        try {
-            client.publish(TOPIC,message);
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
+        executorService.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        logger.info("启动本地 chrome 浏览器啊啊");
+                                        MqttMessage message = new MqttMessage();
+                                        message.setQos(1);
+                                        message.setRetained(false);
+                                        message.setPayload("chrome_up".getBytes());
+                                        try {
+                                            client.publish(TOPIC,message);
+                                        } catch (MqttException e) {
+                                            e.printStackTrace();
+                                        }
+
+
+                                        CallBack callBack = new CallBack(){
+                                            @Override
+                                            public void messageArrived(String string,MqttMessage message1){
+                                                callBacks.remove(this);
+
+                                                return;
+                                            }
+                                        };
+
+
+                                        callBacks.add(callBack);
+
+                                        try {
+                                            wait(3000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                            callBacks.remove(callBack);
+                                        }
+                                    }
+
+                                });
+
+
 
 
     }
+
+
+
 
 
     /**

@@ -243,7 +243,7 @@ public class PrivateNotify {
 
         if(type.equals("docker")) {
             String message = command.getMessage();
-            docker.all_together____(message);
+       //     docker.all_together____(message);
         }
 
 

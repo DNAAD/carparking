@@ -1,9 +1,11 @@
 package com.coalvalue.configuration;
 
+import com.coalvalue.update.model.Release;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.command.ListVolumesResponse;
+import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
@@ -82,7 +84,7 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
             logger.info("Installed? {}", result);
         });*/
     }
-    public void all_together____(String message){
+    public void all_together____(Release message){
 
 
 
@@ -113,6 +115,65 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
 
 
 
+        try {
+
+            System.out.println("正在 下载 config image Network--------------------------------------------------");
+            dockerClient.pullImageCmd("docker.yulinmei.cn/config")
+                    .withTag("latest")
+                    .exec(new PullImageResultCallback(){
+                        @Override
+                        public void onNext(PullResponseItem item) {
+                            super.onNext(item);
+                            System.out.println("在 PullImageResultCallback" + item.getStatus());
+                        }
+                    })
+                    .awaitCompletion(60*30, TimeUnit.SECONDS);
+            System.out.println("下载完成 下载 config image Network--------------------------------------------------");
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+/*
+
+        List<Container> containers2 = dockerClient.listContainersCmd()
+                .withLabelFilter(testLabel)
+                .withShowAll(true)
+                .exec();
+        for (Container container : containers2) {
+            LOG.info("listContainer: id=" + container.getId() + " image=" + container.getImage());
+        }
+
+
+        final Container existing = dockerClient.listContainersCmd().withLabelFilter().get("containerId");
+*/
+        CreateContainerResponse container = dockerClient.createContainerCmd("docker.yulinmei.cn/config")
+                .withCmd("touch", "/test")
+                .exec();
+
+
+/*        dockerClient.startContainerCmd(container.getId()).exec();
+
+        dockerClient.stopContainerCmd(container.getId()).exec();
+
+        dockerClient.killContainerCmd(container.getId()).exec();*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+    private void isValid(DockerClient dockerClient) {
 
         List<Container> containers = dockerClient.listContainersCmd().exec();
 
@@ -152,33 +213,7 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
         networks.stream().forEach(e->{
             System.out.println("Network--------------------------------------------------"+ e.toString());
         });
-
-
-        try {
-
-            System.out.println("正在 下载 config image Network--------------------------------------------------");
-            dockerClient.pullImageCmd("docker.yulinmei.cn/config")
-                    .withTag("latest")
-                    .exec(new PullImageResultCallback(){
-                        @Override
-                        public void onNext(PullResponseItem item) {
-                            super.onNext(item);
-                            System.out.println("在 PullImageResultCallback" + item.getStatus());
-                        }
-                    })
-                    .awaitCompletion(60*30, TimeUnit.SECONDS);
-            System.out.println("下载完成 下载 config image Network--------------------------------------------------");
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-/*        dockerClient.startContainerCmd(container.getId()).exec();
-
-        dockerClient.stopContainerCmd(container.getId()).exec();
-
-        dockerClient.killContainerCmd(container.getId()).exec();*/
     }
-
 
 
     private boolean isValid(Object r, String threshold) {

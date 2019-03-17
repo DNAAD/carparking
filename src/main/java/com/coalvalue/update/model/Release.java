@@ -23,6 +23,8 @@
  */
 package com.coalvalue.update.model;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -94,4 +96,11 @@ public class Release {
 	public void setApplication(Application application) {
 		this.application = application;
 	}
+
+
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this);
+	}
+
 }

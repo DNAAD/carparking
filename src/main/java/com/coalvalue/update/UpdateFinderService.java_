@@ -56,7 +56,7 @@ public class UpdateFinderService extends Service<Release> {
 
 	protected Release call() throws Exception {
 		HashMap<Integer, Release> releaseMap = new HashMap<>();
-		Release newestVersion = null;
+		Release newestVersion = null;// 查找出每个授权号 最新的版本号。
 
 		for (Release release : application.getReleases()) {
 			Release currentNewest = releaseMap.get(release.getLicenseVersion());
