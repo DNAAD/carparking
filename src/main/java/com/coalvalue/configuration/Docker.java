@@ -12,6 +12,8 @@ import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class Docker {
+
+    protected transient Logger logger = LoggerFactory.getLogger(getClass());
+
 /*
     ls -la /var/run/docker.sock
 
@@ -179,6 +184,15 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
 
 
         containers.stream().forEach(e->{
+            logger.info("getLabels {}",e.getLabels());
+
+            logger.info("getImage {}",e.getImage());
+            logger.info("getImageId {}",e.getImageId());
+
+            logger.info("getStatus {}",e.getStatus());
+            logger.info("getPorts {}",e.getPorts());
+            logger.info("getState {}",e.getState());
+
             System.out.println("Container--------------------------------------------------"+ e.toString());
         });
 
@@ -188,12 +202,21 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
         List<Image> images = dockerClient.listImagesCmd().exec();
 
         images.stream().forEach(e->{
+            logger.info("getId {}",e.getId());
+
+            logger.info("getCreated {}",e.getCreated());
+            logger.info("getParentId {}",e.getParentId());
+
+            logger.info("getRepoTags {}",e.getRepoTags());
+            logger.info("getVirtualSize {}",e.getVirtualSize());
+            logger.info("getSize {}",e.getSize());
+
             System.out.println("Image--------------------------------------------------"+ e.toString());
         });
 
 
 
-
+      //  dockerClient.createContainerCmd();
 
 
         List<SearchItem> items = dockerClient.searchImagesCmd("Java").exec();
