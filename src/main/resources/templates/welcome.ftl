@@ -45,9 +45,9 @@
                            <strong><a href="${workbenchUrl}">${companyName}</a></strong>
 
                         <#else>
-                        欢迎首次使用
+                        别来无恙，欢迎首次使用
                         </#if>
-                         提煤系统 !
+                         提煤系统
 
                         <#if isBind>
                         <#else>

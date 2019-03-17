@@ -17,10 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -191,8 +188,51 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
         List<Container> containers = dockerClient.listContainersCmd().exec();
 
         List<Image> images = dockerClient.listImagesCmd().exec();
+        images.stream().forEach(e->{
 
-        Optional<Image> configImageOp = images.stream().filter(e-> e.getRepoTags()[0].equals("docker.yulinmei.cn/config:latest")).findFirst();
+            logger.info("发现了一个 新的 image");
+            logger.info("getRepoTags {}",e.getRepoTags());
+
+            logger.info("getId {}",e.getId());
+
+            logger.info("getCreated {}",e.getCreated());
+            logger.info("getParentId {}",e.getParentId());
+
+            logger.info("getVirtualSize {}",e.getVirtualSize());
+            logger.info("getSize {}",e.getSize());
+
+        });
+
+
+        String dockerImage = "arm32v7/hello-world:latest";
+
+        Optional<Image> configImageOp = images.stream().filter(e-> {
+            if(e== null ){
+                return false;
+            }
+            if(e.getRepoTags()== null ){
+
+                System.out.println(e+"这个image reporteTags 是null----------=");
+                return false;
+            }
+           List<String> list=  Arrays.asList(e.getRepoTags());
+            logger.info("--- {}");
+            list.forEach(a->System.out.println(a+"0000000----------="));
+
+
+
+
+
+            if(e.getRepoTags()[0].equals(dockerImage)){
+                return true;
+
+
+        }else{
+                return false;
+            }
+
+        }).findFirst();
+
 
         if (configImageOp.isPresent()){
             Image image = configImageOp.get();
@@ -209,7 +249,7 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
         try {
 
             System.out.println("正在 下载 config image Network--------------------------------------------------");
-            dockerClient.pullImageCmd("docker.yulinmei.cn/config")
+            dockerClient.pullImageCmd(dockerImage)
                     .withTag("latest")
                     .exec(new PullImageResultCallback(){
                         @Override
@@ -228,29 +268,40 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
 
 
 
-        Container container = containers.stream().filter(e-> e.getImage().equals("docker.yulinmei.cn/carparking")).findFirst().get();
-        logger.info("getLabels {}",container.getLabels());
+        Optional<Container> containerOptional = containers.stream().filter(e-> e.getImage().equals(dockerImage)).findFirst();
+        if(containerOptional.isPresent()){
 
-        logger.info("getImage {}",container.getImage());
-        logger.info("getImageId {}",container.getImageId());
+            logger.debug("存在这个 image 的 container"+ dockerImage);
 
-        logger.info("getStatus {}",container.getStatus());
-        logger.info("getPorts {}",container.getPorts());
-        logger.info("getState {}",container.getState());
+            Container container = containerOptional.get();
+            logger.info("getLabels {}",container.getLabels());
+
+            logger.info("getImage {}",container.getImage());
+            logger.info("getImageId {}",container.getImageId());
+
+            logger.info("getStatus {}",container.getStatus());
+            logger.info("getPorts {}",container.getPorts());
+            logger.info("getState {}",container.getState());
+        }
 
 
-        Image image = images.stream().filter(e-> e.getRepoTags()[0].equals("docker.yulinmei.cn/carparking:latest")).findFirst().get();
 
-        System.out.println("Image--------------------------------------------------"+ image.toString());
+        Optional<Image> imageOptional = images.stream().filter(e->  e.getRepoTags()!= null && e.getRepoTags()[0].equals(dockerImage)).findFirst();
 
-        logger.info("getId {}",image.getId());
+        if(imageOptional.isPresent()){
+            Image image = imageOptional.get();
+            System.out.println("存在这个 image "+ dockerImage);
 
-        logger.info("getCreated {}",image.getCreated());
-        logger.info("getParentId {}",image.getParentId());
+            logger.info("getId {}",image.getId());
 
-        logger.info("getRepoTags {}",image.getRepoTags());
-        logger.info("getVirtualSize {}",image.getVirtualSize());
-        logger.info("getSize {}",image.getSize());
+            logger.info("getCreated {}",image.getCreated());
+            logger.info("getParentId {}",image.getParentId());
+
+            logger.info("getRepoTags {}",image.getRepoTags());
+            logger.info("getVirtualSize {}",image.getVirtualSize());
+            logger.info("getSize {}",image.getSize());
+        }
+
 
 
     }

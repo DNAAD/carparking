@@ -60,12 +60,13 @@ public class UpdateService /*extends Service<Release> */{
 		return updateFX;
 	}
 
-	@Scheduled(fixedDelay = 1000*60*6,   initialDelay=1000*60*4)
+	@Scheduled(fixedDelay = 1000*60,   initialDelay=1000*60)
 
 
 
 	public void update() throws IOException {
 
+		logger.info("进行一次更新啊啊啊");
 		RestTemplate restTemplate = new RestTemplate();
 
 		UpdateFX localApplication = getPropertiesForApp(UpdateService.class);
