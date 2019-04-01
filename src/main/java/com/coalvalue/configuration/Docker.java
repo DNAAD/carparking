@@ -1,22 +1,22 @@
 package com.coalvalue.configuration;
 
+import com.coalvalue.domain.pojo.StatusInfo;
 import com.coalvalue.update.model.Release;
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectVolumeResponse;
-import com.github.dockerjava.api.command.ListVolumesResponse;
-import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
+import org.apache.http.conn.HttpHostConnectException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.ws.rs.ProcessingException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -82,6 +82,31 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
 
 
     DockerClient dockerClient = null;
+    public StatusInfo isValid(){
+
+        StatusInfo statusInfo = new StatusInfo();
+        if(dockerClient== null){
+           dockerClient = getDockerClient();
+        }
+
+        try {
+            InfoCmd infoCmd = dockerClient.infoCmd();
+
+            VersionCmd versionCmd = dockerClient.versionCmd();
+            logger.debug("docker inforCmd:{}", infoCmd.exec());
+            logger.debug("docker versionCmd:{}", versionCmd.exec());
+            statusInfo.setStatus(true);
+
+        }catch (ProcessingException e){
+            logger.error("docker ProcessingException:{}", e.getMessage());
+            statusInfo.setStatus(false);
+
+        }
+        return statusInfo;
+    }
+
+
+
     public DockerClient  getDockerClient(){
 
 
@@ -113,6 +138,15 @@ java -jar -Dspring.profiles.active=devlocal -DDOCKER_HOST=tcp://0.0.0.0:5678 -Di
 
         }
 
+        try {
+            InfoCmd infoCmd = dockerClient.infoCmd();
+
+            VersionCmd versionCmd = dockerClient.versionCmd();
+            logger.debug("docker inforCmd:{}", infoCmd.exec());
+            logger.debug("docker versionCmd:{}", versionCmd.exec());
+        }catch (ProcessingException e){
+            logger.error("docker ProcessingException:{}", e.getMessage());
+        }
         return dockerClient;
 
 

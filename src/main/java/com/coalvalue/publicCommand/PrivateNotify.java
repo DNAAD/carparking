@@ -79,13 +79,10 @@ public class PrivateNotify {
 
 
     @Autowired
-    private MqttPublishSample mqttPublishSample;
-    @Autowired
-    private MqttClient mqttClient;
+    private CommonProcess commonProcess;
+
     private String topic
             ;
-    @Autowired
-    private Docker docker;
 
 
     public PrivateNotify() {}
@@ -126,13 +123,13 @@ public class PrivateNotify {
         if(type.equals(CommandEnum.clear.getText())){
             String message = command.getMessage();
             System.out.println("====私自，私自，私自 notify_message "+message);
-            deleteAll();
+            commonProcess.deleteAll();
 
         }
         if(type.equals(CommandEnum.bind.getText())){
             String message = command.getMessage();
             System.out.println("====私自，私自，私自 notify_message "+message);
-            deleteAll();
+            commonProcess.deleteAll();
 
             registerTasks.register(EchoSessionTypeEnum.Register_bootup.getText());
 
@@ -178,7 +175,7 @@ public class PrivateNotify {
 
 
             System.out.println("====私自，私自，私自 notify_message "+message);
-            deleteAll();
+            commonProcess.deleteAll();
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
@@ -206,7 +203,7 @@ public class PrivateNotify {
 
         if(type.equals("unbind")){
 
-            deleteAll();
+            commonProcess.deleteAll();
 
             Map ret = new HashMap<String, String>();
             ret.put("status", false);
@@ -250,67 +247,7 @@ public class PrivateNotify {
     }
 
 
-    @Transactional
-    public void deleteAll() {
 
-
-            differentialSyncService._lastSync =  LocalDateTime.now().minusYears(1);
-            configurationRepository.deleteAll();
-
-            employeeRepository.deleteAll();
-            userRepository.deleteAll();
-            inventoryRepository.deleteAll();
-            storageSpaceRepository.deleteAll();
-            productRepository.deleteAll();
-            reportDeliveryOrderRepository.deleteAll();
-
-
-    }
-
-
-
-
-
- //   @Scheduled(fixedRate = 10000)
-    public void shedule() {
-        File file=new File("C:\\Users\\silence\\1.jpg");
-
-
-
-        BufferedImage bufferedImage = null;
-        try {
-            bufferedImage = ImageIO.read(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(bufferedImage, "png", baos);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        byte[] res=baos.toByteArray();
-
-
-
-        String imageString = Base64.getEncoder().encodeToString(res);
-
-        Map imageMap = new HashMap<>();
-        imageMap.put("type", DataSynchronizationTypeEnum.Image.getText());
-
-
-
-        imageMap.put("imageString", imageString);
-        String client_request        = "request/"+ mqttPublishSample.getChannal_topic();
-
-        try {
-            mqttClient.publish(client_request, JSON.toJSONString(imageMap).getBytes(),2,false);
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
-
-
-    }
 
     public boolean support(Hub.Message message) {
 
@@ -331,11 +268,3 @@ public class PrivateNotify {
 }
 
 
-
-/*
-    //   @Scheduled(fixedRate = 60000)
-    public void camara() {
-        //strategyService.command("极少探测");
-        strategyService.command(StrategyService.Strategy_COMMAND.Strategy_COMMAND_过磅,"UUID");
-
-    }*/

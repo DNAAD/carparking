@@ -1,4 +1,4 @@
-// Licensed under Apache License version 2.0
+package com.coalvalue.compont.backup;// Licensed under Apache License version 2.0
 // Original license LGPL
 
 //

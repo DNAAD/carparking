@@ -1,8 +1,9 @@
-package com;
+/*
+package com.coalvalue.compont.backup;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DockerClientBuilder;
-import io.reactivex.Observable;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,9 +41,12 @@ public class Docker {
 
     private void all_together(){
         // And all together now
+*/
 /*        download(someUrl).flatMap(this::install).subscribe(result -> {
             logger.info("Installed? {}", result);
-        });*/
+        });*//*
+
     }
 
 }
+*/

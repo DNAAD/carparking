@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 
 /*@RunWith(SpringRunner.class)
@@ -28,6 +30,21 @@ public class StatesFirstApplicationTests {
         // Arrange
         // Act
         stateMachine.sendEvent(Events.START_FEATURE);
+
+
+
+        Message<Events> message = MessageBuilder
+                .withPayload(Events.START_FEATURE)
+                .setHeader("ORDER_ENTITY_KEY", "order")
+                .build();
+
+
+
+
+
+        stateMachine.sendEvent(message);
+
+
         stateMachine.sendEvent(Events.FINISH_FEATURE);
         stateMachine.sendEvent(Events.QA_TEAM_APPROVE);
         // Asserts

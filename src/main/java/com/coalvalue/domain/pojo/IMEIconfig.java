@@ -13,6 +13,10 @@ public class IMEIconfig {
 
 
     private String imei;
+    private StatusInfo alreadyDocker;
+    private StatusInfo alreadyProperty;
+    private StatusInfo alreadyMqtt;
+    private StatusInfo alreadyLocalMqtt;
 
     public IMEIconfig() {
     }
@@ -45,5 +49,38 @@ public class IMEIconfig {
 
     public void setImei(String imei) {
         this.imei = imei;
+    }
+
+    public void setAlreadyDocker(StatusInfo alreadyDocker) {
+        this.alreadyDocker = alreadyDocker;
+    }
+
+    public StatusInfo getAlreadyDocker() {
+        return alreadyDocker;
+    }
+
+    public void setAlreadyProperty(StatusInfo alreadyProperty) {
+
+        this.alreadyProperty = alreadyProperty;
+    }
+
+    public StatusInfo getAlreadyProperty() {
+        return alreadyProperty;
+    }
+
+    public void setAlreadyMqtt(StatusInfo alreadyMqtt) {
+        this.alreadyMqtt = alreadyMqtt;
+    }
+
+    public StatusInfo getAlreadyMqtt() {
+        return alreadyMqtt;
+    }
+
+    public void setAlreadyLocalMqtt(StatusInfo alreadyLocalMqtt) {
+        this.alreadyLocalMqtt = alreadyLocalMqtt;
+    }
+
+    public StatusInfo getAlreadyLocalMqtt() {
+        return alreadyLocalMqtt;
     }
 }

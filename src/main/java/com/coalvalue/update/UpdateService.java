@@ -15,9 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -60,9 +63,7 @@ public class UpdateService /*extends Service<Release> */{
 		return updateFX;
 	}
 
-	@Scheduled(fixedDelay = 1000*60,   initialDelay=1000*60)
-
-
+	@Scheduled(fixedDelay = 1000*60*60,   initialDelay=1000*60)
 
 	public void update() throws IOException {
 
@@ -73,19 +74,35 @@ public class UpdateService /*extends Service<Release> */{
 		String fooResourceUrl = localApplication.getUpdateXML().toString();
 
 
-		Application applicationRemote = null;
+		ResponseEntity<Application> response_applicationRemote = null;
 		try {
-			applicationRemote
-					= restTemplate.getForObject(fooResourceUrl , Application.class);
-
-			System.out.println(applicationRemote.toString());
-			applicationRemote.getReleases().stream().forEach(e->System.out.print(e.toString()));
-			//System.out.println(applicationRemote.getReleases().toString());
-		} catch (HttpStatusCodeException exception) {
-			int statusCode = exception.getStatusCode().value();
-			//	logger.error("获取更新，网络错误" + exception.getCause().toString());
+			response_applicationRemote= restTemplate.getForEntity(fooResourceUrl , Application.class);
+		}catch (ResourceAccessException exception){
+			logger.error("获取更新，网络错误" + exception.getCause().toString());
 
 		}
+		catch (HttpStatusCodeException exception) {
+			int statusCode = exception.getStatusCode().value();
+			logger.error("获取更新，网络错误" + exception.getCause().toString());
+
+		}
+			if(response_applicationRemote.getStatusCode().equals(HttpStatus.OK)){
+				logger.info("获取了更新信息" );
+
+				response_applicationRemote.getBody().getReleases().stream().forEach(e->System.out.print(e.toString()));
+
+
+				DockerClient dockerClient = docker.getDockerClient();
+				docker.isValid(dockerClient);
+
+
+				System.out.println(response_applicationRemote.toString());
+			}
+
+
+		//
+			//System.out.println(applicationRemote.getReleases().toString());
+
 
 		//	Release release = applicationRemote.getReleases().get(0);
 
@@ -96,11 +113,6 @@ public class UpdateService /*extends Service<Release> */{
 
 
 
-
-
-
-		DockerClient dockerClient = docker.getDockerClient();
-		docker.isValid(dockerClient);
 
 
 		//docker.restart(); // TODO 重新启动docker

@@ -1,12 +1,16 @@
 package com.coalvalue.task;
 
 import com.coalvalue.configuration.MqttPublishSample;
+import com.coalvalue.configuration.state.RegEventEnum;
+import com.coalvalue.configuration.state.RegStatusEnum;
 import com.coalvalue.domain.entity.Configuration;
 
 import com.coalvalue.domain.pojo.IMEIconfig;
+import com.coalvalue.domain.pojo.TopicQos;
 import com.coalvalue.enumType.EchoSessionTypeEnum;
 import com.coalvalue.enumType.ProjectStatusEnum;
 import com.coalvalue.protobuf.Hub;
+import com.coalvalue.publicCommand.CommonProcess;
 import com.coalvalue.publicCommand.PrivateNotify;
 import com.coalvalue.repository.ConfigurationRepository;
 import com.coalvalue.service.*;
@@ -17,6 +21,9 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Component;
 
 
@@ -32,8 +39,9 @@ public class InitTasks  {
 
     @Autowired
     private RegisterTasks registerTasks;
+
     @Autowired
-    private PrivateNotify privateNotify;
+    private CommonProcess commonProcess;
 
 
     public String activationCode;
@@ -61,13 +69,11 @@ public class InitTasks  {
     DistributorService distributorService;
     @Autowired
     MqttPublishSample mqttPublishSample;
-    @Autowired
-    SystemStatusBroadcast systemStatusBroadcast;
-
 
 
     @Autowired
     TimeSilcePasswordService timeSilcePasswordService;
+
 
 
 
@@ -80,15 +86,21 @@ public class InitTasks  {
 
 
 
-
-    Integer count = 0;
-
-
     public void identity(String echo_session) throws MqttException {
+
+
+
+
+
+
+
+
+
+
         logger.info("开始识别身份---- " + ":");
 
         logger.info("获取硬件信息---- " + ":");
-        systemStatusBroadcast.reportFualtInfo(count++);
+    //    systemStatusBroadcast.reportFualtInfo(count++);
         HardwareUtil.getOs();
         if(HardwareUtil.isPiUnix){
             identity = HardwareUtil.getCPUSerial__()[0];
@@ -131,74 +143,104 @@ public class InitTasks  {
 
     }
     public void completeIdentity(String echo_session, String channelId, String activationCode_, String status, String objectUuid, String companyNo, List<Hub.MqttTopic> topicsList) {
-        systemStatusBroadcast.completeEastanblishChanel = true;
+     //   systemStatusBroadcast.completeEastanblishChanel = true;
         logger.info("身份识别成功，初始化开始");
         activationCode = activationCode_;
 
 
-        logger.info("activationCode，初始化开始"+activationCode);
-
-        String[] topics_UUID = new String[3];
-        int[] qos_UUID = new int[3];
-        //topics_UUID[0]= UUID_TOPIC;
-
-
-
-        Integer index = 0;
-        for(Hub.MqttTopic topic : topicsList){
-            if(topic.getName().equals("channelId")){
-                mqttPublishSample.setChannal_topic(topic.getTopic());
-                qos_UUID[index] = MqttPublishSample.qos_2;
-                topics_UUID[index++] = topic.getTopic();
-            }
-            if(topic.getName().equals("public")){
-                mqttPublishSample.setPublic_topic(topic.getTopic());
-                qos_UUID[index] = MqttPublishSample.qos_2;
-                topics_UUID[index++] = topic.getTopic();
-            }
-            if(topic.getName().equals("region")){
-                mqttPublishSample.setRegion_topic(topic.getTopic());
-                qos_UUID[index] = MqttPublishSample.qos_2;
-                topics_UUID[index++] = topic.getTopic();
-            }
-        }
 
 
 
 
-
-
-
-        try {
-            mqttClient.subscribe(topics_UUID, qos_UUID);
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
-
+        // TODO 以上建立了 新的 通道， 开始
 
 
         if(EchoSessionTypeEnum.Identity_bootup.getText().equals(echo_session)){
+
+
+
+
+
+
+
+
+            logger.info("activationCode，初始化开始"+activationCode);
+            List<TopicQos> topicQos = new ArrayList<>();
+            for(Hub.MqttTopic topic : topicsList){
+                if(topic.getName().equals("channelId")){
+                    mqttPublishSample.setChannal_topic(topic.getTopic());
+
+                    topicQos.add(TopicQos.of(topic.getTopic(), MqttPublishSample.qos_2));
+                }
+                if(topic.getName().equals("public")){
+                    mqttPublishSample.setPublic_topic(topic.getTopic());
+
+                    topicQos.add(TopicQos.of(topic.getTopic(), MqttPublishSample.qos_2));
+                }
+                if(topic.getName().equals("region")){
+                    mqttPublishSample.setRegion_topic(topic.getTopic());
+
+                    topicQos.add(TopicQos.of(topic.getTopic(), MqttPublishSample.qos_2));
+                }
+            }
+            mqttPublishSample.subscribe(topicQos);
+
+
+
+/*            Message<RegEventEnum> messageState = MessageBuilder
+                    .withPayload(RegEventEnum.IDENTITY_SUCCESS)
+                    .setHeader("ORDER_ENTITY_KEY", "order")
+                    .build();
+            stateMachine.sendEvent(messageState);*/
+
+
+
+            if(status.equals(ProjectStatusEnum.Unbinded.getText())){
+                commonProcess.deleteAll();
+                System.out.println("删除了数据库啊啊啊，");
+
+                // TODO 发送删除数据 通知
+
+
+
+
+   /*         register();
+            syncService.syncCompare();*/
+
+            }
+
+
             if(status.equals(ProjectStatusEnum.Binded.getText())){
+
+
                 logger.info("该设备 服务器端 已经注册");
                 Configuration configuration =  configurationService.getConfiguration(ConfigurationServiceImpl.PRODUCER_CONFIGURATION_KEY_companyNo);
 
                 if(configuration!= null) {
                     logger.info("该设备 本地已经注册 "+configuration);
-                    if (configuration.getStringValue().equals(companyNo)) {
-                        logger.info("识别发现 本地绑定 公司  与 与远程 绑定公司 一致");
-                        //liveBroadcast.reportEvent(null);
-                    } else {
+                    if (!configuration.getStringValue().equals(companyNo)) {
+
                         logger.info("本地绑定 公司  与 与远程 绑定公司 NO NO NO NO  一致");
-                        privateNotify.deleteAll();
-                        System.out.println("删除了数据库啊啊啊，");
+
+                        // TODO 发送删除数据 通知  privateNotify.deleteAll(); System.out.println("删除了数据库啊啊啊，");
 
 
                     }
 
-                }else{
-                    logger.info("识别发现 本地 没有注册");
+                    logger.info("识别发现 本地绑定 公司  与 与远程 绑定公司 一致");
                 }
 
+
+                logger.info("识别发现 本地 没有注册");
+
+
+
+
+/*                Message<RegEventEnum> messageState_ = MessageBuilder
+                        .withPayload(RegEventEnum.REGISTER)
+                        .setHeader("ORDER_ENTITY_KEY", "order")
+                        .build();
+                stateMachine.sendEvent(messageState_);*/
                 registerTasks.register(EchoSessionTypeEnum.Register_bootup.getText());
 
 
@@ -206,19 +248,10 @@ public class InitTasks  {
 
 
 
-
-
             }
 
 
-            if(status.equals(ProjectStatusEnum.Unbinded.getText())){
-                privateNotify.deleteAll();
-                System.out.println("删除了数据库啊啊啊，");
 
-   /*         register();
-            syncService.syncCompare();*/
-
-            }
 
         }
 
@@ -231,7 +264,6 @@ public class InitTasks  {
 
 
 
-    Map request_sync = new HashMap();
 
 
 

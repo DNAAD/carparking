@@ -125,11 +125,15 @@ public class Application implements ApplicationListener<ContextRefreshedEvent>
         for (String beanName : beanNames) {
             System.out.println(beanName);
         }
+
+
+/*
         Docker docker = (Docker) ctx.getBean("docker");
 
 
         DockerClient dockerClient = docker.getDockerClient();
       docker.isValid(dockerClient);
+*/
 
 
 

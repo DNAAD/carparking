@@ -3,11 +3,16 @@ package com.coalvalue.configuration;
 
 
 import com.coalvalue.domain.pojo.IMEIconfig;
+import com.coalvalue.domain.pojo.StatusInfo;
 import com.coalvalue.service.ConfigurationService;
 import com.coalvalue.service.assistant.ModuleMqttClientConfig;
+import com.coalvalue.configuration.state.RegEventEnum;
+import com.coalvalue.configuration.state.RegStatusEnum;
+import com.coalvalue.statemachine.Events;
 import com.coalvalue.task.SystemStatusBroadcast;
 import com.coalvalue.util.EncryUtil;
 import com.coalvalue.web.HardWareCommandService;
+import com.github.dockerjava.api.DockerClient;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
@@ -17,6 +22,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -47,9 +55,6 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
     public static String alreadyConfigured ="";
 
-    @Autowired
-    MqttPublishSample mqttPublishSample;
-
 
     @Autowired
     HardWareCommandService hardWareCommandService;
@@ -69,6 +74,17 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
     private Boolean up_local_mqtt;
     @Value("${IMEI}")
     private String IMEI;
+    @Autowired
+    MqttPublishSample mqttPublishSample;
+
+
+    @Autowired
+    private StateMachine<RegStatusEnum, RegEventEnum> stateMachine;
+
+    @Autowired
+    Docker docker;
+
+
 /*
     @Value("${serviceUrl}")
     private String serviceUrl;
@@ -86,6 +102,8 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
     //解密
 
 
+
+  //    docker.isValid(dockerClient);
 
     private Boolean desDecode(String str) {
         String t = "";
@@ -119,65 +137,65 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         logger.info("系统启动完成，准备建立通道");
 
-       // logger.debug("begin ------------------------------------"+mqttPublishSample.getImei().getImei());
-    //    logger.debug("begin ------------------------------------"+desDecode(Key));
-
-/*
-        Map map = new HashMap<>();
-        map.put("id", ServiceTypeEnum.INDEX_STATISTIC.getText());
-        map.put("Body","I like pie");
-        Map date = new HashMap<>();
-        date.put("name", ServiceTypeEnum.INDEX_STATISTIC.getDisplayText());
-
-        map.put("data",date);
+        System.out.println("Ip: " + GetNetworkAddress.GetAddress("ip"));
+        System.out.println("Mac: " + GetNetworkAddress.GetAddress("mac"));
 
 
-        String jsonObject = JSON.toJSONString(map);
-*/
+        logger.info("测试docker start");
 
-        //InitTasks.init_configuration();
-        logger.info("查找配置文件");
-        String property = (String)getParamChanges().get("imei");
-        if(StringUtils.isBlank(property)){
+        IMEIconfig imeIconfig = new IMEIconfig(IMEI,alreadyConfigured);
+        imeIconfig.setAlreadyDocker(docker.isValid());
+        imeIconfig.setAlreadyProperty(isValid());
+        imeIconfig.setAlreadyMqtt(isValidMqtt());
+        imeIconfig.setAlreadyLocalMqtt(isValidLocalMqtt());
 
-        //if(StringUtils.isBlank(mqttPublishSample.imei)){
+        mqttPublishSample.setImei(imeIconfig);
 
-            logger.debug("未找到配置文件");
-            logger.info("查找给环境变量");
-
-            if(IMEI!= null){
-                alreadyConfigured="配置设备,来自于 环境变量";
-                logger.info("找到了 环境配置 imei",alreadyConfigured);
-
-                isBind = true;
-                mqttPublishSample.setImei(new IMEIconfig(IMEI,alreadyConfigured));
-            }else{
-                logger.info("没有找到环境 配置imei，");
-                isBind = false;
-            }
-
-        }else{
-
-            alreadyConfigured="找到配置文件";
-            isBind = true;
-            mqttPublishSample.setImei(new IMEIconfig(property,alreadyConfigured));
-
-        }
+        logger.info("测试docker end");
 
 
 
-        if(isBind){
 
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
 
-                    logger.info("开始连接");
-                    try {
-                        mqttPublishSample.reconnect();
-                    } catch (MqttException e) {
-                        e.printStackTrace();
-                    }
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                logger.info("开始连接");
+                stateMachine.start();
+
+
+
+                System.out.println("发送开始连接时间======================================IDENTITY");
+
+
+
+
+
+
+                Message<RegEventEnum> message = MessageBuilder
+                        .withPayload(RegEventEnum.CONNECT)
+                        .setHeader("ORDER_ENTITY_KEY", "order")
+                        .build();
+
+                stateMachine.sendEvent(message);
+
+
+                try {
+                    mqttPublishSample.reconnect();
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("已经发送了 连接 事件 ===================================IDENTITY"+stateMachine.getState().getId().name());
+
+
+
+
                 /*try {
                     JSONObject result = TulingApiProcess.getTulingResult(serviceUrl,"");
 
@@ -188,30 +206,10 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
                 }*/
 
 
-                    if(up_local_mqtt){
-                        logger.debug("===============开始连接 本地 MqttClient");
-                        try {
-                            moduleMqttClientConfig.retryWhenException();
-                        } catch (MqttException e) {
-                            System.out.println("-建立 或 连retryWhenException接 异常个");
-                            e.printStackTrace();
-                        }catch (Exception e) {
-                            System.out.println("-qException");
-                            e.printStackTrace();
-                        }
 
 
-
-                        moduleMqttClientConfig.chrome();
-                    }else{
-                        logger.debug("不开启本地mqtt连接");
-                    }
-
-                }
-            });
-        }
-
-
+            }
+        });
 
 
 
@@ -229,7 +227,81 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
 
 
+    public StatusInfo isValid(){
+        StatusInfo statusInfo = new StatusInfo();
+        logger.info("查找配置文件");
 
+        String property = (String)getParamChanges().get("imei");
+        if(StringUtils.isBlank(property)){
+
+            //if(StringUtils.isBlank(mqttPublishSample.imei)){
+
+            logger.debug("未找到配置文件");
+            logger.info("查找给环境变量");
+
+            if(IMEI!= null){
+                alreadyConfigured="配置设备,来自于 环境变量";
+                logger.info("找到了 环境配置 imei",alreadyConfigured);
+
+                isBind = true;
+
+            }else{
+                logger.info("没有找到环境 配置imei，");
+                isBind = false;
+            }
+
+        }else{
+
+            alreadyConfigured="找到配置文件";
+            isBind = true;
+
+
+        }
+        statusInfo.setStatus(isBind);
+        statusInfo.setMessage(alreadyConfigured);
+        return statusInfo;
+
+    }
+
+    public StatusInfo isValidMqtt(){
+        StatusInfo statusInfo = new StatusInfo();
+
+
+
+        statusInfo.setStatus(null);
+        statusInfo.setMessage(stateMachine.getState().getId().name());
+        return statusInfo;
+
+    }
+
+    public StatusInfo isValidLocalMqtt(){
+
+        if(up_local_mqtt){
+            logger.debug("===============开始连接 本地 MqttClient");
+            try {
+                moduleMqttClientConfig.retryWhenException();
+            } catch (MqttException e) {
+                System.out.println("-建立 或 连retryWhenException接 异常个");
+                e.printStackTrace();
+            }catch (Exception e) {
+                System.out.println("-qException");
+                e.printStackTrace();
+            }
+
+            moduleMqttClientConfig.chrome();
+        }else{
+            logger.debug("不开启本地mqtt连接");
+        }
+
+        StatusInfo statusInfo = new StatusInfo();
+
+
+
+        statusInfo.setStatus(null);
+       // statusInfo.setMessage(networkStateMachine.getState().getId().name());
+        return statusInfo;
+
+    }
 
     public Properties getParamChanges() {
 

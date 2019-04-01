@@ -3,7 +3,9 @@ package com.coalvalue.configuration.state;
 public enum RegEventEnum {
 // 连接
 CONNECT,
-// 注册
+    COMPLETE_CONNECT,
+
+    // 注册
 IDENTITY,
 IDENTITY_SUCCESS,
 REGISTER,
@@ -11,7 +13,12 @@ REGISTER,
 REGISTER_SUCCESS,
 // 注册失败
 REGISTER_FAILED,
+
+
+
+    LOST_CONNECT,
+
 // 注销
-UN_REGISTER,
-    SYNC;
+/*UN_REGISTER,
+    SYNC;*/
 }

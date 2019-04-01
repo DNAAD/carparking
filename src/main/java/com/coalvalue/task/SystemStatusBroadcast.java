@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.coalvalue.configuration.ApplicationReadyEventListener;
 import com.coalvalue.configuration.MqttConfiguration;
 import com.coalvalue.configuration.MqttPublishSample;
+import com.coalvalue.configuration.state.RegEventEnum;
+import com.coalvalue.configuration.state.RegStatusEnum;
 import com.coalvalue.publicCommand.ParseRoute;
 import com.coalvalue.repository.ConfigurationRepository;
 import com.coalvalue.repository.InstanceTransportRepository;
@@ -16,6 +18,7 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Component;
 
 import java.net.Inet4Address;
@@ -36,6 +39,8 @@ public class SystemStatusBroadcast implements EnvironmentAware {
     @Autowired
     MqttClient mqttClient;
 
+/*    @Autowired
+    private StateMachine<RegStatusEnum, RegEventEnum> stateMachine;*/
 
     @Autowired
     ConfigurationService configurationService;
@@ -205,6 +210,15 @@ public class SystemStatusBroadcast implements EnvironmentAware {
         objectMap.put("name","与mqtt服务器连接");
         objectMap.put("url",mqttClient.isConnected());
         maps.add(objectMap);
+
+
+/*
+        objectMap = new HashMap<>();
+        objectMap.put("name","stateMachine");
+        objectMap.put("url",stateMachine.getState().getId().name());
+        maps.add(objectMap);
+*/
+
 
 
         objectMap = new HashMap<>();

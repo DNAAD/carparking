@@ -3,6 +3,8 @@ package com.coalvalue.configuration;
 
 
 import com.alibaba.fastjson.JSON;
+import com.coalvalue.configuration.state.RegEventEnum;
+import com.coalvalue.configuration.state.RegStatusEnum;
 import com.coalvalue.enumType.DataSynchronizationTypeEnum;
 import com.coalvalue.notification.*;
 import com.coalvalue.protobuf.Hub;
@@ -18,7 +20,10 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Component;
 import reactor.bus.Event;
 import reactor.bus.EventBus;
@@ -36,6 +41,10 @@ public class MqttReceiver implements MqttCallbackExtended{//MqttCallback {
     protected transient Logger logger = LoggerFactory.getLogger(getClass());
 
 
+
+    @Autowired
+
+    private StateMachine<RegStatusEnum, RegEventEnum> stateMachine;
 
     @Autowired
     EmployeeService employeeService;
@@ -85,11 +94,27 @@ TransportOperationService transportOperationService;
     @Override
 public void connectionLost(Throwable cause) {
     // TODO Auto-generated method stub
-    System.out.println("Connection lost -=========== attempting reconnect.");
+    System.out.println("Connection lost -=========== attempting reconnect."+stateMachine.getState().getId().name());
 
-        NotificationData notificationData = new NotificationData();
+        Message<RegEventEnum> message = MessageBuilder
+                .withPayload(RegEventEnum.LOST_CONNECT)
+                .setHeader("ORDER_ENTITY_KEY", "order")
+                .build();
+        boolean returnAccepted = stateMachine.sendEvent(message);
 
-        eventBus.notify(ReactorEventConfig.notificationConsumer_status_offline_event, Event.wrap(notificationData));
+/*
+        if(returnAccepted){
+            NotificationData notificationData = new NotificationData();
+            eventBus.notify(ReactorEventConfig.notificationConsumer_status_offline_event, Event.wrap(notificationData));
+
+        }
+*/
+
+
+
+
+
+
 
 /*        if(mqttPublishSample.scheduler.isShutdown()){
         }*/
@@ -132,27 +157,47 @@ public void messageArrived(String topic, MqttMessage messageByte)
                 } catch (InvalidProtocolBufferException e) {
                     e.printStackTrace();
                 }
+                System.out.println("0000000000-000000000000000----------------------0"+message.toString());
+                System.out.println("0000000000-000000000000000----------------------0"+messageByte.getQos());
+                System.out.println("0000000000-000000000000000----------------------0"+messageByte.getId());
+
+                System.out.println("====synchronizedType=  isRetained "+topic);
+
+
 
 
 
                 if(topic.equals(mqttPublishSample.getImei())){
 
                     System.out.println("受到了 身份识别的 信息 来自 服务器的  进行身份 设置");
+                    System.out.println("受到了 身份识别的 信息 来自 服务器的  进行身份 设置");
 
 
                     if(DataSynchronizationTypeEnum.Identity.getText().equals(message.getType())){
 
                         Hub.Identity identity = message.getIdentity();
+
+/*
+
+                        Message<RegEventEnum> messageState = MessageBuilder
+                                .withPayload(RegEventEnum.IDENTITY_SUCCESS)
+                                .setHeader("ENTITY_KEY_identity", identity)
+                                .build();
+                        stateMachine.sendEvent(messageState);
+*/
+
                         String activationCode =identity.getActivationCode();
 
                         String status =identity.getStatus();
                         String objectUuid =identity.getObjectUuid();
                         String companyNo =identity.getCompanyNo();
                         String echo_session =identity.getEchoSession();
+
+
+
+                        // TODO 身份识别后， 服务端 给出的  新的 交互通道。
                         List<Hub.MqttTopic> topicsList =identity.getTopicsList();
-
                         topics = topicsList.stream().collect(Collectors.toMap(Hub.MqttTopic::getName, Hub.MqttTopic::getTopic));
-
 
 
                         initTasks.completeIdentity(echo_session,topicsList.stream().filter(e->e.getId()==0).findFirst().get().getTopic(),activationCode,status,objectUuid,companyNo,topicsList);
@@ -229,26 +274,6 @@ public void messageArrived(String topic, MqttMessage messageByte)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-                System.out.println("0000000000-000000000000000----------------------0"+message.toString());
-                System.out.println("0000000000-000000000000000----------------------0"+messageByte.getQos());
-                System.out.println("0000000000-000000000000000----------------------0"+messageByte.getId());
-
-                System.out.println("====synchronizedType=  isRetained "+topic);
-
-
-
-
             }
         });
 
@@ -265,18 +290,40 @@ public void messageArrived(String topic, MqttMessage messageByte)
         System.out.println("进入 process "+mqttPublishSample.getChannal_topic());
         if(topic.equals(mqttPublishSample.getChannal_topic())){
             System.out.println("====进入 私有 通道 "+mqttPublishSample.getChannal_topic());
-            if(registerTasks.support(message)){
+            if(registerTasks.support(message)){  // TODO 通过私有通道 已经注册成功了
+
+/*                Message<RegEventEnum> messageState_ = MessageBuilder
+                        .withPayload(RegEventEnum.REGISTER_SUCCESS)
+                        .setHeader("ORDER_ENTITY_KEY", "order")
+                        .build();
+                boolean returnAccepted =stateMachine.sendEvent(messageState_);
+
+                if(returnAccepted){
+                }*/
+
                 registerTasks.process(message.getRegister());
+
             }
+
+
+
             if (privateNotify.support(message)) {
                 privateNotify.decesion(message.getCommand());
             }
 
 
+
+
+            // 本地 收到 服务器 的 同步请求。这个是 请求
+
             if(registerTasks.surportSyncRequest(message)){
                 registerTasks.decesionSyncRequest(message.getRegister());
             }
 
+
+
+
+            // 收到 这个是 同步数据。
             if (differentialSyncService.surport(message)) {
 
                 System.out.println("收到了 同步数据 ："+ message.getType());
@@ -316,9 +363,24 @@ public void messageArrived(String topic, MqttMessage messageByte)
     @Override
     public void connectComplete(boolean reconnect, String serverURI) {
 
-        logger.debug("连接主机后 发送 上线通知 ");
+        System.out.println(" 当前装爱MqttReceiver.java ================"+stateMachine.getState().getId().name());
+
+        Message<RegEventEnum> message = MessageBuilder
+                .withPayload(RegEventEnum.COMPLETE_CONNECT)
+                .setHeader("ORDER_ENTITY_KEY", "order")
+                .build();
+
+        stateMachine.sendEvent(message);
+
+        System.out.println(" 当前装爱MqttReceiver.java ================"+stateMachine.getState().getId().name());
+
+
+
+/*
         NotificationData notificationData = new NotificationData();
-        eventBus.notify(ReactorEventConfig.notificationConsumer_status_online_event, Event.wrap(notificationData));
+     eventBus.notify(ReactorEventConfig.notificationConsumer_status_online_event, Event.wrap(notificationData));
+*/
+
         // 连接成功之后，处理相关逻辑
     }
 }

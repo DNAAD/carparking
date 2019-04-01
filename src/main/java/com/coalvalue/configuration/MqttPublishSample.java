@@ -2,6 +2,7 @@ package com.coalvalue.configuration;
 
 import com.alibaba.fastjson.JSONArray;
 import com.coalvalue.domain.pojo.IMEIconfig;
+import com.coalvalue.domain.pojo.TopicQos;
 import com.coalvalue.protobuf.Hub;
 import org.eclipse.paho.client.mqttv3.*;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import java.lang.Exception;
 import java.lang.String;import java.lang.System;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,7 +26,6 @@ import java.util.UUID;
 
 public class MqttPublishSample {
     private Logger logger = LoggerFactory.getLogger(MqttPublishSample.class);
-
 
 
     public static String topic_delivery_web_server        = "delivery_web_server";
@@ -39,11 +40,11 @@ public class MqttPublishSample {
 
 
     @Value("${own.configuration.mqtt.public_uuid_topic}")
-    public String PUBLIC_UUID_TOPIC;
+    private String PUBLIC_UUID_TOPIC;
 
 
     @Value("${own.configuration.mqtt.uuid_topic_default}")
-    public String UUID_TOPIC_default;
+    private String UUID_TOPIC_default;
 
 
 
@@ -64,6 +65,8 @@ public class MqttPublishSample {
     private String public_topic;
 
 
+
+
     @Retryable(
             value = {MqttException.class,Exception.class},
             maxAttempts = 1000000, backoff = @Backoff(2000))
@@ -82,37 +85,6 @@ public class MqttPublishSample {
             if (token.isComplete()) {
 
 
-                logger.debug("定义主体 {} ", PUBLIC_UUID_TOPIC);
-                logger.debug("定义主体 {} ", imei);
-
-                try {
-
-                    String[] topics_UUID = new String[2];
-                    //topics_UUID[0]= UUID_TOPIC;
-                    topics_UUID[0] = imei.getImei();
-                    topics_UUID[1] = PUBLIC_UUID_TOPIC;
-
-                    int[] qos_UUID = new int[2];
-                    //qos_UUID[0] = MqttPublishSample.qos;
-                    qos_UUID[0] = MqttPublishSample.qos_2;
-                    qos_UUID[1] = MqttPublishSample.qos_2;
-                    mqttClient.subscribe(topics_UUID, qos_UUID);
-                    logger.info("订阅成功！"+ topics_UUID.toString());
-
-
-                    String online = "online/" + imei;
-
-                    MqttTopic onlinetopic = mqttClient.getTopic(online);
-                    //setWill方法，如果项目中需要知道客户端是否掉线可以调用该方法。设置最终端口的通知消息
-                    String onlineContent = imei + "online";
-                    onlinetopic.publish(onlineContent.getBytes(), 1, true);
-
-
-                    logger.info("通知上线！"+onlineContent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    logger.error("订阅，或上线通知失败！"+e.getMessage() + "  " + e.getClass().toString());
-                }
 
 
             } else {
@@ -124,6 +96,7 @@ public class MqttPublishSample {
 
             logger.debug(mqttConnectOptions.getServerURIs()+"捕获MqttException mqtt 连接 依次 end --------------------------------------------- register service, to master");
             logger.debug(LocalDateTime.now()+"");
+            logger.debug(LocalDateTime.now()+""+mqttConnectOptions.getServerURIs());
             throw  e;
 
 
@@ -141,11 +114,34 @@ public class MqttPublishSample {
 
 
 
-    public void subscribe(String[] topics_uuid, int[] qos_uuid) throws MqttException {
-        mqttClient.subscribe(topics_uuid, qos_uuid);
+    public void subscribe(List<TopicQos> topicQos_add)  {
+
+
+        List<TopicQos> topicQos = new ArrayList<>();
+        topicQos.add(TopicQos.of(imei.getImei(),MqttPublishSample.qos_2));
+        topicQos.add(TopicQos.of(PUBLIC_UUID_TOPIC,MqttPublishSample.qos_2));
+        topicQos_add.forEach(e->topicQos.add(e));
+
+        String[] topics_UUID = new String[topicQos.size()];
+        int[] qos_UUID = new int[topicQos.size()];
+
+
+        for(int i = 0; i< topicQos.size(); i++){
+            topics_UUID[i] = topicQos.get(i).getTopic();
+            qos_UUID[i] =topicQos.get(i).getQos();
+        }
+
+
+        try {
+            mqttClient.subscribe(topics_UUID, qos_UUID);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        logger.info("订阅成功！"+ topics_UUID.toString());
+
+
 
     }
-
 
 
 
@@ -280,6 +276,19 @@ public class MqttPublishSample {
 
 
 
+    }
+
+    public void publish(String topic,byte[] message) throws MqttException {
+
+        mqttClient.publish(topic, message,2,false);
+
+
+
+    }
+
+
+    public MqttClient getMqttClient() {
+        return mqttClient;
     }
 
 

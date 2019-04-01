@@ -1,5 +1,5 @@
 # java -noverify -XX:TieredStopAtLevel=1 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -jar myproject.jar --spring.config.location=classpath:/default.properties,classpath:/override.properties
-
+mysql: localhost
 server:
   port: 80
 #   context-path: /ui3
@@ -94,7 +94,7 @@ spring:
 
 
   datasource:
-    jdbc-url: jdbc:mysql://mysql:3306/storage?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+    jdbc-url: jdbc:mysql://${mysql}:3306/storage?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: 123456
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -126,7 +126,7 @@ own:
   configuration:
     mqtt:
       broker:
-        url: ${CHANNEL_SERVER:tcp://localhost:1883}
+        url: ${CHANNEL_SERVER_:tcp://mqtt.yulinmei.cn:1883}
 #                url: ${CHANNEL_SERVER:tcp://yulinmei.cn:8080}
 
       uuid_topic: ${MEI_CHANNEL:h6pol00}
